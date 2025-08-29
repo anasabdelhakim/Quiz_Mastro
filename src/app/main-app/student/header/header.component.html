@@ -1,0 +1,157 @@
+<header
+  class="items-center gradient-surface justify-between whitespace-nowrap border-b border-solid border-secondary sm:px-10 p-3 shadow-sm sticky top-0 z-10 flex h-16"
+>
+  <div class="flex items-center gap-8">
+    <div class="flex items-center gap-3 text-primary">
+      <div class="size-6 text-primary">
+        <svg
+          fill="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            clip-rule="evenodd"
+            d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM12 4C16.4183 4 20 7.58172 20 12C20 16.4183 16.4183 20 12 20C7.58172 20 4 16.4183 4 12C4 7.58172 7.58172 4 12 4Z"
+            fill-rule="evenodd"
+          ></path>
+          <path
+            d="M12 6C11.4477 6 11 6.44772 11 7V11H7C6.44772 11 6 11.4477 6 12C6 12.5523 6.44772 13 7 13H11V17C11 17.5523 11.4477 18 12 18C12.5523 18 13 17.5523 13 17V13H17C17.5523 13 18 12.5523 18 12C18 11.4477 17.5523 11 17 11H13V7C13 6.44772 12.5523 6 12 6Z"
+          ></path>
+        </svg>
+      </div>
+      <h2 class="text-xl font-bold tracking-tighter">QuizApp</h2>
+    </div>
+    <nav class="hidden sm:flex items-center gap-2 text-sm font-medium">
+      <a
+        class="text-muted-foreground hover:text-primary hover:border-b-2 hover:border-primary border-b-2 hover:shadow-soft border-transparent transition-colors h-16 flex items-center px-3 mt-1"
+        routerLink="/student-dashboard"
+        routerLinkActive="text-primary btn-active-app  font-medium pointer-events-none"
+        >Dashboard</a
+      >
+      <a
+        class="text-muted-foreground hover:text-primary hover:border-b-2 hover:border-primary border-b-2 hover:shadow-soft border-transparent transition-colors h-16 flex items-center px-3 mt-1"
+        routerLink="/connect-student"
+        routerLinkActive="text-primary btn-active-app  font-medium pointer-events-none"
+        >Connects</a
+      >
+      <a
+        class="text-muted-foreground hover:text-primary hover:border-b-2 hover:border-primary border-b-2 hover:shadow-soft border-transparent transition-colors h-16 flex items-center px-3 mt-1"
+        routerLink="/teacher-to-student"
+        routerLinkActive="text-primary btn-active-app  font-medium pointer-events-none"
+        >Teachers</a
+      >
+    </nav>
+  </div>
+  <div class="flex items-center gap-4">
+    <button
+      class="flex items-center justify-center rounded-full size-10 bg-[var(--secondary-color)] text-[var(--text-foreground)] hover:bg-[var(--accent-color)] hover:text-[var(--primary-color)] transition-colors"
+    >
+      <svg
+        fill="currentColor"
+        height="20"
+        viewBox="0 0 256 256"
+        width="20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M221.8,175.94C216.25,166.38,208,139.33,208,104a80,80,0,1,0-160,0c0,35.34-8.26,62.38-13.81,71.94A16,16,0,0,0,48,200H88.81a40,40,0,0,0,78.38,0H208a16,16,0,0,0,13.8-24.06ZM128,216a24,24,0,0,1-22.62-16h45.24A24,24,0,0,1,128,216ZM48,184c7.7-13.24,16-43.92,16-80a64,64,0,1,1,128,0c0,36.05,8.28,66.73,16,80Z"
+        ></path>
+      </svg>
+    </button>
+    <brn-popover>
+      <!-- Avatar becomes the trigger -->
+      <button
+        brnPopoverTrigger
+        class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border border-gray-200 hover:ring-2 hover:ring-primary data-[state=open]:ring-2 data-[state=open]:ring-primary transition-all cursor-pointer"
+        style="
+          background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCU_TnWvtxOoxM0E9Mg7qATAlVWg43mdNFLH7bJHGmUxqB62S1rQfrQ7lLotVa3xci96IRgQtupA4ckNRw6iipWPlDqf5ykHpSD_OpWL_egph0TgFmYewVwdVnfbz42BvrBmENuVIHlMzmZ93ZlZDSBoqX8lptmFo8l5m4TSN8V_p-X2a33Ig1amIXbf91Pf_Z_bf5ucawz3QorQdHJP9zDYvVQBQ0eYv6jIvmeRN8WUFlcuZTsg-jCfr2XUdFoLleY-VLLcEzvs60');
+        "
+      ></button>
+
+      <!-- Popover content -->
+      <div
+        hlmPopoverContent
+        *brnPopoverContent="let ctx"
+        class="min-h-40 w-95 mr-5 mt-3.5 space-y-2 max-sm:w-45 relative"
+      >
+        <div
+          class="absolute -top-[8.8px] right-7.5 max-sm:right-1 w-4 h-4 rotate-45 bg-popover border-l border-t border-border"
+        ></div>
+
+        <div class="flex gap-5 max-sm:flex-col">
+          <div class="w-1/2 aspect-square max-sm:w-full">
+            <img
+              class="h-full max-sm:object-contain w-full object-cover object-center rounded-md"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCU_TnWvtxOoxM0E9Mg7qATAlVWg43mdNFLH7bJHGmUxqB62S1rQfrQ7lLotVa3xci96IRgQtupA4ckNRw6iipWPlDqf5ykHpSD_OpWL_egph0TgFmYewVwdVnfbz42BvrBmENuVIHlMzmZ93ZlZDSBoqX8lptmFo8l5m4TSN8V_p-X2a33Ig1amIXbf91Pf_Z_bf5ucawz3QorQdHJP9zDYvVQBQ0eYv6jIvmeRN8WUFlcuZTsg-jCfr2XUdFoLleY-VLLcEzvs60"
+              alt="Profile picture"
+            />
+          </div>
+          <div class="w-1/2 max-sm:w-full">
+            <div class="mb-2">
+              <p class="font-medium">Sarah Omar</p>
+              <p class="text-sm text-gray-500">Student</p>
+            </div>
+            <div class="border-b-2 border-border"></div>
+
+            <div class="flex flex-col text-left mt-2">
+              <button
+                hlmBtn
+                variant="ghost"
+                class="w-full justify-start hover:bg-accent/10 px-1"
+              >
+                Profile
+              </button>
+
+              <button
+                hlmBtn
+                variant="ghost"
+                class="w-full justify-start hover:bg-accent/10 px-1"
+              >
+                Settings
+              </button>
+
+              <button
+                hlmBtn
+                variant="ghost"
+                class="w-full justify-start text-red-600 hover:bg-red-50 px-1"
+              >
+                Sign Out
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </brn-popover>
+  </div>
+</header>
+
+<aside
+  class="fixed bottom-0 z-50 w-full bg-white flex items-center px-2 justify-between shadow-sidebar h-15 sm:hidden"
+>
+  <nav class="w-full flex justify-between items-center">
+    <a
+      routerLink="/student-dashboard"
+      routerLinkActive="text-primary"
+      class="relative group flex items-center flex-col rounded-main text-muted-foreground font-light sidebar-font-scale"
+    >
+      <span class="material-icons sidebar-font-scale">space_dashboard</span>
+      <span>Dashboard</span>
+    </a>
+    <a
+      routerLink="/connect-student"
+      routerLinkActive="text-primary"
+      class="relative group flex items-center flex-col rounded-main text-muted-foreground font-light sidebar-font-scale"
+    >
+      <span class="material-icons sidebar-font-scale">people_outline</span>
+      <span>Connects</span>
+    </a>
+    <a
+      routerLink="/teacher-to-student"
+      routerLinkActive="text-primary"
+      class="relative group flex items-center flex-col rounded-main text-muted-foreground font-light sidebar-font-scale"
+    >
+      <span class="material-icons sidebar-font-scale">school</span>
+      <span>Teachers</span>
+    </a>
+  </nav>
+</aside>

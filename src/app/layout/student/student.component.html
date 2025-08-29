@@ -1,0 +1,222 @@
+<div class="layout">
+  <div class="p-4 sm:p-6 space-y-4">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-3xl font-bold">Students</h1>
+      <button
+        (click)="openAddModal()"
+        class="bg-blue-600 hover:bg-blue-500 text-white gap-2 font-medium py-2 px-4 rounded-lg shadow-md flex items-center"
+      >
+        <span class="material-symbols-outlined"> add </span>
+        Add Student
+      </button>
+    </div>
+
+    <!-- Search -->
+    <div class="relative mb-6 shadow-md">
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        (input)="filterStudents()"
+        placeholder="Search students..."
+        class="w-full p-2 pl-8 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+    </div>
+
+    <!-- Table -->
+    <div class="bg-white rounded-lg shadow p-4">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Name
+            </th>
+            <th
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Email
+            </th>
+            <th
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Grade
+            </th>
+            <th
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Gender
+            </th>
+            <th
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Phone
+            </th>
+            <th
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Actions
+            </th>
+          </tr>
+        </thead>
+
+        <tbody class="bg-white divide-y divide-gray-200 card">
+          <tr *ngFor="let student of filteredStudents" class="hover:bg-gray-50">
+            <td class="px-6 py-4 whitespace-nowrap">{{ student.name }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ student.email }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ student.grade }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ student.gender }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              {{ student.phone || "-" }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap flex space-x-2">
+              <button
+                (click)="editStudent(student)"
+                class="text-black-600 hover:text-blue-500"
+                title="Edit"
+              >
+                <span class="material-symbols-outlined"> edit_document </span>
+              </button>
+              <button
+                (click)="deleteStudent(student.id)"
+                class="text-red-600 hover:text-blue-500"
+                title="Delete"
+              >
+                <span class="material-symbols-outlined"> delete </span>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Modal -->
+    <div
+      *ngIf="showModal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
+    >
+      <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+        <div class="border-b px-6 py-4 flex justify-between items-center">
+          <h3 class="text-lg font-medium">
+            {{ isEditMode ? "Edit Student" : "Add Student" }}
+          </h3>
+          <button
+            (click)="closeModal()"
+            class="text-gray-500 hover:text-gray-700"
+          >
+            ✕
+          </button>
+        </div>
+        <div class="p-6">
+          <form (ngSubmit)="isEditMode ? updateStudent() : addStudent()">
+            <!-- Name -->
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-medium mb-2"
+                >Name</label
+              >
+              <input
+                [(ngModel)]="currentStudent.name"
+                name="name"
+                (ngModelChange)="onInputChange()"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"
+              />
+              <div *ngIf="errors.name" class="text-red-500 text-sm mt-1">
+                {{ errors.name }}
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-medium mb-2"
+                >Email</label
+              >
+              <input
+                [(ngModel)]="currentStudent.email"
+                name="email"
+                type="email"
+                (ngModelChange)="onInputChange()"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"
+              />
+              <div *ngIf="errors.email" class="text-red-500 text-sm mt-1">
+                {{ errors.email }}
+              </div>
+            </div>
+
+            <!-- Grade -->
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-medium mb-2"
+                >Grade</label
+              >
+              <input
+                [(ngModel)]="currentStudent.grade"
+                name="grade"
+                (ngModelChange)="onInputChange()"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"
+              />
+              <div *ngIf="errors.grade" class="text-red-500 text-sm mt-1">
+                {{ errors.grade }}
+              </div>
+            </div>
+
+            <!-- Gender -->
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-medium mb-2"
+                >Gender</label
+              >
+              <select
+                [(ngModel)]="currentStudent.gender"
+                name="gender"
+                (ngModelChange)="onInputChange()"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"
+              >
+                <option value="">Select Gender</option>
+                <option *ngFor="let gender of genderOptions" [value]="gender">
+                  {{ gender }}
+                </option>
+              </select>
+              <div *ngIf="errors.gender" class="text-red-500 text-sm mt-1">
+                {{ errors.gender }}
+              </div>
+            </div>
+
+            <!-- Phone -->
+            <div class="mb-6">
+              <label class="block text-gray-700 text-sm font-medium mb-2"
+                >Phone (Optional)</label
+              >
+              <input
+                [(ngModel)]="currentStudent.phone"
+                name="phone"
+                maxlength="15"
+                (ngModelChange)="onInputChange()"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"
+              />
+              <div *ngIf="errors.phone" class="text-red-500 text-sm mt-1">
+                {{ errors.phone }}
+              </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex justify-end space-x-3">
+              <button
+                type="button"
+                (click)="closeModal()"
+                class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                [disabled]="!formValid"
+                class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+              >
+                {{ isEditMode ? "Update" : "Save" }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

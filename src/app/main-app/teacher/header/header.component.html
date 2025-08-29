@@ -1,0 +1,144 @@
+<header
+  class="items-center gradient-surface justify-between whitespace-nowrap border-b border-solid border-secondary sm:px-6 p-3 shadow-sm sticky top-0 z-10 flex h-16"
+>
+  <div class="flex items-center gap-4">
+    <a class="flex items-center gap-2" href="#">
+      <svg
+        class="h-6 w-6 text-primary"
+        fill="none"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12 3H21C21.5523 3 22 3.44772 22 4V20C22 20.5523 21.5523 21 21 21H3C2.44772 21 2 20.5523 2 20V4C2 3.44772 2.44772 3 3 3H5"
+        ></path>
+        <path d="M16 2V4"></path>
+        <path d="M8 2V4"></path>
+        <path d="M7 12L9 14L13 10"></path>
+        <path d="M7 17L9 19L13 15"></path>
+      </svg>
+      <span class="text-xl font-bold tracking-tight text-foreground"
+        >QuizMaster</span
+      >
+    </a>
+  </div>
+  <div class="flex items-center gap-3">
+    <nav class="hidden sm:flex items-center gap-2 text-sm font-medium">
+      <a
+        class="text-muted-foreground hover:text-primary hover:border-b-2 hover:border-primary border-b-2 hover:shadow-soft border-transparent transition-colors h-16 flex items-center px-3 mt-1"
+        routerLink="/teacher-dashboard"
+        routerLinkActive="text-primary btn-active-app  font-medium pointer-events-none"
+        >Dashboard</a
+      >
+      <a
+        class="text-muted-foreground hover:text-primary hover:border-b-2 hover:border-primary border-b-2 hover:shadow-soft border-transparent transition-colors h-16 flex items-center px-3 mt-1"
+        routerLink="/create-quiz"
+        routerLinkActive="text-primary btn-active-app  font-medium pointer-events-none"
+        >Create</a
+      >
+      <a
+        class="text-muted-foreground hover:text-primary hover:border-b-2 hover:border-primary border-b-2 hover:shadow-soft border-transparent transition-colors h-16 flex items-center px-3 mt-1"
+        routerLink="/student-to-teacher"
+        routerLinkActive="text-primary btn-active-app  font-medium pointer-events-none"
+        >Student</a
+      >
+    </nav>
+    <div class="flex items-center gap-4">
+      <button
+        class="relative rounded-full p-1 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+      >
+        <span class="absolute -top-1 -right-1 flex h-3 w-3">
+          <span
+            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-destructive opacity-75"
+          ></span>
+          <span
+            class="relative inline-flex rounded-full h-3 w-3 bg-destructive"
+          ></span>
+        </span>
+        <svg
+          class="h-6 w-6"
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+        </svg>
+      </button>
+      <button
+        class="flex items-center gap-2 rounded-full border border-gray-200 p-1 pr-3 text-sm font-medium hover:bg-gray-100 text-primary"
+      >
+        <img
+          alt="Admin Avatar"
+          class="h-8 w-8 rounded-full"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6qEwUkxuOGEDiL8n6K8twJ2vDD0nwPnqZOQpL0TXBXJZAEuYRHw7B9GDlyuKMCpW7FNkA7boN6ycyyWltuKoKSTlD4PZSNgQlI_43dRYA5uJ2uNazmQexdyc6b_9UWKxmq9bYm6I_Sqohl6Vm2oiWiTsy0j0FZ9YdOErR7VIhdxnzMl5Xg1Ovc-e6pflJbkWbFRClY5dLHVtxPdBJ2yJylKB4cIr7oAf_gPrg4FTEZKcOyFIRYIOMWqur9KhjX5xF1OarqC61JzY"
+        />
+        <span>Admin</span>
+        <svg
+          class="h-4 w-4 text-muted-foreground"
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<aside
+  class="fixed bottom-0 z-50 w-full bg-white flex items-center px-2 justify-between shadow-sidebar h-15 sm:hidden"
+>
+  <nav class="w-full flex justify-between items-center">
+    <a
+      routerLink="home"
+      routerLinkActive="text-primary"
+      class="relative group flex items-center flex-col rounded-main text-muted-foreground font-light sidebar-font-scale"
+    >
+      <span class="material-icons sidebar-font-scale">space_dashboard</span>
+      <span>Home</span>
+    </a>
+    <a
+      routerLink="student"
+      routerLinkActive="text-primary"
+      class="relative group flex items-center flex-col rounded-main text-muted-foreground font-light sidebar-font-scale"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-6 h-6 mb-0.5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M3 3h7v7H3V3zM14 3h7v4h-7V3zM14 10h7v11h-7V10zM3 14h7v7H3v-7z"
+        />
+      </svg>
+      <span>Dashboard</span>
+    </a>
+    <a
+      routerLink="teacher"
+      routerLinkActive="text-primary"
+      class="relative group flex items-center flex-col rounded-main text-muted-foreground font-light sidebar-font-scale"
+    >
+      <span class="material-icons sidebar-font-scale">school</span>
+      <span>Teachers</span>
+    </a>
+  </nav>
+</aside>

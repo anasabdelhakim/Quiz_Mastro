@@ -1,0 +1,252 @@
+<div class="layout">
+  <div
+    class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6"
+  >
+    <div>
+      <h2 class="text-2xl font-bold text-foreground">Dashboard Overview</h2>
+      <p class="text-muted-foreground mt-1">
+        Welcome back! Here's what's happening in your quiz system.
+      </p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
+    <!-- Total Students -->
+    <div
+      class="bg-white p-6 rounded-lg shadow-sm flex justify-between items-center"
+    >
+      <div>
+        <p class="text-sm text-gray-500">Total Students</p>
+        <p class="text-3xl font-bold text-gray-800">{{ studentsCount }}</p>
+      </div>
+      <div class="bg-blue-100 p-3 rounded-lg">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="text-blue-500"
+        >
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- Active Teachers -->
+    <div
+      class="bg-white p-6 rounded-lg shadow-sm flex justify-between items-center"
+    >
+      <div>
+        <p class="text-sm text-gray-500">Active Teachers</p>
+        <p class="text-3xl font-bold text-gray-800">{{ teachersCount }}</p>
+      </div>
+      <div class="bg-red-100 p-3 rounded-lg">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="text-red-500"
+        >
+          <path
+            d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"
+          />
+          <path d="M22 10v6" />
+          <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- Active Relationships -->
+    <div
+      class="bg-white p-6 rounded-lg shadow-sm flex justify-between items-center"
+    >
+      <div>
+        <p class="text-sm text-gray-500">Active Relationships</p>
+        <p class="text-3xl font-bold text-gray-800">{{ relationshipsCount }}</p>
+      </div>
+      <div class="bg-yellow-100 p-3 rounded-lg">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="text-yellow-500"
+        >
+          <line x1="6" y1="3" x2="6" y2="15" />
+          <circle cx="18" cy="6" r="3" />
+          <circle cx="6" cy="18" r="3" />
+          <path d="M18 9a9 9 0 0 1-9 9" />
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Activity -->
+  <div class="flex flex-col lg:flex-row gap-8 card">
+    <div class="bg-white p-6 rounded-lg shadow-sm w-full">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-semibold text-gray-800">Recent Activities</h3>
+
+        <div class="flex items-center gap-2">
+          <!-- Clear Button -->
+          <button
+            (click)="clearActivities()"
+            class="flex items-center space-x-1 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-gray-700 transition-colors"
+          >
+            <span class="material-icons text-sm">delete</span>
+            <span>Clear All</span>
+          </button>
+
+          <!-- Filter Button -->
+          <div class="relative">
+            <button
+              (click)="toggleFilterOptions()"
+              class="flex items-center space-x-1 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-gray-700 transition-colors"
+            >
+              <span class="material-icons text-sm">filter_list</span>
+              <span>{{ getFilterButtonText() }}</span>
+              <span class="material-icons text-sm">
+                {{ showFilterOptions ? "arrow_drop_up" : "arrow_drop_down" }}
+              </span>
+            </button>
+
+            <!-- Filter Options -->
+            <div
+              *ngIf="showFilterOptions"
+              class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg z-10 border border-gray-200"
+            >
+              <div class="py-1">
+                <button
+                  (click)="applyFilter('all')"
+                  class="flex items-center w-full text-left px-4 py-2 hover:bg-gray-100 text-gray-700"
+                  [class.bg-blue-100]="currentFilter === 'all'"
+                >
+                  <span class="material-icons text-sm mr-2">list</span>
+                  All Activities
+                </button>
+                <button
+                  (click)="applyFilter('student')"
+                  class="flex items-center w-full text-left px-4 py-2 hover:bg-gray-100 text-gray-700"
+                  [class.bg-blue-100]="currentFilter === 'student'"
+                >
+                  <span class="material-icons text-sm mr-2">person</span>
+                  Students
+                </button>
+                <button
+                  (click)="applyFilter('teacher')"
+                  class="flex items-center w-full text-left px-4 py-2 hover:bg-gray-100 text-gray-700"
+                  [class.bg-blue-100]="currentFilter === 'teacher'"
+                >
+                  <span class="material-icons text-sm mr-2">school</span>
+                  Teachers
+                </button>
+                <button
+                  (click)="applyFilter('connection')"
+                  class="flex items-center w-full text-left px-4 py-2 hover:bg-gray-100 text-gray-700"
+                  [class.bg-blue-100]="currentFilter === 'connection'"
+                >
+                  <span class="material-icons text-sm mr-2">link</span>
+                  Connections
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="activities-container space-y-6 max-h-[45vh] overflow-y-auto pr-2"
+      >
+        <div
+          *ngFor="let activity of recentActivities"
+          class="flex items-center"
+        >
+          <!-- Activity icon -->
+          <div
+            class="w-8 h-8 rounded-full mr-4 flex-shrink-0 flex items-center justify-center"
+            [ngClass]="{
+              'bg-blue-100': activity.type === 'connection',
+              'bg-green-100': activity.type === 'student',
+              'bg-purple-100': activity.type === 'teacher',
+              'bg-gray-100': activity.type === 'quiz'
+            }"
+          >
+            <span
+              class="material-icons text-sm"
+              [ngClass]="{
+                'text-blue-600': activity.type === 'connection',
+                'text-green-600': activity.type === 'student',
+                'text-purple-600': activity.type === 'teacher',
+                'text-gray-600': activity.type === 'quiz'
+              }"
+            >
+              {{
+                activity.type === "connection"
+                  ? "link"
+                  : activity.type === "student"
+                  ? "person"
+                  : activity.type === "teacher"
+                  ? "school"
+                  : "quiz"
+              }}
+            </span>
+          </div>
+
+          <div class="flex-grow">
+            <p class="font-medium text-gray-800">{{ activity.title }}</p>
+            <p class="text-sm text-gray-500">{{ activity.description }}</p>
+            <p class="text-xs text-gray-400 mt-1">
+              {{ activity.timestamp | date : "medium" }}
+            </p>
+          </div>
+
+          <span
+            class="text-xs font-medium px-2 py-1 rounded-full"
+            [ngClass]="{
+              'bg-blue-100 text-blue-800': activity.type === 'connection',
+              'bg-green-100 text-green-800': activity.type === 'student',
+              'bg-purple-100 text-purple-800': activity.type === 'teacher',
+              'bg-gray-100 text-gray-800': activity.type === 'quiz'
+            }"
+          >
+            {{
+              activity.type === "connection"
+                ? "Connection"
+                : activity.type === "student"
+                ? "Student"
+                : activity.type === "teacher"
+                ? "Teacher"
+                : "Quiz"
+            }}
+          </span>
+        </div>
+
+        <div
+          *ngIf="recentActivities.length === 0"
+          class="text-center text-gray-500 py-4"
+        >
+          No {{ currentFilter !== "all" ? currentFilter : "" }} activities found
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

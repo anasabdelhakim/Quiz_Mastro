@@ -1,0 +1,141 @@
+<div class="layout">
+  <div class="p-4 sm:p-6 space-y-4">
+    <div class="flex justify-between items-center">
+      <h2 class="text-2xl font-semibold">Student Assignments</h2>
+      <div class="flex gap-3">
+        <button
+          class="flex items-center gap-2 px-4 py-2 duration-200 rounded-lg shadow-md hover:bg-blue-400"
+          [class.bg-blue-600]="mode() === 'assign'"
+          [class.bg-white]="mode() !== 'assign'"
+          [class.text-white]="mode() === 'assign'"
+          [class.text-black]="mode() !== 'assign'"
+          (click)="mode.set('assign')"
+        >
+          <span
+            class="material-symbols-outlined"
+            [class.text-white]="mode() === 'assign'"
+          >
+            group
+          </span>
+          Assign Teachers
+        </button>
+        <button
+          class="flex items-center gap-2 px-4 py-2 rounded-lg shadow-md duration-200 hover:bg-blue-400"
+          [class.bg-blue-600]="mode() === 'manage'"
+          [class.bg-white]="mode() !== 'manage'"
+          [class.text-white]="mode() === 'manage'"
+          [class.text-black]="mode() !== 'manage'"
+          (click)="mode.set('manage')"
+        >
+          <span
+            class="material-symbols-outlined"
+            [class.text-white]="mode() === 'manage'"
+          >
+            import_contacts
+          </span>
+          Manage Assignments
+        </button>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow p-4 card">
+      <label class="text-lg font-medium">Select Student</label>
+      <select
+        class="w-full p-2 h-10 border border-gray-300 rounded focus:border-blue-500 focus:ring focus:ring-blue-500 outline-none"
+        [ngModel]="selectedStudentId()"
+        (ngModelChange)="selectedStudentId.set($event)"
+      >
+        <!-- Placeholder shown by default -->
+        <option [ngValue]="null" disabled selected hidden class="shadow-md">
+          Choose a student to assign teachers
+        </option>
+
+        <!-- Student list -->
+        <option *ngFor="let s of students" [ngValue]="s.id">
+          {{ s.name }} - {{ s.grade }}
+        </option>
+      </select>
+    </div>
+
+    <div
+      *ngIf="selectedStudentId() !== null && mode() === 'assign'"
+      class="bg-white rounded-lg shadow p-4"
+    >
+      <div
+        class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3"
+      >
+        <h3 class="text-xl font-semibold">
+          Assign Teachers to {{ getSelectedStudentName() }}
+        </h3>
+        <input
+          class="border rounded px-3 py-2 w-full sm:w-64"
+          placeholder="Search teachers..."
+          [ngModel]="teacherSearch()"
+          (ngModelChange)="teacherSearch.set($event)"
+        />
+      </div>
+
+      <div class="space-y-3">
+        <label
+          *ngFor="let t of filteredTeachersList"
+          class="flex items-start gap-3 p-3 border rounded hover:bg-gray-50"
+        >
+          <input
+            type="checkbox"
+            [checked]="isTeacherAssigned(t.id)"
+            (change)="toggleAssignment(t.id, $any($event.target).checked)"
+          />
+          <div>
+            <div class="font-medium">{{ t.name }}</div>
+            <div class="text-sm text-gray-600">{{ t.subject }}</div>
+          </div>
+          <span
+            class="ml-auto text-sm"
+            [class.text-green-600]="isTeacherAssigned(t.id)"
+            >{{ isTeacherAssigned(t.id) ? "Assigned" : "" }}</span
+          >
+        </label>
+      </div>
+    </div>
+
+    <div
+      class="bg-white rounded-lg shadow p-4"
+      *ngIf="selectedStudentId() !== null && mode() === 'manage'"
+    >
+      <div class="space-y-3">
+        <div
+          *ngFor="
+            let c of connections.getConnectionsByStudent(selectedStudentId()!)
+          "
+          class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 p-3 border rounded"
+        >
+          <div>
+            <div class="font-medium">
+              {{ getStudentNameById(c.studentId) }} ↔
+              {{ getTeacherNameById(c.teacherId) }}
+            </div>
+            <div class="text-sm text-gray-600">
+              {{ getTeacherSubjectById(c.teacherId) }} • Created
+              {{ c.createdAt | date : "M/d/yyyy" }}
+            </div>
+          </div>
+          <button
+            class="sm:ml-auto text-red-600"
+            (click)="connections.removeConnection(c.id)"
+          >
+            Delete
+          </button>
+        </div>
+        <div
+          *ngIf="
+            connections.getConnectionsByStudent(selectedStudentId()!).length ===
+            0
+          "
+          class="text-sm text-gray-600"
+        >
+          No assignments yet.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
