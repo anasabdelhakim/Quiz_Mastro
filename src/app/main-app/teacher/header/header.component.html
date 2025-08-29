@@ -102,17 +102,33 @@
 <aside
   class="fixed bottom-0 z-50 w-full bg-white flex items-center px-2 justify-between shadow-sidebar h-15 sm:hidden"
 >
-  <nav class="w-full flex justify-between items-center">
+  <nav class="w-full mt-1 flex justify-between items-center">
     <a
-      routerLink="home"
+      routerLink="/teacher-dashboard"
       routerLinkActive="text-primary"
       class="relative group flex items-center flex-col rounded-main text-muted-foreground font-light sidebar-font-scale"
     >
-      <span class="material-icons sidebar-font-scale">space_dashboard</span>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="lucide lucide-house-icon lucide-house"
+      >
+        <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
+        <path
+          d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+        />
+      </svg>
       <span>Home</span>
     </a>
     <a
-      routerLink="student"
+      routerLink="/create-quiz"
       routerLinkActive="text-primary"
       class="relative group flex items-center flex-col rounded-main text-muted-foreground font-light sidebar-font-scale"
     >
@@ -130,15 +146,32 @@
           d="M3 3h7v7H3V3zM14 3h7v4h-7V3zM14 10h7v11h-7V10zM3 14h7v7H3v-7z"
         />
       </svg>
-      <span>Dashboard</span>
+      <span>Create Quiz</span>
     </a>
     <a
-      routerLink="teacher"
+      routerLink="/student-to-teacher"
       routerLinkActive="text-primary"
       class="relative group flex items-center flex-col rounded-main text-muted-foreground font-light sidebar-font-scale"
     >
-      <span class="material-icons sidebar-font-scale">school</span>
-      <span>Teachers</span>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="lucide lucide-graduation-cap-icon lucide-graduation-cap"
+      >
+        <path
+          d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"
+        />
+        <path d="M22 10v6" />
+        <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5" />
+      </svg>
+      <span>Students</span>
     </a>
   </nav>
 </aside>

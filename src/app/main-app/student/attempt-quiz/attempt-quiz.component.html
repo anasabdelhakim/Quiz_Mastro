@@ -101,7 +101,7 @@
           <textarea
             hlmInput
             class="w-full border-2 p-3"
-            rows="4"
+            rows="12"
             placeholder="Write your answer here..."
             [(ngModel)]="selectedAnswers[currentQuestion.id]"
           ></textarea>
@@ -246,13 +246,22 @@
               {{ i + 1 }}
 
               <!-- ✅ checkmark for answered -->
-              <span
+              <svg
                 *ngIf="isAnswered(q.id) && currentIndex !== i"
-                class="material-icons absolute -top-1 -right-1 text-white bg-green-600 rounded-full p-0.5"
-                style="font-size: 14px"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="absolute -top-1.5 -right-1.5 text-white bg-success rounded-full p-0.5 text-[14px]"
               >
-                check
-              </span>
+                <path d="M21.801 10A10 10 0 1 1 17 3.335" />
+                <path d="m9 11 3 3L22 4" />
+              </svg>
             </button>
           </div>
 
