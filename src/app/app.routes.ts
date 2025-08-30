@@ -6,7 +6,7 @@ import { TeacherComponent } from './layout/teacher/teacher.component';
 import { ConnectionsComponent } from './layout/connections/connections.component';
 import { RelashionMapComponent } from './layout/relashion-map/relashion-map.component';
 import { ErrorpageComponent } from './errorpage/errorpage.component';
-import { IndexComponent } from './main-app/index/index.component';
+import { IndexComponent } from './index/index.component';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { LayoutStudentComponent } from './main-app/student/layout-student/layout-student.component';
 import { StudentDashboardComponent } from './main-app/student/student-dashboard/student-dashboard.component';

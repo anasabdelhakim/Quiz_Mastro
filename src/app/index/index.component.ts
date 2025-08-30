@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../auth.service';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-index',
@@ -37,5 +37,8 @@ export class IndexComponent {
       default:
         this.router.navigate(['/sign-in']);
     }
+  }
+  launchSEB() {
+    window.location.href = '/SebClientSettings.seb';
   }
 }
