@@ -9,8 +9,9 @@ export interface Teacher {
   id: number;
   name: string;
   email: string;
-  subject: string;
   gender: string;
+  username: string;
+  password: string;
   phone?: string;
 }
 
@@ -28,11 +29,13 @@ export class TeacherComponent implements OnInit {
     id: null,
     name: '',
     email: '',
-    subject: '',
     gender: '',
+    username: '',
+    password: '',
     phone: '',
   };
 
+  showPassword = false;
   showModal = false;
   isEditMode = false;
   searchTerm = '';
@@ -40,15 +43,27 @@ export class TeacherComponent implements OnInit {
   formValid = false;
   genderOptions = ['Male', 'Female'];
 
+  togglePassword() {
+  this.showPassword = !this.showPassword;
+}
+
+
   teacherSchema = z.object({
     name: z.string().min(2, 'Name is required'),
     email: z.string().email('Invalid email').endsWith('@gmail.com', 'Email must end with @gmail.com'),
-    subject: z.string().min(2, 'Subject is required'),
     gender: z.string().min(1, 'Gender is required'),
     phone: z.string().regex(/^\d*$/, 'Phone must be numbers only').optional(),
+    username: z.string().min(4, 'Username must be at least 4 characters'),
+    password: z
+      .string()
+      .min(8, 'Password must be at least 8 characters')
+      .regex(/[\W_]/, 'Password must contain at least one special character')
+      .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
+      .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
+      .regex(/[0-9]/, 'Password must contain at least one number'),
   });
 
-  constructor(private activityService: ActivityService) {}
+  constructor(private activityService: ActivityService) { }
 
   ngOnInit() {
     const saved = localStorage.getItem('teachers');
@@ -66,7 +81,6 @@ export class TeacherComponent implements OnInit {
       t =>
         t.name.toLowerCase().includes(term) ||
         t.email.toLowerCase().includes(term) ||
-        t.subject.toLowerCase().includes(term) ||
         t.gender.toLowerCase().includes(term) ||
         (t.phone && t.phone.includes(term))
     );
@@ -74,7 +88,7 @@ export class TeacherComponent implements OnInit {
 
   openAddModal() {
     this.isEditMode = false;
-    this.currentTeacher = { id: null, name: '', email: '', subject: '', gender: '', phone: '' };
+    this.currentTeacher = { id: null, name: '', email: '', gender: '', username: '', password: '', phone: '' };
     this.errors = {};
     this.formValid = false;
     this.showModal = true;
@@ -84,6 +98,7 @@ export class TeacherComponent implements OnInit {
     this.isEditMode = true;
     this.currentTeacher = { ...teacher };
     this.errors = {};
+    this.showPassword = false;  
     this.formValid = true;
     this.showModal = true;
   }
