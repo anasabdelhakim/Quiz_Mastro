@@ -3,10 +3,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { QuizDataService, Quiz, Question } from '../../quiz.service';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../header/header.component';
+import { Location } from '@angular/common';
+import { HlmButton } from '@spartan-ng/helm/button';
 @Component({
   selector: 'app-review-quiz',
   standalone: true,
-  imports: [CommonModule, HeaderComponent],
+  imports: [CommonModule, HeaderComponent, HlmButton],
   templateUrl: './review-quiz.component.html',
   styleUrls: ['./review-quiz.component.css'],
 })
@@ -22,7 +24,8 @@ export class ReviewQuizComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private quizService: QuizDataService
+    private quizService: QuizDataService,
+    private location: Location
   ) {}
 
   ngOnInit(): void {
@@ -123,5 +126,8 @@ export class ReviewQuizComponent implements OnInit {
     const remainingSeconds = seconds % 60;
 
     return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+  }
+  goBack() {
+    this.location.back();
   }
 }

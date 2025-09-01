@@ -62,19 +62,19 @@
           </h2>
 
           <span
-            class="bg-accent text-primary text-sm max-sm:text-[12px] font-bold px-3 py-1 rounded-full"
+            class="bg-accent text-primary sm:text-sm text-[10px] font-bold px-3 py-1 rounded-full"
             >{{ currentQuestion.points }} Points</span
           >
         </div>
 
         <!-- Options -->
         <div
-          class="space-y-4 max-sm:space-y-2 mb-8 max-sm:mb-6"
+          class="space-y-4 max-sm:space-y-3 mb-8 max-sm:mb-3"
           *ngIf="currentQuestion.type === 'mcq'"
         >
           <label
             *ngFor="let option of currentQuestion.options; let i = index"
-            class="flex items-center gap-4 max-sm:gap-1 rounded-lg border-2 max-sm:p-2 border-border p-4 cursor-pointer transition-all duration-200"
+            class="flex items-center gap-4 max-sm:gap-1 rounded-lg border-2 max-sm:p-3 border-border p-4 cursor-pointer transition-all duration-200"
             [ngClass]="{
               'border-primary bg-primary-soft':
                 selectedAnswers[currentQuestion.id] === option.id
@@ -109,22 +109,21 @@
         <div *ngIf="currentQuestion.type === 'written'" class="mb-8">
           <textarea
             hlmInput
-            class="w-full border-2 p-3"
-            rows="12"
+            class="w-full border-2 p-3 h-48 sm:h-72"
             placeholder="Write your answer here..."
             [(ngModel)]="selectedAnswers[currentQuestion.id]"
           ></textarea>
         </div>
       </div>
 
-      <div class="border-t border-gray-200 my-6"></div>
+      <div class="border-t border-gray-200 my-6 max-sm:my-3"></div>
 
       <!-- Footer Navigation -->
       <div class="flex sm:flex-row flex-wrap justify-between gap-4">
         <button
           hlmBtn
           variant="outline"
-          class="px-6 py-3"
+          class="px-6 py-3 max-sm:px-4 max-sm:h-8"
           (click)="previousQuestion()"
           [disabled]="currentIndex === 0"
         >
@@ -143,7 +142,7 @@
             variant="destructive"
             brnDialogTrigger
             *ngIf="currentIndex == quiz.questions.length - 1"
-            class="w-full sm:py-6"
+            class="w-full py-5 sm:py-6"
           >
             Submit Quiz
           </button>
@@ -151,7 +150,7 @@
           <!-- Dialog content -->
           <hlm-dialog-content
             *brnDialogContent="let ctx"
-            class="max-sm:w-[90%] max-sm:mx-auto"
+            class="max-sm:w-[95%] max-sm:mx-auto"
           >
             <hlm-dialog-header>
               <div class="flex items-center gap-2 mb-4">
@@ -226,7 +225,7 @@
 
         <button
           hlmBtn
-          class="px-6 py-3"
+          class="px-6 py-3 max-sm:px-4 max-sm:h-8"
           (click)="nextQuestion()"
           [disabled]="currentIndex === quiz.questions.length - 1"
         >
@@ -246,7 +245,7 @@
         <!-- Question numbers -->
         <div class="flex flex-col justify-between min-h-60 max-sm:min-h-fit">
           <div
-            class="grid grid-cols-5 gap-3 max-sm:grid-cols-[repeat(auto-fit,minmax(40px,1fr))] max-sm:mb-10"
+            class="grid grid-cols-5 gap-3 max-sm:grid-cols-[repeat(auto-fit,40px)] max-sm:mb-10"
           >
             <button
               *ngFor="let q of quiz.questions; let i = index"
@@ -300,7 +299,7 @@
             <!-- Dialog content -->
             <hlm-dialog-content
               *brnDialogContent="let ctx"
-              class="max-sm:w-[90%] max-sm:mx-auto"
+              class="max-sm:w-[95%] max-sm:mx-auto"
             >
               <hlm-dialog-header>
                 <div class="flex items-center gap-2 mb-4">

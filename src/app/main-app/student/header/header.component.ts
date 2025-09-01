@@ -16,8 +16,10 @@ import {
 } from '@spartan-ng/brain/popover';
 import { HlmButton } from '@spartan-ng/helm/button';
 import { HlmPopoverContent } from '@spartan-ng/helm/popover';
+
 @Component({
   selector: 'app-header',
+  standalone: true,
   imports: [
     HlmPopoverContent,
     RouterLink,
@@ -28,7 +30,7 @@ import { HlmPopoverContent } from '@spartan-ng/helm/popover';
     HlmButton,
   ],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.css',
+  styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit {
   pageTitle = 'QuizMaster';
@@ -52,14 +54,17 @@ export class HeaderComponent implements OnInit {
   }
 
   private updateTitle(route: ActivatedRoute) {
-    let child = route.firstChild;
-    while (child?.firstChild) {
+    let child = route;
+
+    // ✅ go down to the deepest child route (works with layouts)
+    while (child.firstChild) {
       child = child.firstChild;
     }
 
-    const fullTitle = child?.snapshot.data['title'];
+    const fullTitle = child.snapshot.data['title'];
+
     if (fullTitle) {
-      // ✅ split before the dash "-" and take the first part
+      // ✅ split BEFORE the dash and take only the first part
       this.pageTitle = fullTitle.split('-')[0].trim();
     } else {
       this.pageTitle = 'QuizMaster';
