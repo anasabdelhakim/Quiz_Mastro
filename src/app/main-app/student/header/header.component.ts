@@ -6,15 +6,13 @@ import {
   BrnPopoverTrigger,
 } from '@spartan-ng/brain/popover';
 import { HlmButton } from '@spartan-ng/helm/button';
-import {  HlmPopoverContent } from '@spartan-ng/helm/popover';
+import { HlmPopoverContent } from '@spartan-ng/helm/popover';
 @Component({
   selector: 'app-header',
   imports: [
-
     HlmPopoverContent,
     RouterLink,
     RouterLinkActive,
-
     BrnPopover,
     BrnPopoverContent,
     BrnPopoverTrigger,
