@@ -1,10 +1,28 @@
 <header
   class="items-center gradient-surface justify-between whitespace-nowrap border-b border-solid border-secondary sm:px-10 p-3 shadow-sm sticky top-0 z-10 flex h-16 max-sm:h-14"
 >
+  <svg
+    routerLink="/index"
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class="lucide lucide-arrow-big-left-icon lucide-arrow-big-left sm:hidden"
+  >
+    <path
+      d="M13 9a1 1 0 0 1-1-1V5.061a1 1 0 0 0-1.811-.75l-6.835 6.836a1.207 1.207 0 0 0 0 1.707l6.835 6.835a1 1 0 0 0 1.811-.75V16a1 1 0 0 1 1-1h6a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1z"
+    />
+  </svg>
   <div class="flex items-center gap-8">
-    <div class="flex items-center gap-3 text-primary">
-      <div class="size-6 text-primary">
+    <div class="flex items-center gap-1 text-primary">
+      <div class="text-primary">
         <svg
+          class="max-sm:hidden w-8 h-8"
           fill="currentColor"
           viewBox="0 0 24 24"
           xmlns="http://www.w3.org/2000/svg"
@@ -19,7 +37,7 @@
           ></path>
         </svg>
       </div>
-      <h2 class="text-xl font-bold tracking-tighter">QuizApp</h2>
+      <h2 class="text-2xl font-bold tracking-tighter">QuizApp</h2>
     </div>
     <nav class="hidden sm:flex items-center gap-2 text-sm font-medium">
       <a
@@ -42,87 +60,71 @@
       >
     </nav>
   </div>
-  <div class="flex items-center gap-4">
+
+  <brn-popover>
+    <!-- Avatar becomes the trigger -->
     <button
-      class="flex items-center justify-center rounded-full size-10 bg-[var(--secondary-color)] text-[var(--text-foreground)] hover:bg-[var(--accent-color)] hover:text-[var(--primary-color)] transition-colors"
+      brnPopoverTrigger
+      class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border border-gray-200 hover:ring-2 hover:ring-primary data-[state=open]:ring-2 data-[state=open]:ring-primary transition-all cursor-pointer"
+      style="
+        background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCU_TnWvtxOoxM0E9Mg7qATAlVWg43mdNFLH7bJHGmUxqB62S1rQfrQ7lLotVa3xci96IRgQtupA4ckNRw6iipWPlDqf5ykHpSD_OpWL_egph0TgFmYewVwdVnfbz42BvrBmENuVIHlMzmZ93ZlZDSBoqX8lptmFo8l5m4TSN8V_p-X2a33Ig1amIXbf91Pf_Z_bf5ucawz3QorQdHJP9zDYvVQBQ0eYv6jIvmeRN8WUFlcuZTsg-jCfr2XUdFoLleY-VLLcEzvs60');
+      "
+    ></button>
+
+    <!-- Popover content -->
+    <div
+      hlmPopoverContent
+      *brnPopoverContent="let ctx"
+      class="min-h-40 w-95 mr-5 mt-3.5 space-y-2 max-sm:w-45 relative"
     >
-      <svg
-        fill="currentColor"
-        height="20"
-        viewBox="0 0 256 256"
-        width="20"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M221.8,175.94C216.25,166.38,208,139.33,208,104a80,80,0,1,0-160,0c0,35.34-8.26,62.38-13.81,71.94A16,16,0,0,0,48,200H88.81a40,40,0,0,0,78.38,0H208a16,16,0,0,0,13.8-24.06ZM128,216a24,24,0,0,1-22.62-16h45.24A24,24,0,0,1,128,216ZM48,184c7.7-13.24,16-43.92,16-80a64,64,0,1,1,128,0c0,36.05,8.28,66.73,16,80Z"
-        ></path>
-      </svg>
-    </button>
-    <brn-popover>
-      <!-- Avatar becomes the trigger -->
-      <button
-        brnPopoverTrigger
-        class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border border-gray-200 hover:ring-2 hover:ring-primary data-[state=open]:ring-2 data-[state=open]:ring-primary transition-all cursor-pointer"
-        style="
-          background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCU_TnWvtxOoxM0E9Mg7qATAlVWg43mdNFLH7bJHGmUxqB62S1rQfrQ7lLotVa3xci96IRgQtupA4ckNRw6iipWPlDqf5ykHpSD_OpWL_egph0TgFmYewVwdVnfbz42BvrBmENuVIHlMzmZ93ZlZDSBoqX8lptmFo8l5m4TSN8V_p-X2a33Ig1amIXbf91Pf_Z_bf5ucawz3QorQdHJP9zDYvVQBQ0eYv6jIvmeRN8WUFlcuZTsg-jCfr2XUdFoLleY-VLLcEzvs60');
-        "
-      ></button>
-
-      <!-- Popover content -->
       <div
-        hlmPopoverContent
-        *brnPopoverContent="let ctx"
-        class="min-h-40 w-95 mr-5 mt-3.5 space-y-2 max-sm:w-45 relative"
-      >
-        <div
-          class="absolute -top-[8.8px] right-7.5 max-sm:right-1 w-4 h-4 rotate-45 bg-popover border-l border-t border-border"
-        ></div>
+        class="absolute -top-[8.8px] right-7.5 max-sm:right-1 w-4 h-4 rotate-45 bg-popover border-l border-t border-border"
+      ></div>
 
-        <div class="flex gap-5 max-sm:flex-col">
-          <div class="w-1/2 aspect-square max-sm:w-full">
-            <img
-              class="h-full max-sm:object-contain w-full object-cover object-center rounded-md"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCU_TnWvtxOoxM0E9Mg7qATAlVWg43mdNFLH7bJHGmUxqB62S1rQfrQ7lLotVa3xci96IRgQtupA4ckNRw6iipWPlDqf5ykHpSD_OpWL_egph0TgFmYewVwdVnfbz42BvrBmENuVIHlMzmZ93ZlZDSBoqX8lptmFo8l5m4TSN8V_p-X2a33Ig1amIXbf91Pf_Z_bf5ucawz3QorQdHJP9zDYvVQBQ0eYv6jIvmeRN8WUFlcuZTsg-jCfr2XUdFoLleY-VLLcEzvs60"
-              alt="Profile picture"
-            />
+      <div class="flex gap-5 max-sm:flex-col">
+        <div class="w-1/2 aspect-square max-sm:w-full">
+          <img
+            class="h-full max-sm:object-contain w-full object-cover object-center rounded-md"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCU_TnWvtxOoxM0E9Mg7qATAlVWg43mdNFLH7bJHGmUxqB62S1rQfrQ7lLotVa3xci96IRgQtupA4ckNRw6iipWPlDqf5ykHpSD_OpWL_egph0TgFmYewVwdVnfbz42BvrBmENuVIHlMzmZ93ZlZDSBoqX8lptmFo8l5m4TSN8V_p-X2a33Ig1amIXbf91Pf_Z_bf5ucawz3QorQdHJP9zDYvVQBQ0eYv6jIvmeRN8WUFlcuZTsg-jCfr2XUdFoLleY-VLLcEzvs60"
+            alt="Profile picture"
+          />
+        </div>
+        <div class="w-1/2 max-sm:w-full">
+          <div class="mb-2">
+            <p class="font-medium">Sarah Omar</p>
+            <p class="text-sm text-gray-500">Student</p>
           </div>
-          <div class="w-1/2 max-sm:w-full">
-            <div class="mb-2">
-              <p class="font-medium">Sarah Omar</p>
-              <p class="text-sm text-gray-500">Student</p>
-            </div>
-            <div class="border-b-2 border-border"></div>
+          <div class="border-b-2 border-border"></div>
 
-            <div class="flex flex-col text-left mt-2">
-              <button
-                hlmBtn
-                variant="ghost"
-                class="w-full justify-start hover:bg-accent/10 px-1"
-              >
-                Profile
-              </button>
+          <div class="flex flex-col text-left mt-2">
+            <button
+              hlmBtn
+              variant="ghost"
+              class="w-full justify-start hover:bg-accent/10 px-1"
+            >
+              Profile
+            </button>
 
-              <button
-                hlmBtn
-                variant="ghost"
-                class="w-full justify-start hover:bg-accent/10 px-1"
-              >
-                Settings
-              </button>
+            <button
+              hlmBtn
+              variant="ghost"
+              class="w-full justify-start hover:bg-accent/10 px-1"
+            >
+              Settings
+            </button>
 
-              <button
-                hlmBtn
-                variant="ghost"
-                class="w-full justify-start text-red-600 hover:bg-red-50 px-1"
-              >
-                Sign Out
-              </button>
-            </div>
+            <button
+              hlmBtn
+              variant="ghost"
+              class="w-full justify-start text-red-600 hover:bg-red-50 px-1"
+            >
+              Sign Out
+            </button>
           </div>
         </div>
       </div>
-    </brn-popover>
-  </div>
+    </div>
+  </brn-popover>
 </header>
 
 <aside
