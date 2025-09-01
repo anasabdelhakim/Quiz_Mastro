@@ -9,8 +9,9 @@ export interface Student {
   id: number;
   name: string;
   email: string;
-  grade: string;
   gender: string;
+  username: string;
+  password: string;
   phone?: string;
 }
 
@@ -27,8 +28,9 @@ export class StudentComponent implements OnInit {
     id: null,
     name: '',
     email: '',
-    grade: '',
     gender: '',
+    username: '',
+    password: '',
     phone: '',
   };
 
@@ -39,18 +41,24 @@ export class StudentComponent implements OnInit {
   formValid = false;
   genderOptions = ['Male', 'Female'];
 
+
+
   studentSchema = z.object({
     name: z.string().min(2, 'Name is required'),
     email: z.string().email('Invalid email').endsWith('@gmail.com', 'Email must end with @gmail.com'),
-    grade: z.string()
-      .regex(/^\d+$/, 'Grade must be numbers only')
-      .min(1, 'Grade is required')
-      .max(2, 'Grade must be 1-2 digits'),
     gender: z.string().min(1, 'Gender is required'),
     phone: z.string().regex(/^\d*$/, 'Phone must be numbers only').optional(),
+    username: z.string().min(4, 'Username must be at least 4 characters'),
+    password: z
+      .string()
+      .min(8, 'Password must be at least 8 characters')
+      .regex(/[\W_]/, 'Password must contain at least one special character')
+      .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
+      .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
+      .regex(/[0-9]/, 'Password must contain at least one number'),
   });
 
-  constructor(private activityService: ActivityService) {}
+  constructor(private activityService: ActivityService) { }
 
   ngOnInit() {
     const saved = localStorage.getItem('students');
@@ -68,7 +76,6 @@ export class StudentComponent implements OnInit {
       s =>
         s.name.toLowerCase().includes(term) ||
         s.email.toLowerCase().includes(term) ||
-        s.grade.toLowerCase().includes(term) ||
         s.gender.toLowerCase().includes(term) ||
         (s.phone && s.phone.includes(term))
     );
@@ -76,7 +83,7 @@ export class StudentComponent implements OnInit {
 
   openAddModal() {
     this.isEditMode = false;
-    this.currentStudent = { id: null, name: '', email: '', grade: '', gender: '', phone: '' };
+    this.currentStudent = { id: null, name: '', email: '', gender: '', username: '', password: '', phone: '' };
     this.errors = {};
     this.formValid = false;
     this.showModal = true;
@@ -123,14 +130,6 @@ export class StudentComponent implements OnInit {
     }
   }
 
-  // Prevent non-numeric input for grade field
-  onGradeInput(event: any) {
-    // Allow only numbers
-    const input = event.target.value.replace(/[^0-9]/g, '');
-    // Limit to 2 digits
-    this.currentStudent.grade = input.slice(0, 2);
-    this.onInputChange();
-  }
 
   addStudent() {
     if (!this.formValid) return;
