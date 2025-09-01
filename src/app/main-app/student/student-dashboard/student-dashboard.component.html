@@ -1,5 +1,5 @@
 <app-header></app-header>
-<main class="lg:max-w-[90%] px-5 py-10 sm:mt-5 mx-auto">
+<main class="lg:max-w-[90%] px-5 py-10 mx-auto">
   <div
     class="w-full flex justify-between items-center pb-8 border-b border-gray-200 mb-8 max-[370px]:flex-col"
   >
@@ -44,7 +44,7 @@
           <div>
             <div class="w-full flex justify-between items-center mb-10">
               <div class="h-6 w-3/4 bg-gray-200 rounded"></div>
-              <div class="h-6 w-1/7 bg-gray-200 rounded-full"></div>
+              <div class="h-6 w-1/6 bg-gray-200 rounded-full"></div>
             </div>
 
             <div>
@@ -235,6 +235,13 @@
           <!-- Footer Buttons -->
           <div class="px-5 pb-5 mt-auto">
             <!-- ACTIVE → can start -->
+            <button
+              *ngIf="quiz.status === 'active'"
+              class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              (click)="launchSEB()"
+            >
+              Start Quiz in SEB
+            </button>
             <button
               *ngIf="quiz.status === 'active'"
               hlmBtn

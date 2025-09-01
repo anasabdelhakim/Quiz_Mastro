@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { QuizDataService, Quiz, Question } from '../../quiz.service';
 import { CommonModule } from '@angular/common';
-
+import { HeaderComponent } from '../header/header.component';
 @Component({
   selector: 'app-review-quiz',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, HeaderComponent],
   templateUrl: './review-quiz.component.html',
   styleUrls: ['./review-quiz.component.css'],
 })

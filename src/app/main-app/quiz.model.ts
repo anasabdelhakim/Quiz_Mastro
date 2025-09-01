@@ -38,4 +38,5 @@ export interface Quiz {
   startedAt?: Date;
   studentAnswers?: { [questionId: string]: string };
   teacherGraded?: boolean;
+  requiresSEB?: boolean;
 }

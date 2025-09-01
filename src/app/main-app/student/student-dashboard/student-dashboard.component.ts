@@ -45,4 +45,7 @@ export class StudentDashboardComponent implements OnInit {
       this.router.navigate(['/review-quiz', quiz.id]);
     }
   }
+    launchSEB() {
+    window.location.href = '/SebClientSettingsfinal.seb';
+  }
 }

@@ -28,7 +28,7 @@ export const routes: Routes = [
   {
     path: 'index',
     component: IndexComponent,
-    data: { title: 'Welcome - Quiz Dashboard' },
+    data: { title: 'Welcome - Quiz App' },
   },
   {
     path: 'sign-in',
