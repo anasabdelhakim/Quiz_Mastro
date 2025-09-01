@@ -34,7 +34,7 @@ export class TeacherDashboardComponent implements OnInit {
   publishQuiz(quiz: Quiz) {
     if (quiz.status === 'unpublished') {
       this.quizService.publishQuiz(quiz.id);
-     
+
       this.loadQuizzes();
     }
   }

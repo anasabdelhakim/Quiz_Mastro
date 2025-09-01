@@ -201,7 +201,7 @@
 -------------------------- */
 @layer components {
   .card {
-    @apply bg-card text-foreground rounded-md shadow-md p-6;
+    @apply bg-card text-foreground rounded-md shadow-md px-6 py-6 max-sm:px-3;
   }
 }
 .hover-none {
