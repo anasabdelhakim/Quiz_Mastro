@@ -1,7 +1,7 @@
 <div class="min-h-screen flex flex-col">
   <header class="bg-card shadow-sm sticky top-0 z-10">
-    <div class="mx-auto px-4 sm:px-6 lg:px-12">
-      <div class="flex items-center justify-between h-16">
+    <div class="mx-auto px-2 sm:px-6 lg:px-12">
+      <div class="flex items-center justify-between sm:h-16 h-14">
         <div class="flex items-center gap-2">
           <div class="w-8 h-8 text-[var(--primary-color)]">
             <svg
@@ -123,7 +123,8 @@
             routerLink="/sign-in"
             class="button-click bg-destructive text-white rounded-md px-4 py-2 hover:bg-destructive-hover focus:outline-none focus:ring-2 focus:ring-destructive focus:ring-opacity-50 flex items-center gap-2 group max-sm:px-2 max-sm:py-2 max-sm:text-sm"
           >
-            <span>Login to Start</span>
+            <span class="hidden sm:block">Login to Start</span>
+            <span class="block sm:hidden">Login</span>
 
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -149,7 +150,7 @@
   <main class="flex-grow bg-[var(--background-color)]">
     <section class="relative">
       <div
-        class="flex items-center gap-2 sm:hidden justify-center w-full pt-10"
+        class="flex items-center gap-2 sm:hidden justify-center w-fit mt-8 border-t-2 border-b-2 border-border mx-auto p-2"
       >
         <span class="text-sm max-sm:text-base text-foreground">Role:</span>
         <span
@@ -250,11 +251,11 @@
       >
         <div class="lg:w-1/2 text-center lg:text-left">
           <h1
-            class="text-4xl md:text-5xl font-bold text-[var(--text-primary)] leading-tight mb-4"
+            class="text-4xl max-sm:text-3xl md:text-5xl font-bold text-[var(--text-primary)] leading-tight mb-4"
           >
             Unlock Your Potential with Engaging Quizzes
           </h1>
-          <p class="text-lg text-[var(--text-secondary)] mb-8">
+          <p class="text-lg max-sm:text-base text-[var(--text-secondary)] mb-8">
             Dive into a world of knowledge. Our platform offers a diverse range
             of quizzes to challenge your intellect and make learning an exciting
             adventure.
