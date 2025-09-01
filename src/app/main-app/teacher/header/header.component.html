@@ -2,7 +2,7 @@
   class="items-center gradient-surface justify-between whitespace-nowrap border-b border-solid border-secondary sm:px-6 p-3 shadow-sm sticky top-0 z-10 flex h-16 max-sm:h-14"
 >
   <svg
-    routerLink="/index"
+    (click)="goBack()"
     xmlns="http://www.w3.org/2000/svg"
     width="24"
     height="24"
@@ -39,9 +39,10 @@
         <path d="M7 17L9 19L13 15"></path>
       </svg>
       <span
-        class="text-2xl font-bold tracking-tight text-foreground max-sm:ml-4"
-        >QuizMaster</span
+        class="text-2xl font-bold tracking-wide text-foreground max-sm:ml-4"
       >
+        {{ pageTitle }}
+      </span>
     </a>
   </div>
   <div class="flex items-center gap-3">
@@ -149,8 +150,8 @@
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="28"
-        height="28"
+        width="30"
+        height="30"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"

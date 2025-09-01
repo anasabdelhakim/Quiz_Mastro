@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { HlmButton } from '@spartan-ng/helm/button';
 import { RouterLink } from '@angular/router';
 import { HeaderComponent } from '../header/header.component';
+
 @Component({
   selector: 'app-student-dashboard',
   standalone: true,
@@ -16,7 +17,10 @@ export class StudentDashboardComponent implements OnInit {
   quizzes: Quiz[] = [];
   loading: boolean = true; // start in loading state
 
-  constructor(private quizService: QuizDataService, private router: Router) {}
+  constructor(
+    private quizService: QuizDataService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     // Fetch student quizzes
@@ -45,7 +49,8 @@ export class StudentDashboardComponent implements OnInit {
       this.router.navigate(['/review-quiz', quiz.id]);
     }
   }
-    launchSEB() {
+  launchSEB() {
     window.location.href = '/SebClientSettingsfinal.seb';
   }
+  
 }

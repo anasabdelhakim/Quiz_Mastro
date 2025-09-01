@@ -1,10 +1,16 @@
-<div class="lg:max-w-[90%] px-5 py-10 mx-auto">
-  <div class="mt-10 flex max-md:flex-col">
-    <div class="bg-white rounded-y-xl shadow-lg p-6 sm:p-8 flex-1">
+<div
+  class="lg:max-w-[90%] p-8 max-sm:px-0 max-sm:py-0 mx-auto min-h-screen bg-background"
+>
+  <div class="mt-10 max-sm:mt-0 flex max-md:flex-col">
+    <div
+      class="bg-white rounded-y-xl shadow-lg p-6 max-sm:px-4 max-sm:py-5 sm:p-8 flex-1"
+    >
       <!-- Header -->
       <div class="mb-6">
         <div class="flex justify-between items-center mb-2">
-          <span class="text-sm font-medium text-muted-foreground">
+          <span
+            class="text-sm max-sm:text-[12px] font-medium text-muted-foreground"
+          >
             Question {{ currentIndex + 1 }}/{{ quiz.questions.length }}
           </span>
           <div
@@ -18,7 +24,7 @@
                 'text-primary': !isTimeCritical,
                 'text-red-600': isTimeCritical
               }"
-              class="h-6 w-6"
+              class="h-6 w-6 max-sm:h-5 max-sm:w-5"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -33,15 +39,15 @@
 
             <!-- Timer number -->
             <span
-              class="text-2xl max-sm:text-xl font-semibold font-mono inline-block text-center min-w-[4.5ch]"
+              class="text-2xl max-sm:text-lg font-semibold font-mono inline-block text-center min-w-[4.5ch]"
             >
               {{ formattedTime }}
             </span>
           </div>
         </div>
-        <div class="w-full bg-secondary rounded-full h-2.5">
+        <div class="w-full bg-secondary rounded-full h-2.5 max-sm:h-2">
           <div
-            class="bg-primary h-2.5 rounded-full"
+            class="bg-primary h-2.5 rounded-full max-sm:h-2"
             [style.width.%]="progress"
           ></div>
         </div>
@@ -49,23 +55,26 @@
 
       <!-- Question -->
       <div class="transition-opacity duration-300">
-        <div class="w-full flex justify-between items-center my-6">
-          <h2 class="text-2xl font-semibold text-foreground">
+        <div class="w-full flex justify-between items-center my-6 max-sm:my-4">
+          <h2 class="text-2xl max-sm:text-base font-semibold text-foreground">
             <span class="font-bold">Q{{ currentIndex + 1 }}.</span>
             {{ currentQuestion.text }}?
           </h2>
 
           <span
-            class="bg-accent text-primary text-sm font-bold px-3 py-1 rounded-full"
+            class="bg-accent text-primary text-sm max-sm:text-[12px] font-bold px-3 py-1 rounded-full"
             >{{ currentQuestion.points }} Points</span
           >
         </div>
 
         <!-- Options -->
-        <div class="space-y-4 mb-8" *ngIf="currentQuestion.type === 'mcq'">
+        <div
+          class="space-y-4 max-sm:space-y-2 mb-8 max-sm:mb-6"
+          *ngIf="currentQuestion.type === 'mcq'"
+        >
           <label
             *ngFor="let option of currentQuestion.options; let i = index"
-            class="flex items-center gap-4 rounded-lg border-2 border-border p-4 cursor-pointer transition-all duration-200"
+            class="flex items-center gap-4 max-sm:gap-1 rounded-lg border-2 max-sm:p-2 border-border p-4 cursor-pointer transition-all duration-200"
             [ngClass]="{
               'border-primary bg-primary-soft':
                 selectedAnswers[currentQuestion.id] === option.id
@@ -73,7 +82,7 @@
             (click)="selectAnswer(option.id)"
           >
             <span
-              class="flex items-center justify-center h-8 w-8 rounded-md transition-colors"
+              class="flex items-center justify-center h-8 w-8 max-sm:h-6 text-sm max-sm:w-6 rounded-md transition-colors"
               [ngClass]="{
                 'bg-primary text-primary-foreground':
                   selectedAnswers[currentQuestion.id] === option.id,
@@ -83,7 +92,7 @@
             >
               {{ "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[i] }}
             </span>
-            <span class="ml-3 text-base font-medium flex-1">
+            <span class="ml-1 font-medium flex-1 text-sm sm:text-lg">
               {{ option.text }}
             </span>
             <input
@@ -91,7 +100,7 @@
               [name]="'quiz_option_' + currentQuestion.id"
               [value]="option.id"
               [(ngModel)]="selectedAnswers[currentQuestion.id]"
-              class="w-6 h-6 accent-primary cursor-pointer"
+              class="w-6 h-6 accent-primary cursor-pointer max-sm:w-4 max-sm:h-4"
             />
           </label>
         </div>
@@ -111,7 +120,7 @@
       <div class="border-t border-gray-200 my-6"></div>
 
       <!-- Footer Navigation -->
-      <div class="flex sm:flex-row justify-between items-center gap-4">
+      <div class="flex sm:flex-row flex-wrap justify-between gap-4">
         <button
           hlmBtn
           variant="outline"
@@ -124,19 +133,26 @@
         <div class="flex-grow hidden sm:block"></div>
 
         <!-- ✅ Dialog Trigger Button (Submit) -->
-        <hlm-dialog>
-          <!-- Trigger button -->
+        <hlm-dialog
+          [ngClass]="{
+            'order-3 w-full': currentIndex == quiz.questions.length - 1
+          }"
+        >
           <button
             hlmBtn
             variant="destructive"
             brnDialogTrigger
             *ngIf="currentIndex == quiz.questions.length - 1"
+            class="w-full sm:py-6"
           >
             Submit Quiz
           </button>
 
           <!-- Dialog content -->
-          <hlm-dialog-content *brnDialogContent="let ctx" class="">
+          <hlm-dialog-content
+            *brnDialogContent="let ctx"
+            class="max-sm:w-[90%] max-sm:mx-auto"
+          >
             <hlm-dialog-header>
               <div class="flex items-center gap-2 mb-4">
                 <svg
@@ -219,15 +235,19 @@
       </div>
     </div>
     <aside
-      class="p-6 max-md:flex max-md:mx-auto rounded-y-xl lg:rounded-r-xl lg:rounded-bl-none shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05),_0_1px_3px_0_rgba(0,0,0,0.1),_0_1px_2px_0_rgba(0,0,0,0.06)]"
+      class="p-6 max-sm:px-3 max-sm:w-full max-md:flex max-md:mx-auto rounded-y-xl lg:rounded-r-xl lg:rounded-bl-none shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05),_0_1px_3px_0_rgba(0,0,0,0.1),_0_1px_2px_0_rgba(0,0,0,0.06)]"
     >
-      <div class="p-4 bg-white rounded-lg shadow-md min-h-80">
+      <div
+        class="p-4 bg-white rounded-lg shadow-md min-h-80 max-sm:min-h-fit max-sm:w-full"
+      >
         <!-- Title -->
         <h3 class="text-lg font-bold mb-4 text-gray-900">Quiz Navigation</h3>
 
         <!-- Question numbers -->
-        <div class="flex flex-col justify-between min-h-60">
-          <div class="grid grid-cols-5 gap-3">
+        <div class="flex flex-col justify-between min-h-60 max-sm:min-h-fit">
+          <div
+            class="grid grid-cols-5 gap-3 max-sm:grid-cols-[repeat(auto-fit,minmax(40px,1fr))] max-sm:mb-10"
+          >
             <button
               *ngFor="let q of quiz.questions; let i = index"
               (click)="goToQuestion(i)"
@@ -278,7 +298,10 @@
             </button>
 
             <!-- Dialog content -->
-            <hlm-dialog-content *brnDialogContent="let ctx">
+            <hlm-dialog-content
+              *brnDialogContent="let ctx"
+              class="max-sm:w-[90%] max-sm:mx-auto"
+            >
               <hlm-dialog-header>
                 <div class="flex items-center gap-2 mb-4">
                   <svg

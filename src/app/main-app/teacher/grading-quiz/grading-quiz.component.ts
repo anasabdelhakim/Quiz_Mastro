@@ -5,11 +5,29 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HlmButton } from '@spartan-ng/helm/button';
 import { HlmInput } from '@spartan-ng/helm/input';
-
+import {
+  HlmDialog,
+  HlmDialogContent,
+  HlmDialogFooter,
+  HlmDialogHeader,
+} from '@spartan-ng/helm/dialog';
+import { Location } from '@angular/common';
+import { BrnDialogContent, BrnDialogTrigger } from '@spartan-ng/brain/dialog';
 @Component({
   selector: 'app-grading-quiz',
   standalone: true,
-  imports: [CommonModule, FormsModule, HlmInput, HlmButton],
+  imports: [
+    CommonModule,
+    FormsModule,
+    HlmInput,
+    HlmButton,
+    HlmDialog,
+    HlmDialogContent,
+    HlmDialogFooter,
+    HlmDialogHeader,
+    BrnDialogContent,
+    BrnDialogTrigger,
+  ],
   templateUrl: './grading-quiz.component.html',
   styleUrls: ['./grading-quiz.component.css'],
 })
@@ -24,7 +42,8 @@ export class GradingQuizComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private quizService: QuizDataService
+    private quizService: QuizDataService,
+    private location: Location
   ) {}
 
   ngOnInit(): void {
@@ -95,7 +114,6 @@ export class GradingQuizComponent implements OnInit {
       this.manualScores
     );
 
-    alert('Grades submitted successfully!');
     this.router.navigate(['/teacher-dashboard']);
   }
 
@@ -109,5 +127,8 @@ export class GradingQuizComponent implements OnInit {
 
   isCorrect(q: Question) {
     return q.type === 'mcq' && this.studentAnswer(q) === this.correctAnswer(q);
+  }
+  goBack() {
+    this.location.back();
   }
 }

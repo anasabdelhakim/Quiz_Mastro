@@ -1,16 +1,16 @@
-<section class="p-8 max-sm:p-4 bg-background">
-  <h1 class="text-center text-primary text-3xl font-semibold mt-10">
-    Create New Quiz
+<section class="p-8 max-sm:px-2 max-sm:py-4 bg-background">
+  <h1 class="text-center text-foreground text-3xl font-semibold mt-5">
+    View Detailes
   </h1>
 
   <div class="lg:max-w-[70%] mx-auto space-y-8 mt-5" [formGroup]="quizForm">
-    <div class="flex justify-between items-center">
+    <div class="flex justify-between max-sm:justify-center items-center">
       <button
         variant="outline"
         hlmBtn
         type="button"
-        class="flex items-center group"
-        routerLink="/teacher-dashboard"
+        class="flex items-center group max-sm:hidden"
+        (click)="goBack()"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -412,7 +412,10 @@
             Update Quiz
           </button>
 
-          <hlm-dialog-content *brnDialogContent="let ctx">
+          <hlm-dialog-content
+            *brnDialogContent="let ctx"
+            class="max-sm:w-[90%] max-sm:mx-auto"
+          >
             <hlm-dialog-header>
               <div class="flex items-center gap-2 mb-5">
                 <svg

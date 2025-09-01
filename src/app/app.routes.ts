@@ -83,12 +83,12 @@ export const routes: Routes = [
       {
         path: 'teacher-dashboard',
         component: TeacherDashboardComponent,
-        data: { title: 'Dashboard - Teacher' },
+        data: { title: 'My Dashboard - Teacher' },
       },
       {
         path: 'student-to-teacher',
         component: StudentToTeacherComponent,
-        data: { title: 'Students - Teacher' },
+        data: { title: 'Relashions' },
       },
       {
         path: 'view-detailes/:id',
@@ -116,7 +116,7 @@ export const routes: Routes = [
       {
         path: 'teacher-to-student',
         component: TeacherToStudentComponent,
-        data: { title: 'My Teachers - Student' },
+        data: { title: 'Relashions' },
       },
       {
         path: 'connect-student',

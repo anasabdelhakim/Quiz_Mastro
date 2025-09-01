@@ -8,7 +8,7 @@ import {
   Validators,
   FormControl,
 } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   HlmDialog,
   HlmDialogContent,
@@ -23,7 +23,7 @@ import { HlmSelectImports } from '@spartan-ng/helm/select';
 import { HlmButton } from '@spartan-ng/helm/button';
 import { QuizDataService } from '../../quiz.service';
 import { Quiz } from '../../quiz.model';
-
+import { Location } from '@angular/common';
 @Component({
   selector: 'app-view-detailes',
   standalone: true,
@@ -40,7 +40,6 @@ import { Quiz } from '../../quiz.model';
     HlmDialogContent,
     HlmDialogFooter,
     HlmDialogHeader,
-    RouterLink,
   ],
   templateUrl: './view-detailes.component.html',
   styleUrls: ['./view-detailes.component.css'],
@@ -69,6 +68,7 @@ export class ViewDetailesComponent {
   >;
 
   constructor(
+    private location: Location,
     private router: Router,
     private fb: FormBuilder,
     private quizDataService: QuizDataService,
@@ -260,5 +260,8 @@ export class ViewDetailesComponent {
     if (!this.currentQuizId) return;
     this.quizDataService.deleteQuiz(this.currentQuizId);
     this.router.navigate(['/teacher-dashboard']);
+  }
+  goBack() {
+    this.location.back();
   }
 }

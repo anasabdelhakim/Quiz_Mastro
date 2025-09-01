@@ -1,10 +1,12 @@
 <div
-  class="flex min-h-screen flex-col items-center justify-center bg-[var(--background-color)] p-4 overflow-hidden"
+  class="flex min-h-[100dvh] items-center flex-col bg-[var(--background-color)] p-4 overflow-hidden"
 >
   <div class="w-full max-w-md">
     <!-- Header -->
     <div class="mb-8 text-center">
-      <div class="py-1.5 max-lg:px-3 px-2 rounded-lg w-35 h-30 mx-auto">
+      <div
+        class="py-1.5 max-lg:px-3 px-2 rounded-lg w-35 h-30 mx-auto max-sm:hidden"
+      >
         <img
           src="ntg.jpeg"
           alt="Logo"
@@ -14,12 +16,14 @@
       <div class="mx-auto mb-4 h-12 w-12 text-primary">
         <!-- Logo -->
       </div>
-      <h1 class="text-3xl font-bold text-foreground">Quiz Application</h1>
+      <h1 class="text-3xl font-bold text-foreground">Quiz Mastro</h1>
       <p class="mt-2 text-muted-foreground">Sign in to continue</p>
     </div>
 
     <!-- Card -->
-    <div class="rounded-2xl bg-white px-8 pt-8 pb-6 shadow-lg">
+    <div
+      class="rounded-2xl bg-white px-8 pt-8 pb-6 max-sm:pt-6 max-sm:pb-4 max-sm:px-6 shadow-lg"
+    >
       <form class="space-y-5" [formGroup]="form">
         <!-- Username -->
         <div>
@@ -45,7 +49,10 @@
               class="lg:h-12 lg:text-lg"
             />
           </div>
-          <p *ngIf="errors.username" class="text-destructive/70 text-sm mt-1">
+          <p
+            *ngIf="errors.username"
+            class="text-destructive/70 text-sm mt-1 max-sm:text-[12px]"
+          >
             {{ errors.username }}
           </p>
         </div>
@@ -126,7 +133,10 @@
               </svg>
             </button>
           </div>
-          <p *ngIf="errors.password" class="text-destructive/70 text-sm mt-1">
+          <p
+            *ngIf="errors.password"
+            class="text-destructive/70 text-sm mt-1 max-sm:text-[12px]"
+          >
             {{ errors.password }}
           </p>
         </div>
@@ -165,7 +175,7 @@
               <path d="M12 8h.01" />
             </svg>
 
-            <p class="text-gray-500 text-[13px]">
+            <p class="text-gray-500 text-[13px] max-sm:text-[11px]">
               username: <strong>student&#64;</strong>/<strong
                 >teacher&#64;</strong
               >
@@ -189,7 +199,7 @@
               <path d="M12 16v-4" />
               <path d="M12 8h.01" />
             </svg>
-            <p class="text-gray-500 text-[13px]">
+            <p class="text-gray-500 text-[13px] max-sm:text-[11px]">
               password: <strong>student#</strong>/<strong>teacher#</strong>
               followed by password
             </p>
@@ -199,7 +209,9 @@
     </div>
 
     <!-- Footer -->
-    <p class="mt-6 text-center text-sm text-[var(--text-secondary)]">
+    <p
+      class="mt-6 text-center text-sm text-[var(--text-secondary)] max-sm:text-[12px]"
+    >
       © 2025 Quiz App. All rights reserved.
     </p>
   </div>

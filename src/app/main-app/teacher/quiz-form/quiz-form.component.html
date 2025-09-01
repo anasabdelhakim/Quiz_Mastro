@@ -1,6 +1,6 @@
-<section class="p-8 max-sm:p-2 bg-background">
-  <h1 class="text-center text-primary text-3xl font-semibold mt-10">
-    Create New Quiz
+<section class="p-8 max-sm:px-2 max-sm:py-4 bg-background">
+  <h1 class="text-center text-foreground text-3xl font-semibold mt-5">
+    Quiz Settings
   </h1>
 
   <div class="lg:max-w-[70%] mx-auto space-y-8 mt-5" [formGroup]="quizForm">
@@ -8,8 +8,8 @@
       variant="outline"
       hlmBtn
       type="button"
-      class="flex items-center group"
-      routerLink="/teacher-dashboard"
+      class="flex items-center group max-sm:hidden"
+      (click)="goBack()"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -291,13 +291,28 @@
               hlmBtn
               type="button"
               variant="outline"
+              class="max-sm:w-14"
               [ngClass]="{
                 'btn-active text-white': tempCorrectIndex === i,
                 '': tempCorrectIndex !== i
               }"
               (click)="setTempCorrect(i)"
             >
-              Correct
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-check-icon lucide-check hidden max-sm:block"
+              >
+                <path d="M20 6 9 17l-5-5" />
+              </svg>
+              <span class="sm:block hidden">Correct</span>
             </button>
           </div>
         </div>
@@ -345,7 +360,10 @@
         </button>
 
         <!-- Dialog content -->
-        <hlm-dialog-content *brnDialogContent="let ctx">
+        <hlm-dialog-content
+          *brnDialogContent="let ctx"
+          class="max-sm:w-[90%] max-sm:mx-auto"
+        >
           <hlm-dialog-header>
             <div class="flex items-center gap-2 mb-5">
               <svg

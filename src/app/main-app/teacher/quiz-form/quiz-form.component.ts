@@ -22,8 +22,8 @@ import { HlmSelectImports } from '@spartan-ng/helm/select';
 import { HlmButton } from '@spartan-ng/helm/button';
 import { QuizDataService } from '../../quiz.service';
 import { Quiz } from '../../quiz.model';
-import { Router, RouterLink } from '@angular/router';
-
+import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 @Component({
   selector: 'app-quiz-form',
   standalone: true,
@@ -40,7 +40,7 @@ import { Router, RouterLink } from '@angular/router';
     HlmDialogContent,
     HlmDialogFooter,
     HlmDialogHeader,
-    RouterLink,
+    
   ],
   templateUrl: './quiz-form.component.html',
 })
@@ -64,7 +64,8 @@ export class QuizFormComponent {
   constructor(
     private router: Router,
     private fb: FormBuilder,
-    private quizDataService: QuizDataService
+    private quizDataService: QuizDataService,
+    private location: Location
   ) {
     this.quizForm = this.fb.nonNullable.group({
       title: ['', Validators.required],
@@ -192,5 +193,8 @@ export class QuizFormComponent {
     ctx?.close();
 
     this.router.navigate(['/teacher-dashboard']);
+  }
+  goBack() {
+    this.location.back();
   }
 }
