@@ -1,5 +1,5 @@
 <div
-  class="lg:max-w-[90%] p-8 max-sm:px-0 max-sm:py-0 mx-auto min-h-screen bg-background"
+  class="lg:max-w-[90%] p-8 max-sm:px-0 max-sm:py-0 mx-auto min-h-[100dvh] bg-background"
 >
   <div class="mt-10 max-sm:mt-0 flex max-md:flex-col">
     <div
@@ -55,14 +55,18 @@
 
       <!-- Question -->
       <div class="transition-opacity duration-300">
-        <div class="w-full flex justify-between items-center my-6 max-sm:my-4">
-          <h2 class="text-2xl max-sm:text-base font-semibold text-foreground">
+        <div
+          class="w-full flex justify-between items-start my-6 max-sm:my-4 relative"
+        >
+          <h2
+            class="text-2xl max-sm:text-base font-semibold text-foreground break-words max-w-[80%]"
+          >
             <span class="font-bold">Q{{ currentIndex + 1 }}.</span>
             {{ currentQuestion.text }}?
           </h2>
 
           <span
-            class="bg-accent text-primary sm:text-sm text-[10px] font-bold px-3 py-1 rounded-full"
+            class="bg-accent text-primary sm:text-sm text-[10px] font-bold sm:px-3 sm:py-1 px-2 py-0.75 rounded-full absolute right-0"
             >{{ currentQuestion.points }} Points</span
           >
         </div>
@@ -150,7 +154,7 @@
           <!-- Dialog content -->
           <hlm-dialog-content
             *brnDialogContent="let ctx"
-            class="max-sm:w-[95%] max-sm:mx-auto"
+            class="max-sm:w-[95vw] max-sm:mx-auto"
           >
             <hlm-dialog-header>
               <div class="flex items-center gap-2 mb-4">
@@ -234,7 +238,7 @@
       </div>
     </div>
     <aside
-      class="p-6 max-sm:px-3 max-sm:w-full max-md:flex max-md:mx-auto rounded-y-xl lg:rounded-r-xl lg:rounded-bl-none shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05),_0_1px_3px_0_rgba(0,0,0,0.1),_0_1px_2px_0_rgba(0,0,0,0.06)]"
+      class="p-6 max-sm:px-3 max-sm:pb-2 max-sm:w-full max-md:flex max-md:mx-auto rounded-y-xl lg:rounded-r-xl lg:rounded-bl-none shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05),_0_1px_3px_0_rgba(0,0,0,0.1),_0_1px_2px_0_rgba(0,0,0,0.06)]"
     >
       <div
         class="p-4 bg-white rounded-lg shadow-md min-h-80 max-sm:min-h-fit max-sm:w-full"
@@ -299,10 +303,10 @@
             <!-- Dialog content -->
             <hlm-dialog-content
               *brnDialogContent="let ctx"
-              class="max-sm:w-[95%] max-sm:mx-auto"
+              class="max-sm:w-[95vw] max-sm:mx-auto"
             >
               <hlm-dialog-header>
-                <div class="flex items-center gap-2 mb-4">
+                <div class="flex items-center gap-2 mb-5">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"

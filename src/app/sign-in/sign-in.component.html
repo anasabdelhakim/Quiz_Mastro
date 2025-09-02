@@ -1,7 +1,7 @@
 <div
-  class="flex min-h-[100dvh] items-center flex-col bg-[var(--background-color)] p-4 max-sm:p-2 overflow-hidden"
+  class="flex min-h-[100dvh] items-center flex-col bg-[var(--background-color)] p-4 max-sm:p-2 overflow-hidden border-2"
 >
-  <div class="w-full max-w-md">
+  <div class="w-full max-w-md mt-8">
     <!-- Header -->
     <div class="mb-8 text-center">
       <div
@@ -13,7 +13,7 @@
           class="w-full h-full rounded-lg shadow-lg mt-10"
         />
       </div>
-      <div class="mx-auto mb-4 h-12 w-12 text-primary">
+      <div class="mx-auto mb-4 h-12 w-12 text-primary max-sm:hidden">
         <!-- Logo -->
       </div>
       <h1 class="text-3xl font-bold text-foreground">Quiz Mastro</h1>
@@ -156,7 +156,7 @@
 
       <div class="flex flex-col mt-6 items-start gap-3">
         <div class="h-[2px] w-full bg-secondary"></div>
-        <div>
+        <div class="flex flex-col gap-1">
           <div class="flex items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -179,7 +179,6 @@
               username: <strong>student&#64;</strong>/<strong
                 >teacher&#64;</strong
               >
-              followed by password
             </p>
           </div>
           <div class="flex items-center">
@@ -201,7 +200,6 @@
             </svg>
             <p class="text-gray-500 text-[13px] max-sm:text-[11px]">
               password: <strong>student#</strong>/<strong>teacher#</strong>
-              followed by password
             </p>
           </div>
         </div>

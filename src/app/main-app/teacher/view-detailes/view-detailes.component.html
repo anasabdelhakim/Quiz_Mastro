@@ -104,6 +104,7 @@
         </label>
         <input
           id="quiz-title"
+          maxlength="20"
           hlmInput
           formControlName="title"
           placeholder="Enter quiz title"
@@ -128,7 +129,7 @@
           formControlName="description"
           placeholder="Enter description"
           rows="3"
-          maxlength="100"
+          maxlength="40"
           class="overflow-hidden text-start"
           (keydown.enter)="focusNext(durationInput)"
         ></textarea>
@@ -147,6 +148,8 @@
           hlmInput
           [readonly]="!isEditing"
           type="number"
+          min="1"
+          max="300"
           formControlName="duration"
           class="form-input"
           (keydown.enter)="focusNext(startTimeInput)"
@@ -168,7 +171,14 @@
           type="datetime-local"
           formControlName="startTime"
           class="form-input"
+          [min]="minDateTime"
         />
+        <div
+          class="mt-2 text-sm text-destructive"
+          *ngIf="quizForm.get('startTime')?.hasError('minDateTime')"
+        >
+          Start time must be at least 1 minute from now.
+        </div>
       </div>
     </div>
 
@@ -330,6 +340,8 @@
                 #points
                 hlmInput
                 type="number"
+                  min="1"
+              max="100"
                 [formControl]="newQuestionPoints"
                 class="form-input"
               />
@@ -350,6 +362,7 @@
                 [readonly]="!isEditing"
                 hlmInput
                 type="text"
+                maxlength="50"
                 [formControl]="optCtrl"
                 placeholder="Enter option {{ i + 1 }}"
                 class="form-input flex-1"

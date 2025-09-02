@@ -48,6 +48,7 @@ export class ViewDetailesComponent {
   quizForm: FormGroup;
   isEditing = false;
   currentQuizId: string | null = null; // store the loaded quiz ID
+  minDateTime!: string;
 
   /** Temporary controls for the "Add Question" form */
   newQuestionType = new FormControl<'mcq' | 'written'>('mcq', {
@@ -58,6 +59,14 @@ export class ViewDetailesComponent {
     validators: Validators.required,
     nonNullable: true,
   });
+
+  private minDateTimeValidator(control: FormControl) {
+    if (!control.value) return null;
+    const selected = new Date(control.value);
+    const now = new Date();
+    now.setMinutes(now.getMinutes() + 1);
+    return selected < now ? { minDateTime: true } : null;
+  }
 
   /** Temporary MCQ state */
   tempOptionControls: FormArray<FormControl<string | null>>;
@@ -79,7 +88,7 @@ export class ViewDetailesComponent {
       title: ['', Validators.required],
       description: [''],
       duration: [30, [Validators.required, Validators.min(1)]],
-      startTime: ['', Validators.required],
+      startTime: ['', [Validators.required, this.minDateTimeValidator]],
       questions: this.fb.array<FormGroup>([]),
     });
 

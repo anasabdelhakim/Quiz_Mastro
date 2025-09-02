@@ -201,7 +201,7 @@
 -------------------------- */
 @layer components {
   .card {
-    @apply bg-card text-foreground rounded-md shadow-md px-6 py-6 max-sm:px-3;
+    @apply bg-card text-foreground rounded-md shadow-md px-6 py-6 max-sm:px-3 break-words max-w-full;
   }
 }
 .hover-none {
@@ -257,4 +257,17 @@
 .time-critical {
   animation: countdown 1.2s infinite;
   font-weight: bold;
+}
+
+h2,
+span,
+h1,
+p {
+  max-width: 100%;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+}
+.dialog-width-mobile {
+  width: 95% !important;
 }

@@ -40,14 +40,14 @@
     </button>
 
     <div class="card" *ngFor="let q of quiz.questions; let i = index">
-      <div class="flex justify-between items-start mb-4">
-        <p class="text-lg font-semibold text-primary mb-4 flex-1">
+      <div class="flex justify-between items-start mb-4 relative">
+        <p class="text-lg font-semibold text-primary mb-4 flex-1 text-left">
           <span class="font-bold">{{ i + 1 }}.</span> {{ q.text }}
         </p>
 
         <ng-container *ngIf="q.type === 'mcq'">
           <div
-            class="flex items-center gap-2 text-sm font-medium px-3 py-1 rounded-full"
+            class="flex items-center gap-2 text-sm font-medium px-3 py-1 max-sm:px-2 max-sm:py-0.75 rounded-full absolute right-0 -top-2"
             [ngClass]="{
               'text-green-600 bg-green-100': isCorrect(q),
               'text-red-600 bg-red-100': !isCorrect(q)
@@ -80,7 +80,7 @@
       <div class="space-y-3" *ngIf="q.type === 'mcq'">
         <div
           *ngFor="let o of q.options"
-          class="flex items-center p-4 rounded-md border-2"
+          class="flex items-center text-left p-4 rounded-md border-2"
           [ngClass]="{
             'bg-success-soft  border-success': o.isCorrect,
             'bg-destructive-soft  border-destructive':
@@ -88,7 +88,9 @@
             ' border-border': studentAnswer(q) !== o.id
           }"
         >
-          <p [class.font-semibold]="o.isCorrect">{{ o.text }}</p>
+          <div class="max-w-[90%]">
+            <p [class.font-semibold]="o.isCorrect">{{ o.text }}</p>
+          </div>
         </div>
       </div>
 
