@@ -104,7 +104,7 @@
               [name]="'quiz_option_' + currentQuestion.id"
               [value]="option.id"
               [(ngModel)]="selectedAnswers[currentQuestion.id]"
-              class="w-6 h-6 accent-primary cursor-pointer max-sm:w-4 max-sm:h-4"
+              class="w-6 h-6 accent-primary cursor-pointer max-sm:w-5 max-sm:h-5"
             />
           </label>
         </div>
@@ -113,7 +113,7 @@
         <div *ngIf="currentQuestion.type === 'written'" class="mb-8">
           <textarea
             hlmInput
-            class="w-full border-2 p-3 h-48 sm:h-72"
+            class="w-full border-2 p-3 h-56 sm:h-72"
             placeholder="Write your answer here..."
             [(ngModel)]="selectedAnswers[currentQuestion.id]"
           ></textarea>

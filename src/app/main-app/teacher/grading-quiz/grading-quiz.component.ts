@@ -131,4 +131,10 @@ export class GradingQuizComponent implements OnInit {
   goBack() {
     this.location.back();
   }
+  correctOptionId(q: Question): string {
+    return q.options?.find((o) => o.isCorrect)?.id || '';
+  }
+  isSelected(q: Question, optionId: string): boolean {
+    return this.studentAnswer(q) === optionId;
+  }
 }
