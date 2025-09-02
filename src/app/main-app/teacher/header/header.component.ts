@@ -6,7 +6,7 @@ import {
   RouterLink,
   RouterLinkActive,
 } from '@angular/router';
-import { Location } from '@angular/common';
+
 import { filter } from 'rxjs/operators';
 
 @Component({
@@ -20,7 +20,7 @@ export class HeaderComponent implements OnInit {
   pageTitle = 'QuizMaster';
 
   constructor(
-    private location: Location,
+    
     private router: Router,
     private activatedRoute: ActivatedRoute
   ) {}
@@ -50,9 +50,5 @@ export class HeaderComponent implements OnInit {
     } else {
       this.pageTitle = 'QuizMaster';
     }
-  }
-
-  goBack() {
-    this.location.back();
   }
 }

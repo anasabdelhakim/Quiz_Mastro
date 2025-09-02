@@ -114,7 +114,9 @@ export class GradingQuizComponent implements OnInit {
       this.manualScores
     );
 
-    this.router.navigate(['/teacher-dashboard']);
+    this.router.navigate(['/teacher-dashboard'], {
+      replaceUrl: true,
+    });
   }
 
   studentAnswer(q: Question) {

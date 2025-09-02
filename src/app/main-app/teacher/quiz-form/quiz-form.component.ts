@@ -77,7 +77,7 @@ export class QuizFormComponent {
       title: ['', Validators.required],
       description: [''],
       duration: [30, [Validators.required, Validators.min(1)]],
-      startTime: ['', Validators.required],
+      startTime: ['', [Validators.required, this.minDateTimeValidator]],
       questions: this.fb.array<FormGroup>([]),
     });
 
@@ -198,7 +198,9 @@ export class QuizFormComponent {
     console.log(quiz);
     ctx?.close();
 
-    this.router.navigate(['/teacher-dashboard']);
+    this.router.navigate(['/teacher-dashboard'], {
+      replaceUrl: true,
+    });
   }
   goBack() {
     this.location.back();

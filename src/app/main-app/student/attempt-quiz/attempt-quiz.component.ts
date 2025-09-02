@@ -177,7 +177,9 @@ export class AttemptQuizComponent implements OnInit, OnDestroy {
     }
     console.log(this.quiz.timeSpent);
     alert('⏳ Time is up! Your quiz has been automatically submitted.');
-    this.router.navigate(['/student-dashboard']);
+    this.router.navigate(['/student-dashboard'], {
+      replaceUrl: true,
+    });
   }
 
   finalizeSubmit() {
@@ -195,7 +197,9 @@ export class AttemptQuizComponent implements OnInit, OnDestroy {
       });
     }
     console.log(this.quiz.timeSpent);
-    this.router.navigate(['/student-dashboard']);
+    this.router.navigate(['/student-dashboard'], {
+      replaceUrl: true,
+    });
   }
   objectKeys(obj: any): string[] {
     return Object.keys(obj);

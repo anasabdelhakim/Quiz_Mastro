@@ -268,7 +268,9 @@ export class ViewDetailesComponent {
   deleteQuiz() {
     if (!this.currentQuizId) return;
     this.quizDataService.deleteQuiz(this.currentQuizId);
-    this.router.navigate(['/teacher-dashboard']);
+    this.router.navigate(['/teacher-dashboard'], {
+      replaceUrl: true,
+    });
   }
   goBack() {
     this.location.back();
