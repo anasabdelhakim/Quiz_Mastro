@@ -201,6 +201,21 @@ export class AttemptQuizComponent implements OnInit, OnDestroy {
       replaceUrl: true,
     });
   }
+  onWrittenAnswerChange(questionId: string, value: string) {
+    if (value && value.trim() !== '') {
+      this.selectedAnswers[questionId] = value.trim();
+    } else {
+      delete this.selectedAnswers[questionId]; // remove if empty
+    }
+
+    // Persist to service
+    this.quizService.updateStudentAnswer(
+      this.quiz.id,
+      questionId,
+      this.selectedAnswers[questionId] || ''
+    );
+  }
+
   objectKeys(obj: any): string[] {
     return Object.keys(obj);
   }

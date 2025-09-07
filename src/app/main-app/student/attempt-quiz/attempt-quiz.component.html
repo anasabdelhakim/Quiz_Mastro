@@ -73,7 +73,7 @@
 
         <!-- Options -->
         <div
-          class="space-y-4 max-sm:space-y-3 mb-8 max-sm:mb-3"
+          class="space-y-4 max-sm:space-y-3 mb-8 max-sm:my-5"
           *ngIf="currentQuestion.type === 'mcq'"
         >
           <label
@@ -111,12 +111,13 @@
 
         <!-- Written -->
         <div *ngIf="currentQuestion.type === 'written'" class="mb-8">
-          <textarea
-            hlmInput
-            class="w-full border-2 p-3 h-56 sm:h-72"
-            placeholder="Write your answer here..."
-            [(ngModel)]="selectedAnswers[currentQuestion.id]"
-          ></textarea>
+<textarea
+  hlmInput
+  class="w-full border-2 p-3 h-56 sm:h-72"
+  placeholder="Write your answer here..."
+  [(ngModel)]="selectedAnswers[currentQuestion.id]"
+  (ngModelChange)="onWrittenAnswerChange(currentQuestion.id, $event)"
+></textarea>
         </div>
       </div>
 

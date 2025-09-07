@@ -39,9 +39,14 @@
         <path d="M7 17L9 19L13 15"></path>
       </svg>
       <span
-        class="text-xl max-sm:text-[clamp(1rem,7vw,2rem)] font-bold tracking-wide text-foreground max-sm:ml-4"
+        class="text-xl max-sm:text-[clamp(1rem,6vw,2rem)] font-bold tracking-wide text-foreground max-sm:ml-4 hidden max-sm:block"
       >
         {{ pageTitle }}
+      </span>
+      <span
+        class="text-2xl font-bold tracking-wide text-foreground max-sm:ml-4 max-sm:hidden"
+      >
+        Quiz Mastro
       </span>
     </a>
   </div>
@@ -94,13 +99,13 @@
 </header>
 
 <aside
-  class="fixed bottom-0 z-50 w-full bg-white flex items-center px-2 justify-between shadow-sidebar h-13 sm:hidden"
+  class="fixed bottom-0 z-50 w-full bg-white flex items-center px-3 justify-between shadow-sidebar h-12 sm:hidden"
 >
   <nav class="w-full mt-1 flex justify-between items-center">
     <a
       routerLink="/teacher-dashboard"
       routerLinkActive="text-primary"
-      class="relative group flex items-center flex-col rounded-main text-muted-foreground font-light sidebar-font-scale transition-transform active:scale-95 active:bg-gray-200 py-1 px-2"
+      class="relative group flex items-center flex-col rounded-main text-muted-foreground font-light sidebar-font-scale transition-transform active:scale-95 py-1 px-2"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -124,7 +129,7 @@
     <a
       routerLink="/create-quiz"
       routerLinkActive="text-primary"
-      class="relative group flex items-center flex-col rounded-main text-muted-foreground font-light sidebar-font-scale transition-transform active:scale-95 active:bg-gray-200 py-1 px-2"
+      class="relative group flex items-center flex-col rounded-main text-muted-foreground font-light sidebar-font-scale transition-transform active:scale-95 py-1 px-2"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -146,7 +151,7 @@
     <a
       routerLink="/student-to-teacher"
       routerLinkActive="text-primary"
-      class="relative group flex items-center flex-col rounded-main text-muted-foreground font-light sidebar-font-scale transition-transform active:scale-95 active:bg-gray-200 py-1 px-2"
+      class="relative group flex items-center flex-col rounded-main text-muted-foreground font-light sidebar-font-scale transition-transform active:scale-95 py-1 px-2"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
