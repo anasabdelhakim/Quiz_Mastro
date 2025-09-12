@@ -220,10 +220,15 @@
 
 .button-click {
   cursor: pointer;
-  transition: transform 0.15s ease-in-out, background-color 0.1s ease-in-out,
-    color 0.1s ease-in-out;
 }
 
+/* only transition on hover/focus */
+.button-click:hover,
+.button-click:active {
+  transition: transform 0.15s ease-in-out,
+              background-color 0.15s ease-in-out,
+              color 0.15s ease-in-out;
+}
 .button-click:active {
   transform: scale(0.95);
 }
