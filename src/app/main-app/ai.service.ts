@@ -9,12 +9,12 @@ import { catchError, map } from 'rxjs/operators';
 export class AiService {
   private apiUrl = 'https://openrouter.ai/api/v1/chat/completions';
   private apiKey =
-    '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';
+    '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';
 
   constructor(private http: HttpClient) {}
 createQuizAdvanced(
   topic: string,
-  description: string,   // ✅ new param
+  description: string,   
   mcq: { easy: number; medium: number; hard: number },
   written: { easy: number; medium: number; hard: number }
 ): Observable<string | null> {
