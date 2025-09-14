@@ -31,7 +31,7 @@ export class IndexComponent {
       case 'teacher':
         this.router.navigate(['/teacher-dashboard']);
         break;
-      case 'super':
+      case 'admin':
         this.router.navigate(['/home']); // super admin dashboard
         break;
       default:

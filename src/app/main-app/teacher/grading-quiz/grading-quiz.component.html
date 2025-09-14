@@ -43,14 +43,16 @@
       *ngFor="let q of quiz.questions; let i = index"
       class="card mb-12 max-sm:mb-6 last:mb-0"
     >
-      <div class="flex justify-between items-start mb-4 relative">
-        <p class="text-lg font-semibold text-primary mb-4 flex-1 text-left">
+      <div class="flex justify-between items-start mb-4">
+        <p
+          class="text-lg font-semibold text-primary mb-4 flex-1 text-left break-words"
+        >
           <span class="font-bold">{{ i + 1 }}.</span> {{ q.text }}
         </p>
 
         <ng-container *ngIf="q.type === 'mcq'">
           <div
-            class="flex items-center gap-2 text-sm font-medium px-3 py-1 max-sm:px-2 max-sm:py-0.75 rounded-full absolute right-0 -top-2"
+            class="flex items-center gap-2 text-sm font-medium px-3 py-1 max-sm:px-2 max-sm:py-0.75 rounded-full whitespace-nowrap"
             [ngClass]="{
               'text-green-600 bg-green-100': isCorrect(q),
               'text-red-600 bg-red-100': !isCorrect(q)
@@ -180,7 +182,7 @@
         </div>
       </div>
 
-      <div class="mt-4">
+      <div class="mt-4 text-left">
         <label
           class="text-sm font-medium text-gray-500"
           for="explanation-{{ q.id }}"

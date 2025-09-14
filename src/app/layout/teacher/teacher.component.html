@@ -1,5 +1,4 @@
 <div class="layout p-4 sm:p-6 space-y-4">
-
   <!-- Header + Add Button + Search -->
   <div class="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
     <h1 class="text-3xl font-bold">Teachers</h1>
@@ -56,7 +55,7 @@
   </div>
 
   <!-- Modal -->
-  <div *ngIf="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+  <div *ngIf="showModal" class="fixed inset-0 backdrop-blur-sm bg-black/10 flex items-center justify-center p-4 z-50">
     <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
       <div class="border-b px-4 py-4 flex justify-between items-center">
         <h3 class="text-lg font-medium">{{ isEditMode ? 'Edit Teacher' : 'Add Teacher' }}</h3>
@@ -80,7 +79,6 @@
             <div *ngIf="errors.email" class="text-red-500 text-sm mt-1">{{ errors.email }}</div>
           </div>
 
-
           <!-- Gender -->
           <div class="mb-4">
             <label class="block text-gray-700 text-sm font-medium mb-1">Gender</label>
@@ -100,28 +98,13 @@
             <div *ngIf="errors.username" class="text-red-500 text-sm mt-1">{{ errors.username }}</div>
           </div>
 
-          <!-- Password -->
-          <div class="mb-6 relative">
+          <!-- Password (no toggle) -->
+          <div class="mb-6">
             <label class="block text-gray-700 text-sm font-medium mb-1">Password</label>
-
-            <input [(ngModel)]="currentTeacher.password" name="password" [type]="showPassword ? 'text' : 'password'"
-              (ngModelChange)="onInputChange()"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-sm pr-10" />
-
-            <!-- Toggle Icon: shown only in Edit Mode -->
-            <button *ngIf="isEditMode" type="button" (click)="togglePassword()"
-              class="absolute right-3 top-9 text-gray-500 hover:text-gray-700">
-              <span class="material-symbols-outlined">
-                {{ showPassword ? 'visibility_off' : 'visibility' }}
-              </span>
-            </button>
-
-            <div *ngIf="errors.password" class="text-red-500 text-sm mt-1">
-              {{ errors.password }}
-            </div>
+            <input [(ngModel)]="currentTeacher.password" name="password" type="text" (ngModelChange)="onInputChange()"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-sm" />
+            <div *ngIf="errors.password" class="text-red-500 text-sm mt-1">{{ errors.password }}</div>
           </div>
-
-
 
           <!-- Phone -->
           <div class="mb-6">
@@ -144,5 +127,4 @@
       </div>
     </div>
   </div>
-
 </div>

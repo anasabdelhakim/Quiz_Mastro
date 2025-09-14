@@ -35,7 +35,6 @@ export class TeacherComponent implements OnInit {
     phone: '',
   };
 
-  showPassword = false;
   showModal = false;
   isEditMode = false;
   searchTerm = '';
@@ -43,9 +42,7 @@ export class TeacherComponent implements OnInit {
   formValid = false;
   genderOptions = ['Male', 'Female'];
 
-  togglePassword() {
-  this.showPassword = !this.showPassword;
-}
+
 
 
   teacherSchema = z.object({
@@ -98,7 +95,6 @@ export class TeacherComponent implements OnInit {
     this.isEditMode = true;
     this.currentTeacher = { ...teacher };
     this.errors = {};
-    this.showPassword = false;  
     this.formValid = true;
     this.showModal = true;
   }

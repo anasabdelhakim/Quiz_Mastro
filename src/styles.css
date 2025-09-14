@@ -225,10 +225,10 @@
 /* only transition on hover/focus */
 .button-click:hover,
 .button-click:active {
-  transition: transform 0.15s ease-in-out,
-              background-color 0.15s ease-in-out,
-              color 0.15s ease-in-out;
+  transition: transform 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    color 0.15s ease-in-out;
 }
+
 .button-click:active {
   transform: scale(0.95);
 }
@@ -275,4 +275,7 @@ p {
 }
 .dialog-width-mobile {
   width: 95% !important;
+}
+.force-scroll {
+  overflow-y: auto !important; /* force vertical scrolling */
 }

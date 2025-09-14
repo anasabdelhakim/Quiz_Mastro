@@ -15,7 +15,7 @@ import { HeaderComponent } from '../header/header.component';
 })
 export class StudentDashboardComponent implements OnInit {
   quizzes: Quiz[] = [];
-  loading: boolean = true; // start in loading state
+  loading: boolean = true; 
 
   constructor(
     private quizService: QuizDataService,
@@ -23,8 +23,6 @@ export class StudentDashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Fetch student quizzes
-
     this.loadQuizzes();
   }
 
@@ -52,5 +50,4 @@ export class StudentDashboardComponent implements OnInit {
   launchSEB() {
     window.location.href = '/SebClientSettingsfinal.seb';
   }
-  
 }

@@ -97,8 +97,8 @@
           [ngClass]="{
             'border-gray-400': quiz.status === 'unpublished',
             'border-primary': quiz.status === 'published',
-            'border-yellow-500': quiz.status === 'grading',
-            'border-green-600': quiz.status === 'finished'
+            'border-warning': quiz.status === 'grading',
+            'border-success': quiz.status === 'finished'
           }"
         >
           <div class="p-5 flex-grow">
@@ -112,9 +112,9 @@
                 class="text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap"
                 [ngClass]="{
                   'bg-gray-200 text-gray-700': quiz.status === 'unpublished',
-                  'bg-blue-100 text-blue-700': quiz.status === 'published',
-                  'bg-yellow-100 text-yellow-700': quiz.status === 'grading',
-                  'bg-green-100 text-green-700': quiz.status === 'finished'
+                  'bg-primary-soft text-primary': quiz.status === 'published',
+                  'bg-warning-soft text-warning': quiz.status === 'grading',
+                  'bg-success-soft text-success': quiz.status === 'finished'
                 }"
               >
                 {{ quiz.status | titlecase }}
@@ -194,7 +194,7 @@
               <!-- Student Finished -->
               <div
                 *ngIf="quiz.status === 'grading'"
-                class="flex items-center gap-2 text-yellow-600 font-medium"
+                class="flex items-center gap-2 text-warning font-medium"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -225,7 +225,7 @@
               <!-- Finished -->
               <div
                 *ngIf="quiz.status === 'finished'"
-                class="flex items-center gap-2 text-green-600 font-medium"
+                class="flex items-center gap-2 text-success font-medium"
               >
                 <span>Graded</span>
               </div>
