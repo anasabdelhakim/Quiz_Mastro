@@ -8,7 +8,7 @@ import { catchError, map } from 'rxjs/operators';
 })
 export class AiService {
   private apiUrl = 'https://openrouter.ai/api/v1/chat/completions';
-  private apiKey =
+  private api_Key =
     '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';
 
   constructor(private http: HttpClient) {}
@@ -45,7 +45,7 @@ Constraints:
 `;
 
   const headers = new HttpHeaders({
-    Authorization: `Bearer ${this.apiKey}`,
+    Authorization: `Bearer ${this.api_Key}`,
     'Content-Type': 'application/json',
   });
 

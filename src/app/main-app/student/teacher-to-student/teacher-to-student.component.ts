@@ -36,21 +36,21 @@ export class TeacherToStudentComponent {
   teachers = [
     {
       name: 'Ms. Harper',
-
+      
       email: 'heradwwad.math@example.com',
       avatar:
         'https://lh3.googleusercontent.com/aida-public/AB6AXuAjwP1fj5uXRgzbTWc_Ip80AAYq8ix1olvsHenRYxq2K4xAOer28yyx070FW3DvMpnoofliuDSRe3_MGcLlfQh2an6EETa6fO5ZQEUBZrmQfFlY-DpLvL99rPH_Sz9niZb1T_fZq3S0RhfoVuKt8VTKKZhsexhJoB1gSge8GmyNZ8oT7qQTd8qa9YQtFIR2X8aes05slEnZyj9Lw-jwKaIpTRGhspYwobfNS3ht5Zmn-6qh4VYyLIH7N5yD8TEjmRmzY8LpbZqAVUI',
     },
     {
       name: 'Mr. Bennett',
-
+      
       email: 'her.math@example.com',
       avatar:
         'https://lh3.googleusercontent.com/aida-public/AB6AXuDI4fmojvR_79vvZkrHJaSlRCvJ2jVI__G0DCvNb87smSbAgZCLHpy2OGSOnjO00oEHKWmN2R2-7VVNa0isTmcFQBta4JIqAJMSFjlReh5sV1f5n-YjeLtV9mVY-mp9Lnx_qV8KNm154k5lX1ef84QVscn2sZHROzOWSVC6OpQZF5sUMZrSyJwUBYM1uzjMbS4ZT5uBR07jHheDMFCk0v86-6B23XTg4djknDmYSWHn1GNpjIJemZA_n-UMy_qLHsyr1wSPU2WEaYM',
     },
     {
       name: 'Dr. Carter',
-
+    
       email: 'harper.math@example.com',
 
       avatar:
@@ -60,6 +60,7 @@ export class TeacherToStudentComponent {
       name: 'Mrs. Davis',
       email: 'bennett.physics@example.com',
 
+      
       avatar:
         'https://lh3.googleusercontent.com/aida-public/AB6AXuBioliX2q4ObDC9nzfwhowZZsX71e0_ebQwOVXnYPPIeYMInmH2Yv9IOAYoy1IuYq2JRwQmJbeJkVtuqc5P2jdVeqILn4tSjcv0zK8tFMabTHoJLPIQLPWAW3Z9iwAh81qUoL1oxHxG0GYgJQ0erPRtySQDl0QETQ83ZI6c4IMXL6mU-I26TkBk9kYbsnpUWqHo9LU98Vg5fg7hsb3q2IQsl6pYnlMwv_8KtQpKqF2cq3N_8PrfNNzY5JF1gpJt37OanGevGMM_SQk',
     },
@@ -93,9 +94,9 @@ export class TeacherToStudentComponent {
         'https://lh3.googleusercontent.com/aida-public/AB6AXuDcfrSM27jy9L3uIpfZ4NB9C_3DNLl8Eb1HeHgBKX_dnuGzkhyYah9aiaCaiowv3fxR_GAZidfdCAAHeFHyXtRVY4OpzYt_rvp7FRDk56KtygvcNv1DsfDC7hJ_F_1sKEmT6U46wwN930NYWVpmtEt2uQNcX88TzDugI7LnO4xWz4lhhtip6RXM85EN3kH6BSDNc95bI6tqzlMOgQniMAS9IIXXav5AXIuxZH304q0RM-_0fXA6aRuiJrs1oAZrL_Q8hfAlwyLBtWA',
     },
     {
-      name: 'mohamed hatem',
+      name: 'Anas',
       subject: 'Mathematics',
-      email: 'mhatem044@gmail.com',
+      email: 'kosharyanas1234@gmail.com',
       avatar:
         'https://lh3.googleusercontent.com/aida-public/AB6AXuDcfrSM27jy9L3uIpfZ4NB9C_3DNLl8Eb1HeHgBKX_dnuGzkhyYah9aiaCaiowv3fxR_GAZidfdCAAHeFHyXtRVY4OpzYt_rvp7FRDk56KtygvcNv1DsfDC7hJ_F_1sKEmT6U46wwN930NYWVpmtEt2uQNcX88TzDugI7LnO4xWz4lhhtip6RXM85EN3kH6BSDNc95bI6tqzlMOgQniMAS9IIXXav5AXIuxZH304q0RM-_0fXA6aRuiJrs1oAZrL_Q8hfAlwyLBtWA',
     },
@@ -121,6 +122,7 @@ export class TeacherToStudentComponent {
     );
     const teacherEmail = selectedTeacherObj?.email || 'fallback@example.com';
 
+
     const templateParams = {
       name: this.contactForm.value.name,
       from_email: this.contactForm.value.email,
@@ -128,6 +130,7 @@ export class TeacherToStudentComponent {
       teacher_name: this.selectedTeacher,
       title: this.contactForm.value.title,
       message: this.contactForm.value.message,
+      
     };
 
     emailjs
