@@ -66,7 +66,7 @@
         <button
           hlmBtn
           variant="outline"
-          class="flex items-center gap-2 max-sm:w-full max-sm:justify-center h-12 hover:bg-primary-soft transition-all duration-200"
+          class="flex items-center gap-2 max-sm:w-full max-sm:justify-center h-12"
           (click)="exportToCSV()"
         >
           <svg
@@ -91,7 +91,7 @@
     </div>
 
     <!-- Main Content Card -->
-    <div class="card attendance-card p-8 shadow-lg border border-card-border hover:shadow-xl transition-shadow duration-300">
+    <div class="card">
       <!-- Card Header -->
       <div class="flex justify-between items-center mb-8 max-lg:flex-col max-lg:items-start max-lg:gap-6 ">
         <div>
@@ -344,7 +344,7 @@
         </div>
 
         <!-- Pagination -->
-        <div class="flex justify-between items-center mt-8 p-4 bg-muted/30 rounded-lg">
+        <div class="flex justify-between items-center max-sm:flex-col mt-8 p-4 bg-muted/30 rounded-lg">
           <p class="text-sm text-muted-foreground font-medium">
             Showing {{ paginatedAttendances.length }} of {{ filteredAttendances.length }} records
             <span class="text-foreground font-semibold">(Page {{ currentPage }} of {{ totalPages }})</span>
