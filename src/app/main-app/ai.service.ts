@@ -8,17 +8,17 @@ import { catchError, map } from 'rxjs/operators';
 })
 export class AiService {
   private apiUrl = 'https://openrouter.ai/api/v1/chat/completions';
-  private api_Key =
-    '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';
+  private apiKey =
+    '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';
 
   constructor(private http: HttpClient) {}
-createQuizAdvanced(
-  topic: string,
-  description: string,   
-  mcq: { easy: number; medium: number; hard: number },
-  written: { easy: number; medium: number; hard: number }
-): Observable<string | null> {
-  const prompt = `
+  createQuizAdvanced(
+    topic: string,
+    description: string,
+    mcq: { easy: number; medium: number; hard: number },
+    written: { easy: number; medium: number; hard: number }
+  ): Observable<string | null> {
+    const prompt = `
 Create a quiz on the topic "${topic}".
 Description: "${description}"
 
@@ -44,32 +44,31 @@ Constraints:
 ]
 `;
 
-  const headers = new HttpHeaders({
-    Authorization: `Bearer ${this.api_Key}`,
-    'Content-Type': 'application/json',
-  });
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.apiKey}`,
+      'Content-Type': 'application/json',
+    });
 
-  const body = {
-    model: 'deepseek/deepseek-chat-v3.1:free',
-    messages: [{ role: 'user', content: prompt }],
-  };
+    const body = {
+      model: 'deepseek/deepseek-chat-v3.1:free',
+      messages: [{ role: 'user', content: prompt }],
+    };
 
-  return this.http.post<any>(this.apiUrl, body, { headers }).pipe(
-    map((res) => {
-      console.log('✅ AI raw response:', res);
+    return this.http.post<any>(this.apiUrl, body, { headers }).pipe(
+      map((res) => {
+        console.log('✅ AI raw response:', res);
 
-      if (!res?.choices?.length) {
-        console.warn('⚠️ AI response has no choices.');
-        return null;
-      }
+        if (!res?.choices?.length) {
+          console.warn('⚠️ AI response has no choices.');
+          return null;
+        }
 
-      return res.choices[0]?.message?.content || null;
-    }),
-    catchError((err) => {
-      console.error('❌ AI request error:', err);
-      return of(null);
-    })
-  );
-}
-
+        return res.choices[0]?.message?.content || null;
+      }),
+      catchError((err) => {
+        console.error('❌ AI request error:', err);
+        return of(null);
+      })
+    );
+  }
 }
