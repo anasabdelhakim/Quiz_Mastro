@@ -96,7 +96,7 @@ export class TeacherToStudentComponent {
     {
       name: 'Anas',
       subject: 'Mathematics',
-      email: 'anasabdoali22@gmail.com',
+      email: 'kosharyanas1234@gmail.com',
       avatar:
         'https://lh3.googleusercontent.com/aida-public/AB6AXuDcfrSM27jy9L3uIpfZ4NB9C_3DNLl8Eb1HeHgBKX_dnuGzkhyYah9aiaCaiowv3fxR_GAZidfdCAAHeFHyXtRVY4OpzYt_rvp7FRDk56KtygvcNv1DsfDC7hJ_F_1sKEmT6U46wwN930NYWVpmtEt2uQNcX88TzDugI7LnO4xWz4lhhtip6RXM85EN3kH6BSDNc95bI6tqzlMOgQniMAS9IIXXav5AXIuxZH304q0RM-_0fXA6aRuiJrs1oAZrL_Q8hfAlwyLBtWA',
     },
@@ -105,6 +105,7 @@ export class TeacherToStudentComponent {
   constructor(private fb: FormBuilder) {
     this.contactForm = this.fb.group({
       name: ['', Validators.required],
+      title: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       message: ['', Validators.required],
     });
@@ -116,18 +117,20 @@ export class TeacherToStudentComponent {
 
     this.isLoading = true;
 
-    // Example: Let's say each teacher has an email property
     const selectedTeacherObj = this.teachers.find(
       (t) => t.name === this.selectedTeacher
     );
     const teacherEmail = selectedTeacherObj?.email || 'fallback@example.com';
 
+
     const templateParams = {
-      from_name: this.contactForm.value.name,
+      name: this.contactForm.value.name,
       from_email: this.contactForm.value.email,
       to_email: teacherEmail,
       teacher_name: this.selectedTeacher,
+      title: this.contactForm.value.title,
       message: this.contactForm.value.message,
+      
     };
 
     emailjs
