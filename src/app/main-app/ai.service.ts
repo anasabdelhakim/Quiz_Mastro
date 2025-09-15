@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { environment } from '../../environments/environment'; // ✅ import environment
+import { environment } from '../../environments/environment'; 
 
 @Injectable({
   providedIn: 'root',
 })
 export class AiService {
   private apiUrl = 'https://openrouter.ai/api/v1/chat/completions';
-  private apiKey = environment.openrouterKey; // ✅ now comes from env
+  private apiKey = environment.openrouterKey; 
 
   constructor(private http: HttpClient) {}
 

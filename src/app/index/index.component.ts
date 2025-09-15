@@ -38,5 +38,7 @@ export class IndexComponent {
         this.router.navigate(['/sign-in']);
     }
   }
-
+  launchSEB() {
+    window.location.href = '/SebClientSettingsfinal.seb';
+  }
 }

@@ -4,10 +4,11 @@ import { DataStoreService } from '../connections/data-store.service';
 import { ConnectionService } from '../connections/connection.service';
 import { CommonModule } from '@angular/common';
 import { ActivityService, ActivityFilter } from '../../activity.service';
-
+import { HlmButton } from '@spartan-ng/helm/button';
+import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-overview',
-  imports: [CommonModule],
+  imports: [CommonModule, HlmButton, RouterLink],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.css',
 })

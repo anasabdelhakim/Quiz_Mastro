@@ -2,11 +2,38 @@
   <div
     class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6"
   >
-    <div>
-      <h2 class="text-2xl font-bold text-foreground">Dashboard Overview</h2>
-      <p class="text-muted-foreground mt-1">
-        Welcome back! Here's what's happening in your quiz system.
-      </p>
+    <div class="flex justify-between items-center flex-wrap w-full">
+      <div>
+        <h2 class="text-2xl font-bold text-foreground">Dashboard Overview</h2>
+        <p class="text-muted-foreground mt-1">
+          Welcome back! Here's what's happening in your quiz system.
+        </p>
+      </div>
+
+      <button
+        variant="outline"
+        hlmBtn
+        class="flex items-center gap-2 sm:py-5 sm:px-6 py-4 px-3 sm:text-base group"
+        routerLink="/index"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide lucide-arrow-big-left-icon lucide-arrow-big-left transition-transform group-hover:-translate-x-1"
+        >
+          <path
+            d="M13 9a1 1 0 0 1-1-1V5.061a1 1 0 0 0-1.811-.75l-6.835 6.836a1.207 1.207 0 0 0 0 1.707l6.835 6.835a1 1 0 0 0 1.811-.75V16a1 1 0 0 1 1-1h6a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1z"
+          />
+        </svg>
+        <span class="text-base">Return to Home</span>
+      </button>
     </div>
   </div>
 
