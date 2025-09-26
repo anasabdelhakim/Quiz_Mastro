@@ -8,7 +8,8 @@ import { catchError, map } from 'rxjs/operators';
 })
 export class AiService {
   private apiUrl = 'https://openrouter.ai/api/v1/chat/completions';
-  private apiKey = '';
+  private apiKey =
+    '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';
 
   constructor(private http: HttpClient) {}
   createQuizAdvanced(
