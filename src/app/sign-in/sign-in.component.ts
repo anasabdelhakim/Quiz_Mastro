@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { z } from 'zod';
 import { HlmInput } from '@spartan-ng/helm/input';
 import { toast } from 'ngx-sonner';
-import { AuthService } from '../auth.service'; // ✅ import service
+import { AuthService } from '../auth.service'; 
 import { HlmButton } from '@spartan-ng/helm/button';
 
 @Component({
@@ -49,42 +49,11 @@ export class SignInComponent {
     .object({
       username: z
         .string()
-        .min(3, 'Username must be at least 3 characters')
-        .regex(/^(student|teacher|super)@[a-zA-Z0-9]+$/, {
-          message: 'Username must be in correct format',
-        }),
+        .min(3, 'Username must be at least 3 characters'),
       password: z
         .string()
-        .min(6, 'Password must be at least 6 characters')
-        .regex(/^(student|teacher|super)#[a-zA-Z0-9]+$/, {
-          message: 'Password must be in correct format',
-        }),
-    })
-    .refine(
-      (data) => {
-        const userRole = data.username.startsWith('student@')
-          ? 'student'
-          : data.username.startsWith('teacher@')
-          ? 'teacher'
-          : data.username.startsWith('super@')
-          ? 'super'
-          : null;
-
-        const passRole = data.password.startsWith('student#')
-          ? 'student'
-          : data.password.startsWith('teacher#')
-          ? 'teacher'
-          : data.password.startsWith('super#')
-          ? 'super'
-          : null;
-
-        return userRole !== null && userRole === passRole;
-      },
-      {
-        message: 'Username and password must belong to the same role',
-        path: ['password'],
-      }
-    );
+        .min(6, 'Password must be at least 6 characters'),
+    });
 
   validateForm(value: any) {
     this.errors = {};
@@ -129,13 +98,17 @@ export class SignInComponent {
     }
 
     // ✅ Use AuthService to log in and get role
+    console.log('Attempting login with:', { username: trimmedValue.username, password: trimmedValue.password });
+    
     const role = this.authService.login(
       trimmedValue.username,
       trimmedValue.password
     );
 
+    console.log('Login result:', { role, userId: this.authService.getUserId() });
+
     if (role) {
-      toast.success('✅ Login successful!', { duration: 2000 });
+      toast.success('Login successful!', { duration: 2000 });
 
       // Redirect based on role
       if (role === 'student') {

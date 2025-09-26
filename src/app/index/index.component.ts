@@ -32,11 +32,13 @@ export class IndexComponent {
         this.router.navigate(['/teacher-dashboard']);
         break;
       case 'super':
-        this.router.navigate(['/home']); // super admin dashboard
+        this.router.navigate(['/home']); 
         break;
       default:
         this.router.navigate(['/sign-in']);
     }
   }
-
+  launchSEB() {
+    window.location.href = '/SebClientSettingsfinal.seb';
+  }
 }

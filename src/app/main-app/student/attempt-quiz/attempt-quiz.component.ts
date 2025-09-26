@@ -12,6 +12,7 @@ import {
   HlmDialogHeader,
 } from '@spartan-ng/helm/dialog';
 import { BrnDialogContent, BrnDialogTrigger } from '@spartan-ng/brain/dialog';
+import { toast } from 'ngx-sonner';
 
 @Component({
   selector: 'app-attempt-quiz',
@@ -46,7 +47,7 @@ export class AttemptQuizComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const found = this.quizService.getCurrentQuiz();
     if (!found) {
-      alert('No quiz selected');
+      toast.success(`No quiz selected`);
       this.router.navigate(['/student-dashboard']);
       return;
     }
@@ -176,7 +177,8 @@ export class AttemptQuizComponent implements OnInit, OnDestroy {
       });
     }
     console.log(this.quiz.timeSpent);
-    alert('⏳ Time is up! Your quiz has been automatically submitted.');
+    toast.success(`⏳ Time is up! Your quiz has been automatically submitted.`);
+
     this.router.navigate(['/student-dashboard'], {
       replaceUrl: true,
     });
@@ -200,7 +202,23 @@ export class AttemptQuizComponent implements OnInit, OnDestroy {
     this.router.navigate(['/student-dashboard'], {
       replaceUrl: true,
     });
+    toast.success(`Your quiz has been submitted successfully`);
   }
+  onWrittenAnswerChange(questionId: string, value: string) {
+    if (value && value.trim() !== '') {
+      this.selectedAnswers[questionId] = value.trim();
+    } else {
+      delete this.selectedAnswers[questionId]; // remove if empty
+    }
+
+    // Persist to service
+    this.quizService.updateStudentAnswer(
+      this.quiz.id,
+      questionId,
+      this.selectedAnswers[questionId] || ''
+    );
+  }
+
   objectKeys(obj: any): string[] {
     return Object.keys(obj);
   }

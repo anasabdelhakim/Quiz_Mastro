@@ -37,6 +37,7 @@ export const routes: Routes = [
   },
 
   {
+    
     path: '',
     component: LayoutComponent,
     canActivate: [authGuard],
@@ -88,7 +89,7 @@ export const routes: Routes = [
       {
         path: 'student-to-teacher',
         component: StudentToTeacherComponent,
-        data: { title: 'Relashions - Teacher' },
+        data: { title: 'Attendance - Teacher' },
       },
       {
         path: 'view-detailes/:id',

@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Quiz, QuizStatus, Question, Option } from './quiz.model';
+import { ConnectionService } from '../layout/connections/connection.service';
+import { AuthService } from '../auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -16,13 +18,17 @@ export class QuizDataService {
   } = {};
   private currentQuiz: Quiz | null = null;
 
-  constructor() {
+  constructor(
+    private connectionService: ConnectionService,
+    private authService: AuthService
+  ) {
     const savedQuizzes = localStorage.getItem('quizzes');
     if (savedQuizzes) {
       const parsed: Quiz[] = JSON.parse(savedQuizzes).map((q: any) => ({
         ...q,
         startTime: new Date(q.startTime),
         timeSpent: q.timeSpent ?? 0,
+        teacherId: q.teacherId ?? 0, // Default to 0 if no teacherId (will be filtered out)
       }));
       this.quizzesSubject.next(parsed.map(this.evaluateQuizStatus));
     }
@@ -34,6 +40,7 @@ export class QuizDataService {
         ...parsed,
         startTime: new Date(parsed.startTime),
         timeSpent: parsed.timeSpent ?? 0,
+        teacherId: parsed.teacherId ?? 0, // Default to 0 if no teacherId
       };
       if (this.currentQuiz) {
         this.currentQuiz = this.evaluateQuizStatus(this.currentQuiz);
@@ -82,8 +89,16 @@ export class QuizDataService {
     this.quizzesSubject.next(updated);
 
     if (role === 'student') {
+      const studentId = this.authService.getUserId();
+      if (!studentId) return [];
+
+      // Get connected teacher IDs for this student
+      const connections = this.connectionService.getConnectionsByStudent(studentId);
+      const connectedTeacherIds = connections.map(c => c.teacherId);
+
       return updated
         .filter((q) => q.status !== 'unpublished')
+        .filter((q) => connectedTeacherIds.includes(q.teacherId)) // Only show quizzes from connected teachers
         .map((q) => {
           const quizClone = { ...q };
           if (quizClone.status === 'published') {
@@ -96,6 +111,14 @@ export class QuizDataService {
           }
           return quizClone;
         });
+    }
+
+    if (role === 'teacher') {
+      const teacherId = this.authService.getUserId();
+      if (!teacherId) return [];
+
+      // Only show quizzes created by this teacher
+      return updated.filter((q) => q.teacherId === teacherId);
     }
 
     return updated;

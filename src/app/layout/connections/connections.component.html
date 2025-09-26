@@ -1,5 +1,5 @@
 <div class="layout">
-  <div class="p-4 sm:p-6 space-y-4">
+  <div class="p-2 max-sm:p-0 space-y-4">
     <!-- Header with mode buttons -->
     <div
       class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4"
@@ -7,7 +7,7 @@
       <h2 class="text-2xl font-semibold">Student Assignments</h2>
       <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
         <button
-          class="flex items-center justify-center gap-2 px-4 py-2 duration-200 rounded-lg shadow-md w-full sm:w-auto hover:bg-blue-400"
+          class="flex items-center justify-center gap-2 px-4 py-2 hover:duration-200 rounded-lg shadow-md w-full sm:w-auto hover:bg-blue-400 cursor-pointer"
           [class.bg-blue-600]="mode() === 'assign'"
           [class.bg-white]="mode() !== 'assign'"
           [class.text-white]="mode() === 'assign'"
@@ -34,7 +34,7 @@
           Assign Teachers
         </button>
         <button
-          class="flex items-center justify-center gap-2 px-4 py-2 duration-200 rounded-lg shadow-md w-full sm:w-auto hover:bg-blue-400"
+          class="flex items-center justify-center gap-2 px-4 py-2 hover:duration-200 rounded-lg shadow-md w-full sm:w-auto hover:bg-blue-400 cursor-pointer"
           [class.bg-blue-600]="mode() === 'manage'"
           [class.bg-white]="mode() !== 'manage'"
           [class.text-white]="mode() === 'manage'"
@@ -64,64 +64,144 @@
     </div>
 
     <!-- Student select -->
-    <div class="bg-white rounded-lg shadow p-4 card">
+    <div class="card">
       <label class="text-lg font-medium mb-2 block">Select Student</label>
-      <select
-        class="w-full p-2 h-10 border border-gray-300 rounded focus:border-blue-500 focus:ring focus:ring-blue-500 outline-none"
-        [ngModel]="selectedStudentId()"
-        (ngModelChange)="selectedStudentId.set($event)"
+      <brn-select
+        placeholder="Choose a student to assign teachers"
+        [value]="selectedStudentId()"
+        (valueChange)="onStudentChange($event)"
       >
-        <option [ngValue]="null" disabled selected hidden>
-          Choose a student to assign teachers
-        </option>
-        <option *ngFor="let s of students" [ngValue]="s.id">
-          {{ s.name }} - {{ s.grade }}
-        </option>
-      </select>
+        <!-- Trigger -->
+        <hlm-select-trigger class="w-full text-md max-sm:text-sm">
+          <hlm-select-value>
+            {{
+              selectedStudentId() !== null
+                ? getStudentNameById(selectedStudentId()!)
+                : "Choose a student to assign teachers"
+            }}
+          </hlm-select-value>
+        </hlm-select-trigger>
+
+        <!-- Dropdown content -->
+        <hlm-select-content>
+          <!-- Case 1: No students at all -->
+          <hlm-option *ngIf="students.length === 0" [value]="null" disabled>
+            No students available
+          </hlm-option>
+
+          <!-- Case 2: Students exist -->
+          <ng-container *ngIf="students.length > 0">
+            <!-- Search bar -->
+            <div class="flex items-center mb-3 px-3 border-b border-border">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-search text-muted-foreground"
+              >
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.34-4.34"></path>
+              </svg>
+              <input
+                type="text"
+                placeholder="Search student..."
+                [ngModel]="studentSearch()"
+                (ngModelChange)="onStudentSearch($event)"
+                class="w-full outline-none placeholder:text-muted-foreground p-2"
+              />
+            </div>
+
+            <!-- Options -->
+            <hlm-option
+              *ngFor="let s of filteredStudentsList"
+              [value]="s.id"
+              class="text-md max-sm:text-sm"
+            >
+              {{ s.name }}
+            </hlm-option>
+
+            <!-- Empty state (search gave no match) -->
+            <hlm-option
+              *ngIf="filteredStudentsList.length === 0"
+              [value]="null"
+              disabled
+              class="text-gray-500"
+            >
+              No student found
+            </hlm-option>
+          </ng-container>
+        </hlm-select-content>
+      </brn-select>
     </div>
 
     <!-- Assign Teachers Mode -->
     <div
       *ngIf="selectedStudentId() !== null && mode() === 'assign'"
-      class="bg-white rounded-lg shadow p-4"
+      class="card"
     >
       <div
-        class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3"
+        class="flex flex-col md:flex-row md:items-center justify-between gap-3"
       >
-        <h3 class="text-xl font-semibold">
-          Assign Teachers to {{ getSelectedStudentName() }}
+        <h3 class="text-xl font-semibold whitespace-nowrap">
+          Assign Teachers to {{ getSelectedStudentName().split(" ")[0] }}
         </h3>
         <input
-          class="border rounded px-3 py-2 w-full sm:w-64 mt-2 sm:mt-0"
+          class="md:max-w-sm"
+          hlmInput
           placeholder="Search teachers..."
           [ngModel]="teacherSearch()"
           (ngModelChange)="teacherSearch.set($event)"
         />
       </div>
 
-      <div class="space-y-3">
-        <label
-          *ngFor="let t of filteredTeachersList"
-          class="flex flex-col sm:flex-row sm:items-center gap-3 p-3 border rounded hover:bg-gray-50"
+      <div class="space-y-3 mt-4">
+        <ng-container
+          *ngIf="filteredTeachersList.length > 0; else noTeachersTpl"
         >
-          <input
-            type="checkbox"
-            [checked]="isTeacherAssigned(t.id)"
-            (change)="toggleAssignment(t.id, $any($event.target).checked)"
-            class="mt-1 sm:mt-0"
-          />
-          <div class="flex-1">
-            <div class="font-medium">{{ t.name }}</div>
-            <div class="text-sm text-gray-600">{{ t.subject }}</div>
-          </div>
-          <span
-            class="mt-1 sm:mt-0 ml-auto text-sm"
-            [class.text-green-600]="isTeacherAssigned(t.id)"
+          <label
+            *ngFor="let t of filteredTeachersList"
+            class="flex items-center justify-between gap-3 p-3 border-border border-2 rounded cursor-pointer transition-colors"
+            [ngClass]="
+              isTeacherAssigned(t.id)
+                ? 'bg-success-soft border-success hover:bg-success/20'
+                : 'hover:bg-secondary'
+            "
           >
-            {{ isTeacherAssigned(t.id) ? "Assigned" : "" }}
-          </span>
-        </label>
+            <div class="flex items-center gap-3">
+              <input
+                type="checkbox"
+                [checked]="isTeacherAssigned(t.id)"
+                (change)="toggleAssignment(t.id, $any($event.target).checked)"
+                class="mt-1 sm:mt-0 accent-green-600"
+              />
+              <div class="flex-1">
+                <div class="font-medium">{{ t.name }}</div>
+                <div class="text-sm text-gray-600">{{ t.subject }}</div>
+              </div>
+            </div>
+
+            <span
+              class="ml-auto text-sm"
+              [class.text-green-600]="isTeacherAssigned(t.id)"
+            >
+              {{ isTeacherAssigned(t.id) ? "Assigned" : "" }}
+            </span>
+          </label>
+        </ng-container>
       </div>
+      <ng-template #noTeachersTpl>
+        <div
+          *ngIf="filteredTeachersList.length === 0"
+          class="text-center p-4 text-gray-500"
+        >
+          No teachers available to assign.
+        </div>
+      </ng-template>
     </div>
 
     <!-- Manage Assignments Mode -->

@@ -1,9 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { z } from 'zod';
 import { toast } from 'ngx-sonner';
-import { ActivityService, ActivityFilter } from '../../activity.service';
+import { ActivityService } from '../../activity.service';
+import {
+  DataStoreService,
+  StoredStudent,
+} from '../connections/data-store.service';
+import { BrnDialogContent, BrnDialogTrigger } from '@spartan-ng/brain/dialog';
+import {
+  HlmDialog,
+  HlmDialogContent,
+  HlmDialogFooter,
+  HlmDialogHeader,
+} from '@spartan-ng/helm/dialog';
+
+import { HlmInput } from '@spartan-ng/helm/input';
+import { BrnSelectImports } from '@spartan-ng/brain/select';
+import { HlmSelectImports } from '@spartan-ng/helm/select';
+import { HlmButton } from '@spartan-ng/helm/button';
 
 export interface Student {
   id: number;
@@ -18,10 +34,25 @@ export interface Student {
 @Component({
   selector: 'app-student',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    HlmDialog,
+    HlmDialogHeader,
+    HlmDialogContent,
+    HlmDialogFooter,
+    BrnDialogTrigger,
+    BrnDialogContent,
+    HlmInput,
+    BrnSelectImports,
+    HlmSelectImports,
+    HlmButton,
+  ],
   templateUrl: './student.component.html',
 })
 export class StudentComponent implements OnInit {
+  @ViewChild('studentDialog') studentDialog!: HlmDialog;
+
   students: Student[] = [];
   filteredStudents: Student[] = [];
   currentStudent: Omit<Student, 'id'> & { id: number | null } = {
@@ -34,18 +65,19 @@ export class StudentComponent implements OnInit {
     phone: '',
   };
 
-  showModal = false;
+  showModal = signal(false);
   isEditMode = false;
   searchTerm = '';
   errors: Partial<Record<keyof Student, string>> = {};
   formValid = false;
   genderOptions = ['Male', 'Female'];
 
-
-
   studentSchema = z.object({
     name: z.string().min(2, 'Name is required'),
-    email: z.string().email('Invalid email').endsWith('@gmail.com', 'Email must end with @gmail.com'),
+    email: z
+      .string()
+      .email('Invalid email')
+      .endsWith('@gmail.com', 'Email must end with @gmail.com'),
     gender: z.string().min(1, 'Gender is required'),
     phone: z.string().regex(/^\d*$/, 'Phone must be numbers only').optional(),
     username: z.string().min(4, 'Username must be at least 4 characters'),
@@ -58,11 +90,26 @@ export class StudentComponent implements OnInit {
       .regex(/[0-9]/, 'Password must contain at least one number'),
   });
 
-  constructor(private activityService: ActivityService) { }
+  constructor(
+    private activityService: ActivityService,
+    private dataStore: DataStoreService
+  ) {}
 
   ngOnInit() {
-    const saved = localStorage.getItem('students');
-    this.students = saved ? JSON.parse(saved) : [];
+    this.loadStudents();
+  }
+
+  private loadStudents() {
+    const storedStudents = this.dataStore.getStudents();
+    this.students = storedStudents.map((s) => ({
+      id: s.id,
+      name: s.name,
+      email: s.email,
+      gender: s.gender,
+      username: s.username,
+      password: s.password,
+      phone: s.phone || '',
+    }));
     this.filteredStudents = [...this.students];
   }
 
@@ -73,20 +120,31 @@ export class StudentComponent implements OnInit {
     }
     const term = this.searchTerm.toLowerCase();
     this.filteredStudents = this.students.filter(
-      s =>
+      (s) =>
         s.name.toLowerCase().includes(term) ||
         s.email.toLowerCase().includes(term) ||
         s.gender.toLowerCase().includes(term) ||
         (s.phone && s.phone.includes(term))
     );
   }
+  focusNext(nextInput?: HTMLTextAreaElement | HTMLInputElement) {
+    nextInput?.focus();
+  }
 
   openAddModal() {
     this.isEditMode = false;
-    this.currentStudent = { id: null, name: '', email: '', gender: '', username: '', password: '', phone: '' };
+    this.currentStudent = {
+      id: null,
+      name: '',
+      email: '',
+      gender: '',
+      username: '',
+      password: '',
+      phone: '',
+    };
     this.errors = {};
     this.formValid = false;
-    this.showModal = true;
+    this.showModal.set(true);
   }
 
   editStudent(student: Student) {
@@ -94,18 +152,30 @@ export class StudentComponent implements OnInit {
     this.currentStudent = { ...student };
     this.errors = {};
     this.formValid = true;
-    this.showModal = true;
+    this.showModal.set(true);
   }
 
-  deleteStudent(id: number) {
-    const student = this.students.find(s => s.id === id);
+  studentToDelete: StoredStudent | null = null;
+
+  openDeleteDialog(student: Student | StoredStudent) {
+    this.studentToDelete = student as StoredStudent;
+  }
+
+  deleteStudent() {
+    if (!this.studentToDelete) return;
+
+    const currentStudents = this.dataStore.getStudents();
+    const student = currentStudents.find(
+      (s) => s.id === this.studentToDelete!.id
+    );
     if (!student) return;
 
-    if (!confirm('Are you sure you want to delete this student?')) return;
+    // Remove from DataStoreService
+    const updatedStudents = currentStudents.filter((s) => s.id !== student.id);
+    this.dataStore.saveStudents(updatedStudents);
 
-    this.students = this.students.filter(s => s.id !== id);
-    this.persist();
-    this.filterStudents();
+    // Reload local data
+    this.loadStudents();
 
     toast.success('Student deleted successfully!');
     this.activityService.addActivity(
@@ -113,13 +183,15 @@ export class StudentComponent implements OnInit {
       'Deleted Student',
       `Student ${student.name} was deleted`
     );
+
+    this.studentToDelete = null; // reset after delete
   }
 
   onInputChange() {
     const result = this.studentSchema.safeParse(this.currentStudent);
     if (!result.success) {
       this.errors = {};
-      result.error.issues.forEach(issue => {
+      result.error.issues.forEach((issue) => {
         const key = issue.path[0] as keyof Student;
         this.errors[key] = issue.message;
       });
@@ -130,15 +202,33 @@ export class StudentComponent implements OnInit {
     }
   }
 
-
   addStudent() {
     if (!this.formValid) return;
 
-    const newId = this.students.length ? Math.max(...this.students.map(s => s.id)) + 1 : 1;
-    const newStudent: Student = { ...this.currentStudent, id: newId };
-    this.students.push(newStudent);
-    this.persist();
-    this.filterStudents();
+    // Get current students from DataStoreService
+    const currentStudents = this.dataStore.getStudents();
+    const newId = currentStudents.length
+      ? Math.max(...currentStudents.map((s) => s.id)) + 1
+      : 1;
+
+    const newStudent: StoredStudent = {
+      id: newId,
+      name: this.capitalized(this.currentStudent.name),
+      email: this.currentStudent.email,
+      grade: '10th', // Default grade since it's not in the form
+      phone: this.currentStudent.phone,
+      username:
+        this.currentStudent.username[0] + this.currentStudent.username.slice(1),
+      password: this.currentStudent.password,
+      gender: this.currentStudent.gender,
+    };
+
+    // Add to DataStoreService
+    const updatedStudents = [...currentStudents, newStudent];
+    this.dataStore.saveStudents(updatedStudents);
+
+    // Reload local data
+    this.loadStudents();
 
     toast.success('Student added successfully!');
     this.activityService.addActivity(
@@ -149,15 +239,42 @@ export class StudentComponent implements OnInit {
 
     this.closeModal();
   }
-
+  capitalized(value: string | undefined | null): string {
+    if (!value) return '';
+    return value
+      .split(' ')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  }
   updateStudent() {
     if (!this.formValid) return;
 
-    const index = this.students.findIndex(s => s.id === this.currentStudent.id);
+    // Get current students from DataStoreService
+    const currentStudents = this.dataStore.getStudents();
+    const index = currentStudents.findIndex(
+      (s) => s.id === this.currentStudent.id
+    );
+
     if (index !== -1) {
-      this.students[index] = { ...this.currentStudent, id: this.currentStudent.id as number };
-      this.persist();
-      this.filterStudents();
+      const updatedStudent: StoredStudent = {
+        id: this.currentStudent.id as number,
+        name: this.capitalized(this.currentStudent.name),
+        email: this.currentStudent.email,
+        grade: '10th', // Default grade since it's not in the form
+        phone: this.currentStudent.phone,
+        username:
+          this.currentStudent.username[0] +
+          this.currentStudent.username.slice(1),
+        password: this.currentStudent.password,
+        gender: this.currentStudent.gender,
+      };
+
+      // Update in DataStoreService
+      currentStudents[index] = updatedStudent;
+      this.dataStore.saveStudents(currentStudents);
+
+      // Reload local data
+      this.loadStudents();
 
       toast.success('Student updated successfully!');
       this.activityService.addActivity(
@@ -171,10 +288,15 @@ export class StudentComponent implements OnInit {
   }
 
   closeModal() {
-    this.showModal = false;
+    if (this.studentDialog) {
+      this.studentDialog.close();
+    }
+    this.showModal.set(false);
   }
-
-  private persist() {
-    localStorage.setItem('students', JSON.stringify(this.students));
+  onSubmitForm(event: Event) {
+    event.preventDefault();
+    if (this.formValid) {
+      this.isEditMode ? this.updateStudent() : this.addStudent();
+    }
   }
 }

@@ -4,7 +4,7 @@
   *ngIf="quiz"
 >
   <!-- Header -->
-  <div class="mb-10 max-sm:mb-1 text-center">
+  <div class="max-sm:mb-1 text-center">
     <h2 class="text-foreground text-3xl font-semibold mt-5 max-sm:hidden">
       Quiz Result
     </h2>
@@ -16,7 +16,7 @@
     <button
       variant="outline"
       hlmBtn
-      class="flex items-center group max-sm:hidden"
+      class="flex items-center group max-sm:hidden mb-4"
       (click)="goBack()"
     >
       <svg
@@ -39,7 +39,6 @@
     </button>
   </div>
 
-  <!-- Summary -->
   <!-- Summary -->
   <div class="card mb-12">
     <h3 class="text-xl font-bold text-foreground mb-4">Summary</h3>
@@ -80,9 +79,12 @@
   </div>
 
   <!-- Questions -->
-  <div *ngFor="let q of quiz.questions; let i = index" class="card">
-    <div class="flex justify-between items-start relative">
-      <p class="text-lg font-semibold text-primary mb-4">
+  <div
+    *ngFor="let q of quiz.questions; let i = index"
+    class="card mb-12 max-sm:mb-6 last:mb-0"
+  >
+    <div class="flex justify-between items-start">
+      <p class="text-lg font-semibold text-primary mb-4 break-words">
         <span class="font-bold">{{ i + 1 }}.</span> {{ q.text }}
       </p>
       <div
@@ -90,7 +92,7 @@
           'text-green-600 bg-green-100 ': isCorrect(q),
           'text-red-600 bg-red-100 ': !isCorrect(q)
         }"
-        class="flex items-center gap-2 text-sm font-medium px-3 py-1 rounded-full absolute right-0 -top-2"
+        class="flex items-center gap-2 text-sm font-medium px-3 py-1 rounded-full whitespace-nowrap"
       >
         <span>{{ isCorrect(q) ? "Correct" : "Incorrect" }}</span>
       </div>
@@ -139,7 +141,8 @@
 
       <div *ngIf="q.type === 'written'" class="mt-4 p-4 bg-gray-50 rounded-md">
         <p class="text-sm text-gray-700">
-          <strong>Your Answer:</strong> {{ quiz.studentAnswers?.[q.id] || '-' }}
+          <strong>Your Answer:</strong>
+          {{ quiz.studentAnswers?.[q.id] || '-' }}
         </p>
       </div>
 
@@ -151,7 +154,7 @@
 
     <div
       *ngIf="questionExplanations[q.id]"
-      class="mt-4 p-4 bg-warning-soft rounded-md"
+      class="mt-4 p-4 bg-warning-soft rounded-md text-left"
     >
       <p class="text-sm text-yellow-700">
         <strong>Explanation:</strong> {{ questionExplanations[q.id] }}

@@ -39,4 +39,5 @@ export interface Quiz {
   studentAnswers?: { [questionId: string]: string };
   teacherGraded?: boolean;
   requiresSEB?: boolean;
+  teacherId: number; // ID of the teacher who created this quiz
 }

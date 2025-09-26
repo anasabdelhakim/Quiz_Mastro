@@ -38,9 +38,14 @@
         </svg>
       </div>
       <span
-        class="text-2xl font-bold tracking-wide text-foreground max-sm:ml-4"
+        class="text-xl max-sm:text-[clamp(1rem,6.5vw,2rem)] font-bold tracking-wide text-foreground hidden max-sm:block"
       >
         {{ pageTitle }}
+      </span>
+      <span
+        class="text-2xl font-bold tracking-wide text-foreground max-sm:ml-4 max-sm:hidden"
+      >
+        Quiz Mastro
       </span>
     </div>
     <nav class="hidden sm:flex items-center gap-2 text-sm font-medium">
@@ -70,9 +75,7 @@
     <button
       brnPopoverTrigger
       class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border border-gray-200 hover:ring-2 hover:ring-primary data-[state=open]:ring-2 data-[state=open]:ring-primary transition-all cursor-pointer"
-      style="
-        background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCU_TnWvtxOoxM0E9Mg7qATAlVWg43mdNFLH7bJHGmUxqB62S1rQfrQ7lLotVa3xci96IRgQtupA4ckNRw6iipWPlDqf5ykHpSD_OpWL_egph0TgFmYewVwdVnfbz42BvrBmENuVIHlMzmZ93ZlZDSBoqX8lptmFo8l5m4TSN8V_p-X2a33Ig1amIXbf91Pf_Z_bf5ucawz3QorQdHJP9zDYvVQBQ0eYv6jIvmeRN8WUFlcuZTsg-jCfr2XUdFoLleY-VLLcEzvs60');
-      "
+      [ngStyle]="{ 'background-image': 'url(' + getAvatar(currentUser) + ')' }"
     ></button>
 
     <!-- Popover content -->
@@ -89,13 +92,13 @@
         <div class="w-1/2 aspect-square max-sm:w-full">
           <img
             class="h-full max-sm:object-contain w-full object-cover object-center rounded-md"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCU_TnWvtxOoxM0E9Mg7qATAlVWg43mdNFLH7bJHGmUxqB62S1rQfrQ7lLotVa3xci96IRgQtupA4ckNRw6iipWPlDqf5ykHpSD_OpWL_egph0TgFmYewVwdVnfbz42BvrBmENuVIHlMzmZ93ZlZDSBoqX8lptmFo8l5m4TSN8V_p-X2a33Ig1amIXbf91Pf_Z_bf5ucawz3QorQdHJP9zDYvVQBQ0eYv6jIvmeRN8WUFlcuZTsg-jCfr2XUdFoLleY-VLLcEzvs60"
+            [src]="getAvatar(currentUser)"
             alt="Profile picture"
           />
         </div>
         <div class="w-1/2 max-sm:w-full">
           <div class="mb-2">
-            <p class="font-medium">Sarah Omar</p>
+            <p class="font-medium">{{ currentUser?.name }}</p>
             <p class="text-sm text-gray-500">Student</p>
           </div>
           <div class="border-b-2 border-border"></div>
@@ -119,6 +122,7 @@
 
             <button
               hlmBtn
+              (click)="logout()"
               variant="ghost"
               class="w-full justify-start text-red-600 hover:bg-red-50 px-1"
             >
@@ -132,13 +136,13 @@
 </header>
 
 <aside
-  class="fixed bottom-0 z-50 w-full bg-white flex items-center px-2 justify-between shadow-sidebar h-13 sm:hidden"
+  class="fixed bottom-0 z-50 w-full bg-white flex items-center px-3 justify-between shadow-sidebar h-12.5 sm:hidden"
 >
-  <nav class="w-full flex justify-between items-center mt-1">
+  <nav class="w-full flex justify-between mt-0.5 items-center">
     <a
       routerLink="/student-dashboard"
       routerLinkActive="text-primary"
-      class="relative group flex items-center flex-col rounded-main text-muted-foreground font-light sidebar-font-scale transition-transform active:scale-95 active:bg-gray-200 py-1 px-2"
+      class="relative group flex items-center flex-col rounded-main text-muted-foreground font-light sidebar-font-scale transition-transform active:scale-95 py-1 px-2"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -162,7 +166,7 @@
     <a
       routerLink="/connect-student"
       routerLinkActive="text-primary"
-      class="relative group flex items-center flex-col rounded-main text-muted-foreground font-light sidebar-font-scale transition-transform active:scale-95 active:bg-gray-200 py-1 px-2"
+      class="relative group flex items-center flex-col rounded-main text-muted-foreground font-light sidebar-font-scale transition-transform active:scale-95 py-1 px-2"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -189,7 +193,7 @@
     <a
       routerLink="/teacher-to-student"
       routerLinkActive="text-primary"
-      class="relative group flex items-center flex-col rounded-main text-muted-foreground font-light sidebar-font-scale transition-transform active:scale-95 active:bg-gray-200 py-1 px-2"
+      class="relative group flex items-center flex-col rounded-main text-muted-foreground font-light sidebar-font-scale transition-transform active:scale-95 py-1 px-2"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

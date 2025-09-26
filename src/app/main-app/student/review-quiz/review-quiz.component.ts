@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { QuizDataService, Quiz, Question } from '../../quiz.service';
 import { CommonModule } from '@angular/common';
@@ -12,7 +12,7 @@ import { HlmButton } from '@spartan-ng/helm/button';
   templateUrl: './review-quiz.component.html',
   styleUrls: ['./review-quiz.component.css'],
 })
-export class ReviewQuizComponent implements OnInit {
+export class ReviewQuizComponent implements OnInit, AfterViewInit, OnDestroy {
   quiz!: Quiz;
 
   // Properties used in template
@@ -129,5 +129,36 @@ export class ReviewQuizComponent implements OnInit {
   }
   goBack() {
     this.location.back();
+  }
+  ngAfterViewInit() {
+  // Set chatbot config
+  (window as any).chtlConfig = { chatbotId: '5726282828' };
+
+  // Inject the Chatling AI script dynamically
+  const script = document.createElement('script');
+  script.src = 'https://chatling.ai/js/embed.js';
+  script.id = 'chtl-script';
+  script.async = true;
+  script.type = 'text/javascript';
+  document.body.appendChild(script);
+}
+
+  ngOnDestroy() {
+    // Remove the chatbot script
+    const script = document.getElementById('chtl-script');
+    if (script) script.remove();
+
+    // Remove iframe (if any)
+    const iframe = document.querySelector('iframe[src*="chatling.ai"]');
+    if (iframe) iframe.remove();
+
+    // Remove any floating divs injected by the chatbot
+    const chatDivs = document.querySelectorAll(
+      'div[style*="https://s3-assets.chatling.ai"]'
+    );
+    chatDivs.forEach((div) => div.remove());
+
+    // Remove global config
+    delete (window as any).chtlConfig;
   }
 }

@@ -1,20 +1,17 @@
 <div
-  class="flex min-h-[100dvh] items-center flex-col bg-[var(--background-color)] p-4 max-sm:p-2 overflow-hidden border-2"
+  class="flex min-h-[100dvh] items-center sm:justify-center flex-col bg-[var(--background-color)] max-sm:px-2 overflow-hidden"
 >
-  <div class="w-full max-w-md mt-8">
+  <div class="w-full max-w-md max-sm:mt-8">
     <!-- Header -->
     <div class="mb-8 text-center">
-      <div
-        class="py-1.5 max-lg:px-3 px-2 rounded-lg w-35 h-30 mx-auto max-sm:hidden"
-      >
-        <img
-          src="ntg.jpeg"
-          alt="Logo"
-          class="w-full h-full rounded-lg shadow-lg mt-10"
-        />
-      </div>
-      <div class="mx-auto mb-4 h-12 w-12 text-primary max-sm:hidden">
+      <div class="mx-auto mb-4 h-15 w-15 text-primary max-sm:hidden">
         <!-- Logo -->
+        <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M24 0.7L47.2 24 24 47.2 0.7 24 24 0.7ZM21 35.7V12.2L9.2 24 21 35.7Z"
+            fill="currentColor"
+          />
+        </svg>
       </div>
       <h1 class="text-3xl font-bold text-foreground">Quiz Mastro</h1>
       <p class="mt-2 text-muted-foreground">Sign in to continue</p>
@@ -43,7 +40,7 @@
               autofocus
               type="text"
               formControlName="username"
-              placeholder="student@username"
+              placeholder="Enter your username"
               #usernameInput
               (keydown.enter)="focusNext(passwordInput)"
               class="lg:h-12 lg:text-lg"
@@ -75,14 +72,13 @@
               id="password"
               [type]="showPassword ? 'text' : 'password'"
               formControlName="password"
-              placeholder="teacher#password"
+              placeholder="Enter your password"
               (input)="onPasswordInput()"
               #passwordInput
               (keydown.enter)="onSubmit()"
               class="lg:h-12 lg:text-lg"
             />
 
-            <!-- Eye Icon -->
             <button
               *ngIf="passwordHasValue"
               type="button"
@@ -176,9 +172,7 @@
             </svg>
 
             <p class="text-gray-500 text-[13px] max-sm:text-[11px]">
-              username: <strong>student&#64;</strong>/<strong
-                >teacher&#64;</strong
-              >
+              Role: students/teachers
             </p>
           </div>
           <div class="flex items-center">
@@ -199,7 +193,8 @@
               <path d="M12 8h.01" />
             </svg>
             <p class="text-gray-500 text-[13px] max-sm:text-[11px]">
-              password: <strong>student#</strong>/<strong>teacher#</strong>
+              Example: username: <strong>jooo</strong>, password:
+              <strong>jo12345H@</strong>
             </p>
           </div>
         </div>

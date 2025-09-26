@@ -1,11 +1,313 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Location } from '@angular/common';
+import { HlmButton } from '@spartan-ng/helm/button';
+import { HlmInput } from '@spartan-ng/helm/input';
+import { QuizDataService, Quiz } from '../../quiz.service';
+import { DataStoreService } from '../../../layout/connections/data-store.service';
+import { ConnectionService } from '../../../layout/connections/connection.service';
+import { ActivityService } from '../../../activity.service';
+import { toast } from 'ngx-sonner';
+import { BrnSelectImports } from '@spartan-ng/brain/select';
+import { HlmSelectImports } from '@spartan-ng/helm/select';
+import {
+  HlmDialog,
+  HlmDialogContent,
+  HlmDialogFooter,
+  HlmDialogHeader,
+} from '@spartan-ng/helm/dialog';
 
+import { BrnDialogContent, BrnDialogTrigger } from '@spartan-ng/brain/dialog';
 @Component({
   selector: 'app-student-to-teacher',
-  imports: [],
+  imports: [
+    CommonModule,
+    FormsModule,
+    HlmButton,
+    HlmInput,
+    BrnSelectImports,
+    HlmSelectImports,
+    HlmDialog,
+    HlmDialogContent,
+    HlmDialogFooter,
+    HlmDialogHeader,
+    BrnDialogContent,
+    BrnDialogTrigger,
+  ],
   templateUrl: './student-to-teacher.component.html',
-  styleUrl: './student-to-teacher.component.css'
+  styleUrl: './student-to-teacher.component.css',
 })
-export class StudentToTeacherComponent {
+export class StudentToTeacherComponent implements OnInit {
+  attendances: any[] = [];
+  filteredAttendances: any[] = [];
+  quizzes: Quiz[] = [];
+  searchTerm = '';
+  selectedQuizId = '';
+  selectedStatus = '';
+  currentPage = 1;
+  itemsPerPage = 10;
+  statusOptions = [
+    'not-started',
+    'scheduled',
+    'active',
+    'completed',
+    'graded',
+    'expired',
+  ];
 
+  // For teacher notes modal
+  showNotesModal = false;
+  currentAttendance: any | null = null;
+  teacherNotes = '';
+
+  constructor(
+    private quizService: QuizDataService,
+    private activityService: ActivityService,
+    private store: DataStoreService,
+    private connections: ConnectionService,
+    private router: Router,
+    private location: Location
+  ) {}
+
+  ngOnInit(): void {
+    this.loadQuizzes();
+    this.loadAttendanceData();
+  }
+
+  private loadQuizzes(): void {
+    this.quizzes = this.quizService.getQuizzes('teacher');
+  }
+
+  private loadAttendanceData(): void {
+    // Determine current teacher
+    const teachers = this.store.getTeachers();
+    const teacherId = teachers.length === 1 ? teachers[0].id : teachers[0]?.id;
+
+    // Get assigned students for this teacher
+    const assignedConnections = teacherId
+      ? this.connections.getConnectionsByTeacher(teacherId)
+      : [];
+    const studentIds = new Set(assignedConnections.map((c) => c.studentId));
+    const allStudents = this.store.getStudents();
+    const assignedStudents = allStudents.filter((s) => studentIds.has(s.id));
+
+    // Build attendance rows: assigned students x quizzes
+    const quizzes = this.quizService.getQuizzes('teacher');
+    const rows: any[] = [];
+    let rowIdx = 0;
+    for (const student of assignedStudents) {
+      for (const q of quizzes) {
+        const status:
+          | 'not-started'
+          | 'scheduled'
+          | 'active'
+          | 'completed'
+          | 'graded'
+          | 'expired' =
+          q.status === 'finished'
+            ? 'graded'
+            : q.status === 'grading'
+            ? 'completed'
+            : q.status === 'active'
+            ? 'active'
+            : q.status === 'scheduled'
+            ? 'scheduled'
+            : q.status === 'expired'
+            ? 'expired'
+            : 'not-started';
+
+        const startedAt = q.startTime;
+        const submittedAt = new Date(
+          q.startTime.getTime() + q.duration * 60000
+        );
+
+        rows.push({
+          id: `att-${++rowIdx}`,
+          studentId: student.id,
+          studentName: student.name,
+          studentEmail: student.email,
+          quizId: q.id,
+          quizTitle: q.title,
+          startedAt,
+          submittedAt,
+          timeSpent: Math.round((q.timeSpent ?? q.duration * 60) / 60),
+          totalGrade: q.grade ?? NaN,
+          status,
+          answers: q.studentAnswers ?? {},
+          teacherNotes: (q as any).teacherNotes,
+        });
+      }
+    }
+
+    this.attendances = rows;
+
+    this.filteredAttendances = [...this.attendances];
+  }
+
+  filterAttendances(): void {
+    this.filteredAttendances = this.attendances.filter((attendance) => {
+      const matchesSearch =
+        attendance.studentName
+          .toLowerCase()
+          .includes(this.searchTerm.toLowerCase()) ||
+        attendance.studentEmail
+          .toLowerCase()
+          .includes(this.searchTerm.toLowerCase());
+      const matchesQuiz = this.selectedQuizId
+        ? attendance.quizId === this.selectedQuizId
+        : true;
+      const matchesStatus = this.selectedStatus
+        ? attendance.status === this.selectedStatus
+        : true;
+
+      return matchesSearch && matchesQuiz && matchesStatus;
+    });
+
+    this.currentPage = 1;
+  }
+
+  filterByQuiz(): void {
+    this.filterAttendances();
+  }
+
+  filterByStatus(): void {
+    this.filterAttendances();
+  }
+
+  getQuizTitle(quizId: string): string {
+    const quiz = this.quizzes.find((q) => q.id === quizId);
+    return quiz ? quiz.title : 'Unknown Quiz';
+  }
+
+  viewDetails(attendance: any): void {
+    if (attendance.status === 'grading' || attendance.status === 'finished') {
+      this.router.navigate(['grading-quiz', attendance.quizId], {
+        queryParams: {
+          studentId: attendance.studentId,
+          attendanceId: attendance.id,
+        },
+      });
+    } else {
+      toast.info('This quiz has not been completed yet and cannot be graded.');
+    }
+  }
+
+  addTeacherNotes(attendance: any): void {
+    this.currentAttendance = { ...attendance };
+    const quiz = this.quizService.getQuizById(attendance.quizId);
+    this.teacherNotes =
+      (quiz as any)?.teacherNotes || attendance.teacherNotes || '';
+    this.showNotesModal = true;
+  }
+
+  saveTeacherNotes(): void {
+    if (this.currentAttendance) {
+      // Persist notes into quiz state so the rest of the app can see them
+      this.quizService.updateQuiz(this.currentAttendance.quizId, {
+        // Extend Quiz model with teacherNotes
+        ...({ teacherNotes: this.teacherNotes } as any),
+      });
+      // Reflect in local view
+      const idx = this.attendances.findIndex(
+        (a) => a.id === this.currentAttendance!.id
+      );
+      if (idx !== -1) this.attendances[idx].teacherNotes = this.teacherNotes;
+      this.filterAttendances();
+
+      toast.success('Teacher notes saved successfully!');
+      this.activityService.addActivity(
+        'teacher',
+        'Added Notes',
+        `Added notes for ${
+          this.currentAttendance.studentName
+        }'s ${this.getQuizTitle(this.currentAttendance.quizId)} quiz`
+      );
+    }
+    this.closeNotesModal();
+  }
+
+  closeNotesModal(): void {
+    this.showNotesModal = false;
+    this.currentAttendance = null;
+    this.teacherNotes = '';
+  }
+
+  exportToCSV(): void {
+    const headers = [
+      'Student Name',
+      'Student Email',
+      'Quiz Title',
+      'Started At',
+      'Submitted At',
+      'Time Spent (min)',
+      'Grade',
+      'Status',
+      'Teacher Notes',
+    ];
+    const csvData = this.filteredAttendances.map((att) => [
+      att.studentName,
+      att.studentEmail,
+      att.quizTitle,
+      att.startedAt.toLocaleString(),
+      att.submittedAt.toLocaleString(),
+      att.timeSpent,
+      att.totalGrade || 'N/A',
+      att.status,
+      att.teacherNotes || '',
+    ]);
+
+    const csvContent = [headers, ...csvData]
+      .map((row) => row.map((field) => `"${field}"`).join(','))
+      .join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `quiz-attendance-${
+      new Date().toISOString().split('T')[0]
+    }.csv`;
+    link.click();
+    window.URL.revokeObjectURL(url);
+
+    toast.success('Attendance data exported to CSV!');
+    this.activityService.addActivity(
+      'teacher',
+      'Exported Data',
+      'Exported attendance data to CSV'
+    );
+  }
+
+  nextPage(): void {
+    if (
+      this.currentPage * this.itemsPerPage <
+      this.filteredAttendances.length
+    ) {
+      this.currentPage++;
+    }
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
+
+  get paginatedAttendances(): any[] {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    return this.filteredAttendances.slice(
+      startIndex,
+      startIndex + this.itemsPerPage
+    );
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.filteredAttendances.length / this.itemsPerPage);
+  }
+
+  goBack(): void {
+    this.location.back();
+  }
 }

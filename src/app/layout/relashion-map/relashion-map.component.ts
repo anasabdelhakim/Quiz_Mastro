@@ -1,4 +1,3 @@
-// src/app/layout/relashion-map/relashion-map.component.ts
 import { Component, OnInit, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -8,11 +7,12 @@ import {
   StoredTeacher,
 } from '../connections/data-store.service';
 import { ConnectionService } from '../connections/connection.service';
+import { HlmInput } from "@spartan-ng/helm/input";
 
 @Component({
   selector: 'app-relashion-map',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, HlmInput],
   templateUrl: './relashion-map.component.html',
   styleUrls: ['./relashion-map.component.css'],
 })
@@ -53,26 +53,5 @@ export class RelashionMapComponent implements OnInit {
       });
   });
 
-  readonly teacherWithAssignments = computed(() => {
-    const term = this.search().toLowerCase().trim();
-    return this.teachers
-      .filter(
-        (t) =>
-          !term ||
-          t.name.toLowerCase().includes(term) ||
-          t.subject.toLowerCase().includes(term)
-      )
-      .map((t) => {
-        const links = this.connections.getConnectionsByTeacher(t.id);
-        const studentInfos = links
-          .map((l) => this.students.find((s) => s.id === l.studentId))
-          .filter(Boolean) as StoredStudent[];
-        return {
-          teacher: t,
-          students: studentInfos,
-          count: studentInfos.length,
-          createdAtList: links.map((l) => l.createdAt),
-        };
-      });
-  });
+
 }

@@ -39,9 +39,14 @@
         <path d="M7 17L9 19L13 15"></path>
       </svg>
       <span
-        class="text-xl max-sm:text-[clamp(1rem,7vw,2rem)] font-bold tracking-wide text-foreground max-sm:ml-4"
+        class="text-xl max-sm:text-[clamp(1rem,6.5vw,2rem)] font-bold tracking-wide text-foreground max-sm:ml-4 hidden max-sm:block"
       >
         {{ pageTitle }}
+      </span>
+      <span
+        class="text-2xl font-bold tracking-wide text-foreground max-sm:ml-4 max-sm:hidden"
+      >
+        Quiz Mastro
       </span>
     </a>
   </div>
@@ -67,40 +72,99 @@
       >
     </nav>
     <div class="flex items-center gap-4">
-      <button
-        class="flex items-center gap-2 rounded-full border border-gray-200 p-1 pr-3 text-sm font-medium hover:bg-gray-100 text-primary"
-      >
-        <img
-          alt="Admin Avatar"
-          class="h-8 w-8 rounded-full"
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6qEwUkxuOGEDiL8n6K8twJ2vDD0nwPnqZOQpL0TXBXJZAEuYRHw7B9GDlyuKMCpW7FNkA7boN6ycyyWltuKoKSTlD4PZSNgQlI_43dRYA5uJ2uNazmQexdyc6b_9UWKxmq9bYm6I_Sqohl6Vm2oiWiTsy0j0FZ9YdOErR7VIhdxnzMl5Xg1Ovc-e6pflJbkWbFRClY5dLHVtxPdBJ2yJylKB4cIr7oAf_gPrg4FTEZKcOyFIRYIOMWqur9KhjX5xF1OarqC61JzY"
-        />
-        <span class="max-sm:hidden">Admin</span>
-        <svg
-          class="h-4 w-4 text-muted-foreground"
-          fill="none"
-          stroke="currentColor"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
+      <brn-popover>
+        <!-- Teacher/Admin button -->
+        <button
+          brnPopoverTrigger
+          class="flex items-center gap-2 rounded-full border border-gray-200 p-1 pr-3 text-sm font-medium hover:bg-gray-100 text-primary transition-all data-[state=open]:ring-2 data-[state=open]:ring-blue-500 cursor-pointer"
         >
-          <polyline points="6 9 12 15 18 9"></polyline>
-        </svg>
-      </button>
+          <img
+            alt="User Avatar"
+            class="h-8 w-8 rounded-full"
+            [src]="getAvatar(currentUser)"
+          />
+          <span class="max-sm:hidden">{{ firstName }}</span>
+          <svg
+            class="h-4 w-4 text-muted-foreground"
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+
+        <!-- Popover content -->
+        <div
+          hlmPopoverContent
+          *brnPopoverContent="let ctx"
+          class="min-h-40 w-95 mr-5 max-sm:mr-2 mt-3.5 space-y-2 max-sm:w-45 relative"
+        >
+          <div
+            class="absolute -top-[8.8px] right-4 max-sm:right-3.7 w-4 h-4 rotate-45 bg-popover border-l border-t border-border"
+          ></div>
+
+          <div class="flex gap-5 max-sm:flex-col">
+            <div class="w-1/2 aspect-square max-sm:w-full">
+              <img
+                class="h-full max-sm:object-contain w-full object-cover object-center rounded-md"
+                [src]="getAvatar(currentUser)"
+                alt="Profile picture"
+              />
+            </div>
+            <div class="w-1/2 max-sm:w-full">
+              <div class="mb-2">
+                <p class="font-medium">{{ currentUser?.name }}</p>
+                <p class="text-sm text-gray-500">Teacher</p>
+              </div>
+              <div class="border-b-2 border-border"></div>
+
+              <div class="flex flex-col text-left mt-2">
+                <button
+                  hlmBtn
+                  variant="ghost"
+                  class="w-full justify-start hover:bg-accent/10 px-1"
+                >
+                  Profile
+                </button>
+
+                <button
+                  hlmBtn
+                  variant="ghost"
+                  class="w-full justify-start hover:bg-accent/10 px-1"
+                >
+                  Settings
+                </button>
+
+                <button
+                  hlmBtn
+                  variant="ghost"
+                  (click)="logout()"
+                  class="w-full justify-start text-red-600 hover:bg-red-50 px-1"
+                >
+                  Sign Out
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </brn-popover>
     </div>
   </div>
 </header>
 
 <aside
-  class="fixed bottom-0 z-50 w-full bg-white flex items-center px-2 justify-between shadow-sidebar h-13 sm:hidden"
+  class="fixed bottom-0 z-50 w-full bg-white flex items-center px-3 justify-between shadow-sidebar h-12.5 sm:hidden"
 >
-  <nav class="w-full mt-1 flex justify-between items-center">
+  <nav class="w-full mt-0.5 flex justify-between items-center">
     <a
       routerLink="/teacher-dashboard"
       routerLinkActive="text-primary"
-      class="relative group flex items-center flex-col rounded-main text-muted-foreground font-light sidebar-font-scale transition-transform active:scale-95 active:bg-gray-200 py-1 px-2"
+      class="relative group flex items-center flex-col rounded-main text-muted-foreground font-light sidebar-font-scale transition-transform active:scale-95 py-1 px-2"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -124,7 +188,7 @@
     <a
       routerLink="/create-quiz"
       routerLinkActive="text-primary"
-      class="relative group flex items-center flex-col rounded-main text-muted-foreground font-light sidebar-font-scale transition-transform active:scale-95 active:bg-gray-200 py-1 px-2"
+      class="relative group flex items-center flex-col rounded-main text-muted-foreground font-light sidebar-font-scale transition-transform active:scale-95 py-1 px-2"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -146,7 +210,7 @@
     <a
       routerLink="/student-to-teacher"
       routerLinkActive="text-primary"
-      class="relative group flex items-center flex-col rounded-main text-muted-foreground font-light sidebar-font-scale transition-transform active:scale-95 active:bg-gray-200 py-1 px-2"
+      class="relative group flex items-center flex-col rounded-main text-muted-foreground font-light sidebar-font-scale transition-transform active:scale-95 py-1 px-2"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

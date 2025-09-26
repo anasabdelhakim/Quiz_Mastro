@@ -1,4 +1,3 @@
-// src/app/layout/connections/connections.component.ts
 import { Component, OnInit, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -8,11 +7,19 @@ import {
   StoredTeacher,
 } from './data-store.service';
 import { ConnectionService } from './connection.service';
-
+import { BrnSelectImports } from '@spartan-ng/brain/select';
+import { HlmSelectImports } from '@spartan-ng/helm/select';
+import { HlmInput } from '@spartan-ng/helm/input';
 @Component({
   selector: 'app-connections',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    BrnSelectImports,
+    HlmSelectImports,
+    HlmInput,
+  ],
   templateUrl: './connections.component.html',
   styleUrl: './connections.component.css',
 })
@@ -20,10 +27,29 @@ export class ConnectionsComponent implements OnInit {
   students: StoredStudent[] = [];
   teachers: StoredTeacher[] = [];
 
+  // Signals
   selectedStudentId = signal<number | null>(null);
-  teacherSearch = signal<string>('');
+  studentSearch = signal<string>(''); // 👈 for student search
+  teacherSearch = signal<string>(''); // 👈 for teacher search
   mode = signal<'assign' | 'manage'>('assign');
 
+  onStudentChange(event: number | (number | null)[] | null | undefined) {
+    if (typeof event === 'number' || event === null) {
+      this.selectedStudentId.set(event);
+    } else {
+      this.selectedStudentId.set(null);
+    }
+
+    this.studentSearch.set('');
+  }
+  // Computed for student filtering
+  filteredStudents = computed(() => {
+    const term = this.studentSearch().toLowerCase().trim();
+    if (!term) return this.students;
+    return this.students.filter((s) => s.name.toLowerCase().includes(term));
+  });
+
+  // Computed for teacher filtering
   filteredTeachers = computed(() => {
     const term = this.teacherSearch().toLowerCase().trim();
     if (!term) return this.teachers;
@@ -34,7 +60,11 @@ export class ConnectionsComponent implements OnInit {
     );
   });
 
-  // Expose computed as a property for template friendliness
+  // Expose as properties for easier template use
+  get filteredStudentsList(): StoredStudent[] {
+    return this.filteredStudents();
+  }
+
   get filteredTeachersList(): StoredTeacher[] {
     return this.filteredTeachers();
   }
@@ -50,6 +80,16 @@ export class ConnectionsComponent implements OnInit {
     console.log('All connections:', this.connections.getAllConnections());
   }
 
+  // --- Search helpers ---
+  onStudentSearch(term: string) {
+    this.studentSearch.set(term);
+  }
+
+  onTeacherSearch(term: string) {
+    this.teacherSearch.set(term);
+  }
+
+  // --- Teacher assignment helpers ---
   isTeacherAssigned(teacherId: number): boolean {
     const studentId = this.selectedStudentId();
     if (studentId === null) return false;
@@ -75,7 +115,7 @@ export class ConnectionsComponent implements OnInit {
     }
   }
 
-  // Helpers to avoid arrow functions in templates
+  // --- Name lookup helpers ---
   getSelectedStudentName(): string {
     const id = this.selectedStudentId();
     if (id === null) return '';
@@ -94,6 +134,3 @@ export class ConnectionsComponent implements OnInit {
     return this.teachers.find((t) => t.id === id)?.subject ?? '';
   }
 }
-
-
-

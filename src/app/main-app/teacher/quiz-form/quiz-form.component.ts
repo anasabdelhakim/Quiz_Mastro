@@ -24,6 +24,9 @@ import { QuizDataService } from '../../quiz.service';
 import { Quiz } from '../../quiz.model';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { AiService } from '../../ai.service';
+import { AuthService } from '../../../auth.service';
+import { toast } from 'ngx-sonner';
 @Component({
   selector: 'app-quiz-form',
   standalone: true,
@@ -46,6 +49,44 @@ import { Location } from '@angular/common';
 export class QuizFormComponent {
   quizForm: FormGroup;
   minDateTime!: string;
+
+  aiMCQEasy = new FormControl(0, [Validators.required, Validators.min(0)]);
+  aiMCQMedium = new FormControl(0, [Validators.required, Validators.min(0)]);
+  aiMCQHard = new FormControl(0, [Validators.required, Validators.min(0)]);
+
+  aiWrittenEasy = new FormControl(0, [Validators.required, Validators.min(0)]);
+  aiWrittenMedium = new FormControl(0, [
+    Validators.required,
+    Validators.min(0),
+  ]);
+  aiWrittenHard = new FormControl(0, [Validators.required, Validators.min(0)]);
+  aiMCQEasyPoints = new FormControl(null, [
+    Validators.required,
+    Validators.min(1),
+  ]);
+  aiMCQMediumPoints = new FormControl(null, [
+    Validators.required,
+    Validators.min(1),
+  ]);
+  aiMCQHardPoints = new FormControl(null, [
+    Validators.required,
+    Validators.min(1),
+  ]);
+
+  aiWrittenEasyPoints = new FormControl(null, [
+    Validators.required,
+    Validators.min(1),
+  ]);
+  aiWrittenMediumPoints = new FormControl(null, [
+    Validators.required,
+    Validators.min(1),
+  ]);
+  aiWrittenHardPoints = new FormControl(null, [
+    Validators.required,
+    Validators.min(1),
+  ]);
+  aiQuizTopic = new FormControl('', [Validators.required]);
+  aiQuizDescription = new FormControl('', [Validators.maxLength(100)]);
   /** Temporary controls for the "Add Question" form */
   newQuestionType = new FormControl<'mcq' | 'written'>('mcq', {
     nonNullable: true,
@@ -71,7 +112,9 @@ export class QuizFormComponent {
     private router: Router,
     private fb: FormBuilder,
     private quizDataService: QuizDataService,
-    private location: Location
+    private location: Location,
+    private aiService: AiService,
+    private authService: AuthService
   ) {
     this.quizForm = this.fb.nonNullable.group({
       title: ['', Validators.required],
@@ -149,7 +192,9 @@ export class QuizFormComponent {
     }
 
     this.questions.push(questionGroup);
-
+    toast.success('Question is added', {
+      duration: 1000,
+    });
     // Reset fields
     this.newQuestionText.reset('');
     this.newQuestionType.setValue('mcq');
@@ -188,20 +233,155 @@ export class QuizFormComponent {
     if (!this.quizForm.valid) return;
 
     const rawValue = this.quizForm.getRawValue();
+    const teacherId = this.authService.getUserId();
+
+    if (!teacherId) {
+      console.error('No teacher ID found');
+      return;
+    }
+
     const quiz: Quiz = {
       ...rawValue,
       id: crypto.randomUUID(),
       startTime: new Date(rawValue.startTime),
+      teacherId: teacherId,
     };
 
     this.quizDataService.addQuiz(quiz);
     console.log(quiz);
+    toast.success('Quiz created successfully!');
+
     ctx?.close();
 
     this.router.navigate(['/teacher-dashboard'], {
       replaceUrl: true,
     });
   }
+  private toggleFormControls(disabled: boolean) {
+    const action = disabled ? 'disable' : 'enable';
+
+    this.aiQuizTopic[action]();
+    this.aiQuizDescription[action]();
+    this.aiMCQEasy[action]();
+    this.aiMCQMedium[action]();
+    this.aiMCQHard[action]();
+    this.aiWrittenEasy[action]();
+    this.aiWrittenMedium[action]();
+    this.aiWrittenHard[action]();
+    this.aiMCQEasyPoints[action]();
+    this.aiMCQMediumPoints[action]();
+    this.aiMCQHardPoints[action]();
+    this.aiWrittenEasyPoints[action]();
+    this.aiWrittenMediumPoints[action]();
+    this.aiWrittenHardPoints[action]();
+  }
+  isLoadingAI = false;
+
+  createQuizByAI(
+    formValues: {
+      topic: string;
+      description: string; // ✅ add this
+      mcq: { easy: number; medium: number; hard: number };
+      written: { easy: number; medium: number; hard: number };
+      points: {
+        mcq: { easy: number; medium: number; hard: number };
+        written: { easy: number; medium: number; hard: number };
+      };
+    },
+    ctx?: { close: () => void }
+  ) {
+    const { topic, description, mcq, written, points } = formValues;
+
+    this.isLoadingAI = true;
+    this.toggleFormControls(true);
+
+    this.aiService
+      .createQuizAdvanced(topic, description, mcq, written)
+      .subscribe({
+        next: (aiResponse: any) => {
+          if (!aiResponse) {
+            console.log('⚠️ AI API returned null or empty response.');
+            this.isLoadingAI = false;
+            this.toggleFormControls(false);
+            return;
+          }
+
+          try {
+            const jsonStart = aiResponse.indexOf('[');
+            const jsonEnd = aiResponse.lastIndexOf(']');
+            if (jsonStart === -1 || jsonEnd === -1)
+              throw new Error('Invalid AI response format');
+
+            const questions: any[] = JSON.parse(
+              aiResponse.slice(jsonStart, jsonEnd + 1)
+            );
+
+            questions.forEach((q) => {
+              this.newQuestionText.setValue(q.text || '');
+              this.newQuestionType.setValue(q.type);
+
+              const difficulty = (
+                (q.difficulty || 'medium') as string
+              ).toLowerCase() as 'easy' | 'medium' | 'hard';
+
+              let questionPoints = 10; // fallback
+
+              if (q.type?.toLowerCase() === 'mcq') {
+                questionPoints = points.mcq[difficulty] ?? 10;
+              } else if (q.type?.toLowerCase() === 'written') {
+                questionPoints = points.written[difficulty] ?? 10;
+              }
+
+              this.newQuestionPoints.setValue(questionPoints);
+
+              if (q.type?.toLowerCase() === 'mcq' && q.options) {
+                this.tempOptionControls.controls.forEach((ctrl, i) => {
+                  ctrl.setValue(q.options[i] || '');
+                });
+                this.tempCorrectIndex = q.options.indexOf(q.correctAnswer);
+              }
+
+              this.addNewQuestion();
+            });
+
+            console.log('✅ AI Quiz generated successfully.');
+            toast.success('AI Quiz generated successfully!');
+            // reset after generation
+            this.aiQuizTopic.reset('');
+            this.aiQuizDescription.reset('');
+            this.aiMCQEasy.reset(0);
+            this.aiMCQMedium.reset(0);
+            this.aiMCQHard.reset(0);
+            this.aiWrittenEasy.reset(0);
+            this.aiWrittenMedium.reset(0);
+            this.aiWrittenHard.reset(0);
+
+            // reset points
+            this.aiMCQEasyPoints.reset(null);
+            this.aiMCQMediumPoints.reset(null);
+            this.aiMCQHardPoints.reset(null);
+            this.aiWrittenEasyPoints.reset(null);
+            this.aiWrittenMediumPoints.reset(null);
+            this.aiWrittenHardPoints.reset(null);
+
+            ctx?.close();
+          } catch (err: any) {
+            console.error('❌ Error parsing AI response', err);
+            toast.error('Failed to generate quiz with AI');
+          } finally {
+            this.isLoadingAI = false;
+            this.toggleFormControls(false);
+          }
+        },
+        error: (err: any) => {
+          console.error('❌ AI service error:', err);
+          toast.error('Failed to generate quiz with AI');
+          this.isLoadingAI = false;
+          this.toggleFormControls(false);
+        },
+      });
+  }
+
   goBack() {
     this.location.back();
   }

@@ -1,13 +1,35 @@
-// src/app/layout/overview/overview.component.ts
 import { Component, OnInit } from '@angular/core';
 import { DataStoreService } from '../connections/data-store.service';
 import { ConnectionService } from '../connections/connection.service';
 import { CommonModule } from '@angular/common';
 import { ActivityService, ActivityFilter } from '../../activity.service';
-
+import { RouterLink } from '@angular/router';
+import { HlmButton } from '@spartan-ng/helm/button';
+import {
+  HlmDialog,
+  HlmDialogContent,
+  HlmDialogFooter,
+  HlmDialogHeader,
+} from '@spartan-ng/helm/dialog';
+import { toast } from 'ngx-sonner';
+import { BrnSelectImports } from '@spartan-ng/brain/select';
+import { HlmSelectImports } from '@spartan-ng/helm/select';
+import { BrnDialogContent, BrnDialogTrigger } from '@spartan-ng/brain/dialog';
 @Component({
   selector: 'app-overview',
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    RouterLink,
+    HlmButton,
+    HlmDialog,
+    HlmDialogContent,
+    HlmDialogFooter,
+    HlmDialogHeader,
+    BrnDialogContent,
+    BrnSelectImports,
+    HlmSelectImports,
+    BrnDialogTrigger,
+  ],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.css',
 })
@@ -70,6 +92,11 @@ export class OverviewComponent implements OnInit {
     this.currentFilter = filter;
     this.showFilterOptions = false;
   }
+  onFilterChange(event: string | string[] | undefined) {
+    if (typeof event === 'string') {
+      this.applyFilter(event as ActivityFilter);
+    }
+  }
 
   getFilterButtonText(): string {
     switch (this.currentFilter) {
@@ -85,13 +112,8 @@ export class OverviewComponent implements OnInit {
   }
 
   clearActivities() {
-    if (
-      confirm(
-        'Are you sure you want to clear all activities? This action cannot be undone.'
-      )
-    ) {
-      this.activityService.clearActivities();
-      this.recentActivities = [];
-    }
+    this.activityService.clearActivities();
+    this.recentActivities = [];
+    toast.success('All activities cleared successfully!');
   }
 }

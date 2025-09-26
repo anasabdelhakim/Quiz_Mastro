@@ -5,33 +5,358 @@
     Quiz Settings
   </h1>
 
-  <div class="lg:max-w-[70%] mx-auto space-y-8 mt-5" [formGroup]="quizForm">
-    <button
-      variant="outline"
-      hlmBtn
-      type="button"
-      class="flex items-center group max-sm:hidden"
-      (click)="goBack()"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="22"
-        height="22"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        class="lucide lucide-arrow-big-left-icon lucide-arrow-big-left transition-transform group-hover:-translate-x-1"
+  <div
+    class="lg:max-w-[70%] mx-auto space-y-8 max-sm:space-y-4 mt-5"
+    [formGroup]="quizForm"
+  >
+    <div class="flex items-center justify-between max-sm:justify-center">
+      <button
+        variant="outline"
+        hlmBtn
+        type="button"
+        class="flex items-center max-sm:hidden group"
+        (click)="goBack()"
       >
-        <path
-          d="M13 9a1 1 0 0 1-1-1V5.061a1 1 0 0 0-1.811-.75l-6.835 6.836a1.207 1.207 0 0 0 0 1.707l6.835 6.835a1 1 0 0 0 1.811-.75V16a1 1 0 0 1 1-1h6a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1z"
-        />
-      </svg>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide lucide-arrow-big-left-icon lucide-arrow-big-left transition-transform group-hover:-translate-x-1"
+        >
+          <path
+            d="M13 9a1 1 0 0 1-1-1V5.061a1 1 0 0 0-1.811-.75l-6.835 6.836a1.207 1.207 0 0 0 0 1.707l6.835 6.835a1 1 0 0 0 1.811-.75V16a1 1 0 0 1 1-1h6a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1z"
+          />
+        </svg>
 
-      <span class="text-base">Back</span>
-    </button>
+        <span class="text-base">Back</span>
+      </button>
+      <div class="flex justify-center">
+        <hlm-dialog>
+          <button
+            brnDialogTrigger
+            hlmBtn
+            class="px-6 py-5 text-white rounded-md bg-gradient-to-r from-blue-500 via-purple-500 to-red-500 hover:from-blue-600 hover:via-purple-600 hover:to-red-600 transition-colors duration-200 shadow-lg"
+          >
+            Create Quiz by AI
+          </button>
+
+          <hlm-dialog-content
+            *brnDialogContent="let ctx"
+            class="max-sm:mx-auto p-6 max-sm:w-[95%] max-h-screen max-md:overflow-y-scroll"
+          >
+            <hlm-dialog-header>
+              <h3 brnDialogTitle hlm class="text-xl font-semibold mb-4">
+                Generate Quiz with AI
+              </h3>
+              <p brnDialogDescription hlm>
+                Specify topic and number of questions per type/difficulty.
+              </p>
+            </hlm-dialog-header>
+
+            <div class="space-y-4 mt-4">
+              <!-- Topic -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700">
+                  Topic <span class="text-destructive">*</span>
+                </label>
+                <input
+                  hlmInput
+                  type="text"
+                  [formControl]="aiQuizTopic"
+                  maxlength="50"
+                  placeholder="Enter quiz topic"
+                  #topicInput
+                  (keydown.enter)="focusNext(DescriptionInputai)"
+                />
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700">
+                  Description <span class="text-destructive">*</span>
+                </label>
+                <textarea
+                  hlmInput
+                  [disabled]="isLoadingAI"
+                  rows="3"
+                  #DescriptionInputai
+                  [formControl]="aiQuizDescription"
+                  maxlength="100"
+                  placeholder="Enter quiz description"
+                  class="w-full"
+                  (keydown.enter)="focusNext(mcqEasyPointsInput)"
+                ></textarea>
+              </div>
+              <!-- MCQ Numbers -->
+              <div class="mt-4">
+                <h4 class="font-medium text-gray-700 mb-2">MCQ Questions</h4>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  <!-- Easy -->
+                  <div>
+                    <label
+                      class="flex items-center text-sm font-medium text-gray-700"
+                    >
+                      <div class="flex items-center justify-between w-full">
+                        <span>Easy</span>
+                        <input
+                          hlmInput
+                          type="number"
+                          [formControl]="aiMCQEasyPoints"
+                          class="w-15 h-6 text-xs px-1"
+                          min="1"
+                          placeholder="Grade"
+                          #mcqEasyPointsInput
+                          (keydown.enter)="focusNext(mcqEasyCountInput)"
+                        />
+                      </div>
+                    </label>
+                    <input
+                      hlmInput
+                      type="number"
+                      [formControl]="aiMCQEasy"
+                      min="0"
+                      placeholder="Count"
+                      #mcqEasyCountInput
+                      (keydown.enter)="focusNext(mcqMediumPointsInput)"
+                    />
+                  </div>
+
+                  <!-- Medium -->
+                  <div>
+                    <label
+                      class="flex items-center text-sm font-medium text-gray-700"
+                    >
+                      <div class="flex items-center justify-between w-full">
+                        <span>Medium</span>
+                        <input
+                          hlmInput
+                          type="number"
+                          [formControl]="aiMCQMediumPoints"
+                          class="w-15 h-6 text-xs px-1"
+                          min="1"
+                          placeholder="Grade"
+                          #mcqMediumPointsInput
+                          (keydown.enter)="focusNext(mcqMediumCountInput)"
+                        />
+                      </div>
+                    </label>
+                    <input
+                      hlmInput
+                      type="number"
+                      [formControl]="aiMCQMedium"
+                      min="0"
+                      placeholder="Count"
+                      #mcqMediumCountInput
+                      (keydown.enter)="focusNext(mcqHardPointsInput)"
+                    />
+                  </div>
+
+                  <!-- Hard -->
+                  <div>
+                    <label
+                      class="flex items-center text-sm font-medium text-gray-700"
+                    >
+                      <div class="flex items-center justify-between w-full">
+                        <span>Hard</span>
+                        <input
+                          hlmInput
+                          type="number"
+                          [formControl]="aiMCQHardPoints"
+                          class="w-15 h-6 text-xs px-1"
+                          min="1"
+                          placeholder="Grade"
+                          #mcqHardPointsInput
+                          (keydown.enter)="focusNext(mcqHardCountInput)"
+                        />
+                      </div>
+                    </label>
+                    <input
+                      hlmInput
+                      type="number"
+                      [formControl]="aiMCQHard"
+                      min="0"
+                      placeholder="Count"
+                      #mcqHardCountInput
+                      (keydown.enter)="focusNext(writtenEasyPointsInput)"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Written Numbers -->
+              <div class="mt-4">
+                <h4 class="font-medium text-gray-700 mb-2">
+                  Written Questions
+                </h4>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  <!-- Easy -->
+                  <div>
+                    <label
+                      class="flex items-center text-sm font-medium text-gray-700"
+                    >
+                      <div class="flex items-center justify-between w-full">
+                        <span>Easy</span>
+                        <input
+                          hlmInput
+                          type="number"
+                          [formControl]="aiWrittenEasyPoints"
+                          class="w-15 h-6 text-xs px-1"
+                          min="1"
+                          placeholder="Grade"
+                          #writtenEasyPointsInput
+                          (keydown.enter)="focusNext(writtenEasyCountInput)"
+                        />
+                      </div>
+                    </label>
+                    <input
+                      hlmInput
+                      type="number"
+                      [formControl]="aiWrittenEasy"
+                      min="0"
+                      placeholder="Count"
+                      #writtenEasyCountInput
+                      (keydown.enter)="focusNext(writtenMediumPointsInput)"
+                    />
+                  </div>
+
+                  <!-- Medium -->
+                  <div>
+                    <label
+                      class="flex items-center text-sm font-medium text-gray-700"
+                    >
+                      <div class="flex items-center justify-between w-full">
+                        <span>Medium</span>
+                        <input
+                          hlmInput
+                          type="number"
+                          [formControl]="aiWrittenMediumPoints"
+                          class="w-15 h-6 text-xs px-1"
+                          min="1"
+                          placeholder="Grade"
+                          #writtenMediumPointsInput
+                          (keydown.enter)="focusNext(writtenMediumCountInput)"
+                        />
+                      </div>
+                    </label>
+                    <input
+                      hlmInput
+                      type="number"
+                      [formControl]="aiWrittenMedium"
+                      min="0"
+                      placeholder="Count"
+                      #writtenMediumCountInput
+                      (keydown.enter)="focusNext(writtenHardPointsInput)"
+                    />
+                  </div>
+
+                  <!-- Hard -->
+                  <div>
+                    <label
+                      class="flex items-center text-sm font-medium text-gray-700"
+                    >
+                      <div class="flex items-center justify-between w-full">
+                        <span>Hard</span>
+                        <input
+                          hlmInput
+                          type="number"
+                          [formControl]="aiWrittenHardPoints"
+                          class="w-15 h-6 text-xs px-1"
+                          min="1"
+                          placeholder="Grade"
+                          #writtenHardPointsInput
+                          (keydown.enter)="focusNext(writtenHardCountInput)"
+                        />
+                      </div>
+                    </label>
+                    <input
+                      hlmInput
+                      type="number"
+                      [formControl]="aiWrittenHard"
+                      min="0"
+                      placeholder="Count"
+                      #writtenHardCountInput
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <hlm-dialog-footer class="flex justify-end gap-2 mt-6">
+              <button hlmBtn variant="outline" (click)="ctx.close()">
+                Cancel
+              </button>
+              <button
+                hlmBtn
+                type="button"
+                [disabled]="isLoadingAI"
+                (click)="
+                  createQuizByAI(
+                    {
+                      topic: aiQuizTopic.value || 'Test Topic',
+                      description:
+                        aiQuizDescription.value || 'No description provided',
+                      mcq: {
+                        easy: aiMCQEasy.value ?? 0,
+                        medium: aiMCQMedium.value ?? 0,
+                        hard: aiMCQHard.value ?? 0
+                      },
+                      written: {
+                        easy: aiWrittenEasy.value ?? 0,
+                        medium: aiWrittenMedium.value ?? 0,
+                        hard: aiWrittenHard.value ?? 0
+                      },
+                      points: {
+                        mcq: {
+                          easy: aiMCQEasyPoints.value ?? 5,
+                          medium: aiMCQMediumPoints.value ?? 10,
+                          hard: aiMCQHardPoints.value ?? 15
+                        },
+                        written: {
+                          easy: aiWrittenEasyPoints.value ?? 5,
+                          medium: aiWrittenMediumPoints.value ?? 10,
+                          hard: aiWrittenHardPoints.value ?? 15
+                        }
+                      }
+                    },
+                    ctx
+                  )
+                "
+              >
+                <span *ngIf="!isLoadingAI">Generate Quiz</span>
+                <div *ngIf="isLoadingAI" class="flex items-center gap-1">
+                  <svg
+                    class="animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      class="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      stroke-width="4"
+                    ></circle>
+                    <path
+                      class="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                    ></path>
+                  </svg>
+                  <span>Generating...</span>
+                </div>
+              </button>
+            </hlm-dialog-footer>
+          </hlm-dialog-content>
+        </hlm-dialog>
+      </div>
+    </div>
     <div class="card grid grid-cols-1 md:grid-cols-2 gap-6">
       <div>
         <label
@@ -100,6 +425,7 @@
           Start Time <span class="text-destructive">*</span>
         </label>
         <input
+          placeholder="mm/dd/yyyy --:-- --"
           id="start-time"
           #startTimeInput
           hlmInput
@@ -361,6 +687,7 @@
         </div>
       </div>
     </div>
+    <!-- Create Quiz by AI Dialog -->
 
     <div class="flex justify-center mt-6">
       <hlm-dialog>
@@ -369,7 +696,7 @@
           brnDialogTrigger
           hlmBtn
           type="button"
-          class="px-6 py-5 text-white bg-primary rounded-md hover:bg-primary-dark"
+          class="px-6 py-5 text-white"
         >
           Submit Quiz
         </button>
