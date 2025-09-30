@@ -15,12 +15,9 @@ import { HeaderComponent } from '../header/header.component';
 })
 export class StudentDashboardComponent implements OnInit {
   quizzes: Quiz[] = [];
-  loading: boolean = true; 
+  loading: boolean = true;
 
-  constructor(
-    private quizService: QuizDataService,
-    private router: Router
-  ) {}
+  constructor(public quizService: QuizDataService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadQuizzes();

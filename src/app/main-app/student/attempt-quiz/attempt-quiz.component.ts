@@ -13,6 +13,7 @@ import {
 } from '@spartan-ng/helm/dialog';
 import { BrnDialogContent, BrnDialogTrigger } from '@spartan-ng/brain/dialog';
 import { toast } from 'ngx-sonner';
+import { AuthService } from '../../../auth.service';
 
 @Component({
   selector: 'app-attempt-quiz',
@@ -42,7 +43,11 @@ export class AttemptQuizComponent implements OnInit, OnDestroy {
   submitMessage = '';
   autoSubmitted = false;
 
-  constructor(private router: Router, private quizService: QuizDataService) {}
+  constructor(
+    private router: Router,
+    private quizService: QuizDataService,
+    private auth: AuthService
+  ) {}
 
   ngOnInit(): void {
     const found = this.quizService.getCurrentQuiz();
@@ -87,8 +92,11 @@ export class AttemptQuizComponent implements OnInit, OnDestroy {
   }
 
   private startQuiz() {
-    if (!this.quiz.startedAt) this.quiz.startedAt = new Date();
     this.quizService.setCurrentQuiz(this.quiz);
+    const studentId = this.auth.getUserId();
+    if (studentId) {
+      this.quizService.startQuizForStudent(this.quiz.id, studentId);
+    }
     const now = Date.now();
     const end = this.quiz.startTime.getTime() + this.quiz.duration * 60000;
     this.timeLeft = Math.floor((end - now) / 1000);
@@ -124,11 +132,15 @@ export class AttemptQuizComponent implements OnInit, OnDestroy {
     this.selectedAnswers[qId] = optionId.toString();
 
     // Immediately persist to the service
-    this.quizService.updateStudentAnswer(
-      this.quiz.id,
-      qId,
-      optionId.toString()
-    );
+    const studentId = this.auth.getUserId();
+    if (studentId) {
+      this.quizService.updateStudentAnswerForStudent(
+        this.quiz.id,
+        studentId,
+        qId,
+        optionId.toString()
+      );
+    }
   }
 
   nextQuestion() {
@@ -166,17 +178,26 @@ export class AttemptQuizComponent implements OnInit, OnDestroy {
   private autoSubmit() {
     clearInterval(this.timerInterval);
     this.autoSubmitted = true;
-    this.quiz.studentAnswers = { ...this.selectedAnswers };
-    this.quizService.setGrading(this.quiz);
-    if (this.quiz.startedAt) {
-      this.quiz.timeSpent = Math.floor(
-        (Date.now() - this.quiz.startedAt.getTime()) / 1000
-      );
-      this.quizService.updateQuiz(this.quiz.id, {
-        timeSpent: this.quiz.timeSpent,
-      });
-    }
-    console.log(this.quiz.timeSpent);
+    const studentId = this.auth.getUserId();
+    if (!studentId) return;
+
+    // Get the student's submission to calculate time spent
+    const submission = this.quizService.getStudentSubmission(
+      this.quiz.id,
+      studentId
+    );
+    const timeSpentSeconds = submission?.startedAt
+      ? Math.floor(
+          (Date.now() - new Date(submission.startedAt).getTime()) / 1000
+        )
+      : undefined;
+
+    this.quizService.submitQuizForStudent(
+      this.quiz,
+      studentId,
+      { ...this.selectedAnswers },
+      timeSpentSeconds
+    );
     toast.success(`⏳ Time is up! Your quiz has been automatically submitted.`);
 
     this.router.navigate(['/student-dashboard'], {
@@ -185,20 +206,29 @@ export class AttemptQuizComponent implements OnInit, OnDestroy {
   }
 
   finalizeSubmit() {
-    // Save student answers
-    this.quiz.studentAnswers = { ...this.selectedAnswers };
-
-    // Mark quiz as grading for both teacher and student
-    this.quizService.setGrading(this.quiz);
-    if (this.quiz.startedAt) {
-      this.quiz.timeSpent = Math.floor(
-        (Date.now() - this.quiz.startedAt.getTime()) / 1000
-      );
-      this.quizService.updateQuiz(this.quiz.id, {
-        timeSpent: this.quiz.timeSpent,
-      });
+    const studentId = this.auth.getUserId();
+    if (!studentId) {
+      toast.error('User not logged in');
+      return;
     }
-    console.log(this.quiz.timeSpent);
+
+    // Get the student's submission to calculate time spent
+    const submission = this.quizService.getStudentSubmission(
+      this.quiz.id,
+      studentId
+    );
+    const timeSpentSeconds = submission?.startedAt
+      ? Math.floor(
+          (Date.now() - new Date(submission.startedAt).getTime()) / 1000
+        )
+      : undefined;
+
+    this.quizService.submitQuizForStudent(
+      this.quiz,
+      studentId,
+      { ...this.selectedAnswers },
+      timeSpentSeconds
+    );
     this.router.navigate(['/student-dashboard'], {
       replaceUrl: true,
     });
@@ -212,11 +242,15 @@ export class AttemptQuizComponent implements OnInit, OnDestroy {
     }
 
     // Persist to service
-    this.quizService.updateStudentAnswer(
-      this.quiz.id,
-      questionId,
-      this.selectedAnswers[questionId] || ''
-    );
+    const studentId = this.auth.getUserId();
+    if (studentId) {
+      this.quizService.updateStudentAnswerForStudent(
+        this.quiz.id,
+        studentId,
+        questionId,
+        this.selectedAnswers[questionId] || ''
+      );
+    }
   }
 
   objectKeys(obj: any): string[] {

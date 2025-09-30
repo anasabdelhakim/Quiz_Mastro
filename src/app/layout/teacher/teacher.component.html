@@ -75,7 +75,7 @@
                 type="email"
                 placeholder="Enter teacher email"
                 (input)="onInputChange()"
-                (keydown.enter)="focusNext(inputUsername)"
+                (keydown.enter)="focusNext(inputpassword)"
               />
               <div *ngIf="errors.email" class="text-red-500 text-sm mt-1">
                 {{ errors.email }}
@@ -114,24 +114,7 @@
               </div>
             </div>
 
-            <!-- Username -->
-            <div class="mb-4">
-              <label class="block text-gray-700 text-sm font-medium mb-1"
-                >Username</label
-              >
-              <input
-                #inputUsername
-                hlmInput
-                [(ngModel)]="currentTeacher.username"
-                name="username"
-                placeholder="Enter username"
-                (input)="onInputChange()"
-                (keydown.enter)="focusNext(inputpassword)"
-              />
-              <div *ngIf="errors.username" class="text-red-500 text-sm mt-1">
-                {{ errors.username }}
-              </div>
-            </div>
+      
 
             <!-- Password -->
             <div class="mb-4">

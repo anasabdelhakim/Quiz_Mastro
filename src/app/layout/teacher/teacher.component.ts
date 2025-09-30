@@ -26,7 +26,7 @@ export interface Teacher {
   name: string;
   email: string;
   gender: string;
-  username: string;
+
   password: string;
   phone?: string;
 }
@@ -60,7 +60,7 @@ export class TeacherComponent implements OnInit {
     name: '',
     email: '',
     gender: '',
-    username: '',
+ 
     password: '',
     phone: '',
   };
@@ -82,7 +82,7 @@ export class TeacherComponent implements OnInit {
       .endsWith('@gmail.com', 'Email must end with @gmail.com'),
     gender: z.string().min(1, 'Gender is required'),
     phone: z.string().regex(/^\d*$/, 'Phone must be numbers only').optional(),
-    username: z.string().min(4, 'Username must be at least 4 characters'),
+
     password: z
       .string()
       .min(8, 'Password must be at least 8 characters')
@@ -108,7 +108,7 @@ export class TeacherComponent implements OnInit {
       name: t.name,
       email: t.email,
       gender: t.gender,
-      username: t.username,
+   
       password: t.password,
       phone: t.phone || '',
     }));
@@ -139,7 +139,7 @@ export class TeacherComponent implements OnInit {
       name: '',
       email: '',
       gender: '',
-      username: '',
+     
       password: '',
       phone: '',
     };
@@ -217,8 +217,7 @@ export class TeacherComponent implements OnInit {
       email: this.currentTeacher.email,
       subject: 'Mathematics',
       phone: this.currentTeacher.phone || '',
-      username:
-        this.currentTeacher.username[0] + this.currentTeacher.username.slice(1),
+
       password: this.currentTeacher.password,
       gender: this.currentTeacher.gender,
     };
@@ -252,9 +251,7 @@ export class TeacherComponent implements OnInit {
         email: this.currentTeacher.email,
         subject: 'Mathematics',
         phone: this.currentTeacher.phone || '',
-        username:
-          this.currentTeacher.username[0] +
-          this.currentTeacher.username.slice(1),
+
         password: this.currentTeacher.password,
         gender: this.currentTeacher.gender,
       };

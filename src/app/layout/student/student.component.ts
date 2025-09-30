@@ -26,7 +26,7 @@ export interface Student {
   name: string;
   email: string;
   gender: string;
-  username: string;
+
   password: string;
   phone?: string;
 }
@@ -60,7 +60,7 @@ export class StudentComponent implements OnInit {
     name: '',
     email: '',
     gender: '',
-    username: '',
+
     password: '',
     phone: '',
   };
@@ -80,7 +80,7 @@ export class StudentComponent implements OnInit {
       .endsWith('@gmail.com', 'Email must end with @gmail.com'),
     gender: z.string().min(1, 'Gender is required'),
     phone: z.string().regex(/^\d*$/, 'Phone must be numbers only').optional(),
-    username: z.string().min(4, 'Username must be at least 4 characters'),
+
     password: z
       .string()
       .min(8, 'Password must be at least 8 characters')
@@ -106,7 +106,7 @@ export class StudentComponent implements OnInit {
       name: s.name,
       email: s.email,
       gender: s.gender,
-      username: s.username,
+      
       password: s.password,
       phone: s.phone || '',
     }));
@@ -138,7 +138,7 @@ export class StudentComponent implements OnInit {
       name: '',
       email: '',
       gender: '',
-      username: '',
+   
       password: '',
       phone: '',
     };
@@ -217,8 +217,7 @@ export class StudentComponent implements OnInit {
       email: this.currentStudent.email,
       grade: '10th', // Default grade since it's not in the form
       phone: this.currentStudent.phone,
-      username:
-        this.currentStudent.username[0] + this.currentStudent.username.slice(1),
+
       password: this.currentStudent.password,
       gender: this.currentStudent.gender,
     };
@@ -262,9 +261,7 @@ export class StudentComponent implements OnInit {
         email: this.currentStudent.email,
         grade: '10th', // Default grade since it's not in the form
         phone: this.currentStudent.phone,
-        username:
-          this.currentStudent.username[0] +
-          this.currentStudent.username.slice(1),
+  
         password: this.currentStudent.password,
         gender: this.currentStudent.gender,
       };

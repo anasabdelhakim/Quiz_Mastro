@@ -21,6 +21,7 @@ import { StudentToTeacherComponent } from './main-app/teacher/student-to-teacher
 import { ConnectStudentsComponent } from './main-app/student/connect-students/connect-students.component';
 import { ViewDetailesComponent } from './main-app/teacher/view-detailes/view-detailes.component';
 import { GradingQuizComponent } from './main-app/teacher/grading-quiz/grading-quiz.component';
+import { ViewStudentGradesComponent } from './main-app/teacher/view-student-grades/view-student-grades.component';
 import { ReviewQuizComponent } from './main-app/student/review-quiz/review-quiz.component';
 import { TeacherToStudentComponent } from './main-app/student/teacher-to-student/teacher-to-student.component';
 export const routes: Routes = [
@@ -37,7 +38,6 @@ export const routes: Routes = [
   },
 
   {
-    
     path: '',
     component: LayoutComponent,
     canActivate: [authGuard],
@@ -100,6 +100,11 @@ export const routes: Routes = [
         path: 'grading-quiz/:id',
         component: GradingQuizComponent,
         data: { title: 'Grading Quiz - Teacher' },
+      },
+      {
+        path: 'view-student-grades/:id',
+        component: ViewStudentGradesComponent,
+        data: { title: 'Student Grades - Teacher' },
       },
     ],
   },

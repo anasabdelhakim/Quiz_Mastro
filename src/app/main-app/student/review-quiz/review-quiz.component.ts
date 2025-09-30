@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../header/header.component';
 import { Location } from '@angular/common';
 import { HlmButton } from '@spartan-ng/helm/button';
+import { AuthService } from '../../../auth.service';
 @Component({
   selector: 'app-review-quiz',
   standalone: true,
@@ -14,8 +15,6 @@ import { HlmButton } from '@spartan-ng/helm/button';
 })
 export class ReviewQuizComponent implements OnInit, AfterViewInit, OnDestroy {
   quiz!: Quiz;
-
-  // Properties used in template
   totalScore = 0;
   totalPoints = 0;
   correctCount = 0;
@@ -25,7 +24,8 @@ export class ReviewQuizComponent implements OnInit, AfterViewInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private quizService: QuizDataService,
-    private location: Location
+    private location: Location,
+    private auth: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -43,13 +43,34 @@ export class ReviewQuizComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
-    this.quiz = foundQuiz;
+    // Get student-specific quiz data
+    const studentId = this.auth.getUserId();
+    if (!studentId) {
+      alert('Not logged in');
+      this.router.navigate(['/student-dashboard']);
+      return;
+    }
 
-    // Load saved grading state and explanations
-    const gradingState = this.quizService.getGradingState(quizId);
+    const studentQuizData = this.quizService.getStudentQuizData(
+      quizId,
+      studentId
+    );
+    if (!studentQuizData) {
+      alert('Quiz not found');
+      this.router.navigate(['/student-dashboard']);
+      return;
+    }
+
+    this.quiz = studentQuizData;
+
+    // Load saved grading state and explanations per student
+    const gradingState = this.quizService.getGradingState(quizId, studentId);
     this.quiz.questionScores = { ...gradingState.questionScores };
     this.quiz.manualScores = { ...gradingState.manualScores };
-    this.questionExplanations = this.quizService.getExplanations(quizId);
+    this.questionExplanations = this.quizService.getExplanations(
+      quizId,
+      studentId
+    );
 
     // Calculate total points and score
     this.totalPoints = this.getTotalPoints(this.quiz);
@@ -65,7 +86,14 @@ export class ReviewQuizComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   studentAnswer(q: Question): string {
-    return this.quiz.studentAnswers?.[q.id] || '';
+    const studentId = this.auth.getUserId();
+    if (!studentId) return '';
+
+    const submission = this.quizService.getStudentSubmission(
+      this.quiz.id,
+      studentId
+    );
+    return submission?.studentAnswers?.[q.id] || '';
   }
 
   correctAnswer(q: Question): string {
@@ -116,32 +144,47 @@ export class ReviewQuizComponent implements OnInit, AfterViewInit, OnDestroy {
     return quiz.questions.reduce((sum, q) => sum + q.points, 0);
   }
   get formattedTimeSpent(): string {
-    if (!this.quiz?.startedAt) return '0:00';
+    const studentId = this.auth.getUserId();
+    if (!studentId) return `${this.quiz.duration}:00`; // fallback
 
-    const seconds =
-      this.quiz.timeSpent ??
-      Math.floor((Date.now() - new Date(this.quiz.startedAt).getTime()) / 1000);
+    const submission = this.quizService.getStudentSubmission(
+      this.quiz.id,
+      studentId
+    );
 
+    // ❌ No submission → use quiz duration
+    if (!submission) {
+      return `${this.quiz.duration}:00`;
+    }
+
+    // ❌ Started but no timeSpent recorded → use duration
+    if (!submission?.timeSpent) {
+      return `${this.quiz.duration}:00`;
+    }
+
+    // ✅ Student attempted → use recorded time
+    const seconds = submission.timeSpent;
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
 
     return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
   }
+
   goBack() {
     this.location.back();
   }
   ngAfterViewInit() {
-  // Set chatbot config
-  (window as any).chtlConfig = { chatbotId: '5726282828' };
+    // Set chatbot config
+    (window as any).chtlConfig = { chatbotId: '5726282828' };
 
-  // Inject the Chatling AI script dynamically
-  const script = document.createElement('script');
-  script.src = 'https://chatling.ai/js/embed.js';
-  script.id = 'chtl-script';
-  script.async = true;
-  script.type = 'text/javascript';
-  document.body.appendChild(script);
-}
+    // Inject the Chatling AI script dynamically
+    const script = document.createElement('script');
+    script.src = 'https://chatling.ai/js/embed.js';
+    script.id = 'chtl-script';
+    script.async = true;
+    script.type = 'text/javascript';
+    document.body.appendChild(script);
+  }
 
   ngOnDestroy() {
     // Remove the chatbot script

@@ -10,15 +10,14 @@ import { DataStoreService } from '../../../layout/connections/data-store.service
 import { ConnectionService } from '../../../layout/connections/connection.service';
 import { ActivityService } from '../../../activity.service';
 import { toast } from 'ngx-sonner';
-import { BrnSelectImports } from '@spartan-ng/brain/select';
-import { HlmSelectImports } from '@spartan-ng/helm/select';
 import {
   HlmDialog,
   HlmDialogContent,
   HlmDialogFooter,
   HlmDialogHeader,
 } from '@spartan-ng/helm/dialog';
-
+import { BrnSelectImports } from '@spartan-ng/brain/select';
+import { HlmSelectImports } from '@spartan-ng/helm/select';
 import { BrnDialogContent, BrnDialogTrigger } from '@spartan-ng/brain/dialog';
 @Component({
   selector: 'app-student-to-teacher',
@@ -27,14 +26,14 @@ import { BrnDialogContent, BrnDialogTrigger } from '@spartan-ng/brain/dialog';
     FormsModule,
     HlmButton,
     HlmInput,
-    BrnSelectImports,
-    HlmSelectImports,
     HlmDialog,
     HlmDialogContent,
     HlmDialogFooter,
     HlmDialogHeader,
     BrnDialogContent,
     BrnDialogTrigger,
+    HlmSelectImports,
+    BrnSelectImports,
   ],
   templateUrl: './student-to-teacher.component.html',
   styleUrl: './student-to-teacher.component.css',
@@ -81,14 +80,25 @@ export class StudentToTeacherComponent implements OnInit {
   }
 
   private loadAttendanceData(): void {
-    // Determine current teacher
+    // Determine current teacher from auth (fallback to single teacher in store)
+    const authTeacherId = (this.quizService as any)[
+      'authService'
+    ]?.getUserId?.();
     const teachers = this.store.getTeachers();
-    const teacherId = teachers.length === 1 ? teachers[0].id : teachers[0]?.id;
+    const teacherId =
+      authTeacherId ?? (teachers.length === 1 ? teachers[0].id : null);
+
+    // If teacher identity is ambiguous or missing, do not load any data
+    if (teacherId == null) {
+      this.attendances = [];
+      this.filteredAttendances = [];
+
+      return;
+    }
 
     // Get assigned students for this teacher
-    const assignedConnections = teacherId
-      ? this.connections.getConnectionsByTeacher(teacherId)
-      : [];
+    const assignedConnections =
+      this.connections.getConnectionsByTeacher(teacherId);
     const studentIds = new Set(assignedConnections.map((c) => c.studentId));
     const allStudents = this.store.getStudents();
     const assignedStudents = allStudents.filter((s) => studentIds.has(s.id));
@@ -97,8 +107,40 @@ export class StudentToTeacherComponent implements OnInit {
     const quizzes = this.quizService.getQuizzes('teacher');
     const rows: any[] = [];
     let rowIdx = 0;
+    // If there are no quizzes yet, still show connected students with a default "not-started" status
+    if (quizzes.length === 0) {
+      for (const student of assignedStudents) {
+        rows.push({
+          id: `att-${++rowIdx}`,
+          studentId: student.id,
+          studentName: student.name,
+          studentEmail: student.email,
+          quizId: '',
+          quizTitle: 'No Quiz',
+          startedAt: null,
+          submittedAt: null,
+          timeSpent: 0,
+          totalGrade: NaN,
+          pointsEarned: 0,
+          totalPoints: 0,
+          percentage: 0,
+          status: 'not-started',
+          gradingStatus: 'No quiz',
+          answers: {},
+          teacherNotes: '',
+        });
+      }
+      this.attendances = rows;
+      this.filteredAttendances = [...this.attendances];
+      return;
+    }
     for (const student of assignedStudents) {
       for (const q of quizzes) {
+        // Derive per-student status
+        const derivedStatus = this.quizService.getStudentDerivedStatus(
+          q,
+          student.id
+        );
         const status:
           | 'not-started'
           | 'scheduled'
@@ -106,22 +148,42 @@ export class StudentToTeacherComponent implements OnInit {
           | 'completed'
           | 'graded'
           | 'expired' =
-          q.status === 'finished'
+          derivedStatus === 'finished'
             ? 'graded'
-            : q.status === 'grading'
+            : derivedStatus === 'grading'
             ? 'completed'
-            : q.status === 'active'
+            : derivedStatus === 'active'
             ? 'active'
-            : q.status === 'scheduled'
+            : derivedStatus === 'scheduled'
             ? 'scheduled'
-            : q.status === 'expired'
+            : derivedStatus === 'expired'
             ? 'expired'
             : 'not-started';
 
-        const startedAt = q.startTime;
-        const submittedAt = new Date(
-          q.startTime.getTime() + q.duration * 60000
+        const submission = this.quizService.getStudentSubmission(
+          q.id,
+          student.id
         );
+
+        // Add grading status information
+        const isGrading = derivedStatus === 'grading';
+        const isGraded = derivedStatus === 'finished';
+        const gradingStatus = isGrading
+          ? 'Awaiting Grading'
+          : isGraded
+          ? 'Graded'
+          : submission?.studentAnswers
+          ? 'Submitted'
+          : 'Not Submitted';
+        const startedAt = submission?.startedAt || q.startTime;
+        const submittedAt = submission?.studentAnswers
+          ? new Date(startedAt.getTime() + q.duration * 60000)
+          : new Date(q.startTime.getTime() + q.duration * 60000);
+
+        const totalPoints = this.quizService.getTotalPoints(q);
+        const pointsEarned = submission?.grade ?? 0;
+        const percentage =
+          totalPoints > 0 ? Math.round((pointsEarned / totalPoints) * 100) : 0;
 
         rows.push({
           id: `att-${++rowIdx}`,
@@ -132,10 +194,16 @@ export class StudentToTeacherComponent implements OnInit {
           quizTitle: q.title,
           startedAt,
           submittedAt,
-          timeSpent: Math.round((q.timeSpent ?? q.duration * 60) / 60),
-          totalGrade: q.grade ?? NaN,
+          timeSpent: Math.round(
+            (submission?.timeSpent ?? q.duration * 60) / 60
+          ),
+          totalGrade: submission?.grade ?? NaN,
+          pointsEarned,
+          totalPoints,
+          percentage,
           status,
-          answers: q.studentAnswers ?? {},
+          gradingStatus,
+          answers: submission?.studentAnswers ?? {},
           teacherNotes: (q as any).teacherNotes,
         });
       }
@@ -250,10 +318,12 @@ export class StudentToTeacherComponent implements OnInit {
       att.studentName,
       att.studentEmail,
       att.quizTitle,
-      att.startedAt.toLocaleString(),
-      att.submittedAt.toLocaleString(),
+      att.startedAt ? att.startedAt.toLocaleString() : 'No quiz yet',
+      att.submittedAt ? att.submittedAt.toLocaleString() : 'No submission',
       att.timeSpent,
-      att.totalGrade || 'N/A',
+      att.totalGrade
+        ? `${att.pointsEarned}/${att.totalPoints} (${att.percentage}%)`
+        : 'N/A',
       att.status,
       att.teacherNotes || '',
     ]);

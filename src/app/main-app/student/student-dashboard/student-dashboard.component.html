@@ -164,6 +164,26 @@
                 <span>{{ quiz.questions.length || 0 }} Questions</span>
               </div>
               <div class="border-b-border border-b-2"></div>
+              <!-- Teacher name -->
+              <div class="flex items-center gap-2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-user w-4 h-4"
+                >
+                  <path d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0" />
+                  <path d="M12 14a7 7 0 0 0-7 7h14a7 7 0 0 0-7-7" />
+                </svg>
+                <span
+                  >Teacher:
+                  {{ quizService.getTeacherName(quiz.teacherId) }}</span
+                >
+              </div>
               <!-- Scheduled: Show countdown -->
               <div
                 *ngIf="quiz.status === 'scheduled'"

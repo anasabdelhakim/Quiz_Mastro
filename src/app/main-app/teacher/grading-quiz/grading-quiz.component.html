@@ -40,7 +40,11 @@
     </button>
 
     <div
-      *ngFor="let q of quiz.questions; let i = index"
+      *ngFor="
+        let q of quiz.questions;
+        let i = index;
+        trackBy: trackByQuestionId
+      "
       class="card mb-12 max-sm:mb-6 last:mb-0"
     >
       <div class="flex justify-between items-start mb-4">
@@ -142,7 +146,12 @@
             [id]="'score-' + q.id"
             type="number"
             [(ngModel)]="questionScores[q.id]"
+            [ngModelOptions]="{ standalone: true }"
+            [name]="'writtenScore_' + q.id"
+            min="0"
+            [max]="q.points"
           />
+
           <span class="font-bold text-gray-500">/ {{ q.points }}</span>
         </div>
       </div>
@@ -156,7 +165,9 @@
           <p class="font-bold text-[var(--text-primary)]">
             {{
               showGradeInput[q.id]
-                ? manualScores[q.id] || 0
+                ? manualScores[q.id] !== undefined
+                  ? manualScores[q.id]
+                  : 0
                 : studentAnswer(q) === correctAnswer(q)
                 ? q.points
                 : 0
@@ -173,9 +184,14 @@
             <input
               hlmInput
               class="w-20 h-8"
-              [id]="'score-' + q.id"
+              [id]="'manual-score-' + q.id"
               type="number"
-              [(ngModel)]="manualScores[q.id]"
+              [ngModel]="manualScores[q.id] || 0"
+              (ngModelChange)="updateManualScore(q.id, $event)"
+              [ngModelOptions]="{ standalone: true }"
+              [name]="'manualScore_' + q.id"
+              min="0"
+              [max]="q.points"
             />
             <span class="font-bold text-gray-500">/ {{ q.points }}</span>
           </ng-container>
@@ -192,7 +208,10 @@
         <textarea
           id="explanation-{{ q.id }}"
           class="mt-2"
-          [(ngModel)]="questionExplanations[q.id]"
+          [ngModel]="questionExplanations[q.id]"
+          (ngModelChange)="updateExplanation(q.id, $event)"
+          [ngModelOptions]="{ standalone: true }"
+          [name]="'explanation_' + q.id"
           hlmInput
           rows="2"
           placeholder="Add explanation for this question"

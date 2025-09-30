@@ -6,7 +6,7 @@ export interface StoredStudent {
   email: string;
   grade: string;
   phone?: string;
-  username: string;
+ 
   password: string;
   gender: string;
 }
@@ -18,7 +18,7 @@ export interface StoredTeacher {
   subject: string;
   phone: string;
   avatar?: string;
-  username: string;
+
   password: string;
   gender: string;
 }

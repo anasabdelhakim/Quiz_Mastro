@@ -50,16 +50,31 @@ export class QuizFormComponent {
   quizForm: FormGroup;
   minDateTime!: string;
 
-  aiMCQEasy = new FormControl(0, [Validators.required, Validators.min(0)]);
-  aiMCQMedium = new FormControl(0, [Validators.required, Validators.min(0)]);
-  aiMCQHard = new FormControl(0, [Validators.required, Validators.min(0)]);
-
-  aiWrittenEasy = new FormControl(0, [Validators.required, Validators.min(0)]);
-  aiWrittenMedium = new FormControl(0, [
+  aiMCQEasy = new FormControl<number | null>(null, [
     Validators.required,
     Validators.min(0),
   ]);
-  aiWrittenHard = new FormControl(0, [Validators.required, Validators.min(0)]);
+  aiMCQMedium = new FormControl<number | null>(null, [
+    Validators.required,
+    Validators.min(0),
+  ]);
+  aiMCQHard = new FormControl<number | null>(null, [
+    Validators.required,
+    Validators.min(0),
+  ]);
+
+  aiWrittenEasy = new FormControl<number | null>(null, [
+    Validators.required,
+    Validators.min(0),
+  ]);
+  aiWrittenMedium = new FormControl<number | null>(null, [
+    Validators.required,
+    Validators.min(0),
+  ]);
+  aiWrittenHard = new FormControl<number | null>(null, [
+    Validators.required,
+    Validators.min(0),
+  ]);
   aiMCQEasyPoints = new FormControl(null, [
     Validators.required,
     Validators.min(1),
@@ -349,12 +364,12 @@ export class QuizFormComponent {
             // reset after generation
             this.aiQuizTopic.reset('');
             this.aiQuizDescription.reset('');
-            this.aiMCQEasy.reset(0);
-            this.aiMCQMedium.reset(0);
-            this.aiMCQHard.reset(0);
-            this.aiWrittenEasy.reset(0);
-            this.aiWrittenMedium.reset(0);
-            this.aiWrittenHard.reset(0);
+            this.aiMCQEasy.reset(null);
+            this.aiMCQMedium.reset(null);
+            this.aiMCQHard.reset(null);
+            this.aiWrittenEasy.reset(null);
+            this.aiWrittenMedium.reset(null);
+            this.aiWrittenHard.reset(null);
 
             // reset points
             this.aiMCQEasyPoints.reset(null);

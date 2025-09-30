@@ -11,7 +11,7 @@
 
   <div class="lg:max-w-[95%] mx-auto space-y-8 max-sm:mt-6">
     <!-- Navigation and Search Bar -->
-    <div class="flex justify-between max-sm:justify-center items-center max-sm:flex-col max-sm:gap-4 max-sm:hidden">
+    <div class="flex justify-between max-sm:justify-center items-center max-sm:flex-col max-sm:gap-4">
       <button
         variant="outline"
         hlmBtn
@@ -225,22 +225,22 @@
                     <div 
                       class="grade-indicator w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg"
                       [ngClass]="{
-                        'bg-success-soft text-success': attendance.totalGrade >= 80,
-                        'bg-warning-soft text-warning': attendance.totalGrade >= 60 && attendance.totalGrade < 80,
-                        'bg-destructive-soft text-destructive': attendance.totalGrade < 60 && attendance.totalGrade > 0,
+                        'bg-success-soft text-success': attendance.percentage >= 80,
+                        'bg-warning-soft text-warning': attendance.percentage >= 60 && attendance.percentage < 80,
+                        'bg-destructive-soft text-destructive': attendance.percentage < 60 && attendance.percentage > 0,
                         'bg-muted text-muted-foreground': !attendance.totalGrade
                       }"
                     >
-                      {{ attendance.totalGrade || 'N/A' }}
+                      {{ attendance.percentage || 'N/A' }}
                     </div>
                     <div>
                       <div class="font-semibold text-foreground">
-                        {{ attendance.totalGrade ? attendance.totalGrade + '%' : 'Not Graded' }}
+                        {{ attendance.totalGrade ? attendance.pointsEarned + '/' + attendance.totalPoints + ' (' + attendance.percentage + '%)' : 'Not Graded' }}
                       </div>
                       <div class="text-sm text-muted-foreground whitespace-nowrap">
-                        {{ attendance.totalGrade >= 80 ? 'Excellent' : 
-                           attendance.totalGrade >= 60 ? 'Good' : 
-                           attendance.totalGrade > 0 ? 'Needs Improvement' : 'Pending' }}
+                        {{ attendance.percentage >= 80 ? 'Excellent' : 
+                           attendance.percentage >= 60 ? 'Good' : 
+                           attendance.percentage > 0 ? 'Needs Improvement' : 'Pending' }}
                       </div>
                     </div>
                   </div>
@@ -253,8 +253,12 @@
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <div>
-                      <div class="font-medium text-foreground">{{ attendance.startedAt | date: 'MMM dd, yyyy' }}</div>
-                      <div class="text-sm text-muted-foreground">{{ attendance.startedAt | date: 'h:mm a' }}</div>
+                      <div class="font-medium text-foreground">
+                        {{ attendance.startedAt ? (attendance.startedAt | date: 'MMM dd, yyyy') : 'No quiz yet' }}
+                      </div>
+                      <div class="text-sm text-muted-foreground" *ngIf="attendance.startedAt">
+                        {{ attendance.startedAt | date: 'h:mm a' }}
+                      </div>
                     </div>
                   </div>
                 </td>
@@ -266,33 +270,44 @@
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                     </svg>
                     <div>
-                      <div class="font-medium text-foreground">{{ attendance.submittedAt | date: 'MMM dd, yyyy' }}</div>
-                      <div class="text-sm text-muted-foreground">{{ attendance.submittedAt | date: 'h:mm a' }}</div>
+                      <div class="font-medium text-foreground">
+                        {{ attendance.submittedAt ? (attendance.submittedAt | date: 'MMM dd, yyyy') : 'No submission' }}
+                      </div>
+                      <div class="text-sm text-muted-foreground" *ngIf="attendance.submittedAt">
+                        {{ attendance.submittedAt | date: 'h:mm a' }}
+                      </div>
                     </div>
                   </div>
                 </td>
 
                 <!-- Status -->
                 <td class="py-6 px-6">
-                  <span
-                    class="status-badge inline-flex items-center gap-1 text-xs font-bold px-3 py-2 rounded-full whitespace-nowrap"
-                    [ngClass]="{
-                      'bg-success-soft text-success': attendance.status === 'graded',
-                      'bg-primary-soft text-primary': attendance.status === 'completed',
-                      'bg-warning-soft text-warning': attendance.status === 'in-progress',
-                      'bg-muted text-muted-foreground': attendance.status === 'not-started'
-                    }"
-                  >
-                    <div class="w-2 h-2 rounded-full" 
-                         [ngClass]="{
-                           'bg-success': attendance.status === 'graded',
-                           'bg-primary': attendance.status === 'completed',
-                           'bg-warning': attendance.status === 'in-progress',
-                           'bg-muted-foreground': attendance.status === 'not-started'
-                         }">
+                  <div class="space-y-1">
+                    <span
+                      class="status-badge inline-flex items-center gap-1 text-xs font-bold px-3 py-2 rounded-full whitespace-nowrap"
+                      [ngClass]="{
+                        'bg-success-soft text-success': attendance.status === 'graded',
+                        'bg-primary-soft text-primary': attendance.status === 'completed',
+                        'bg-warning-soft text-warning': attendance.status === 'active',
+                        'bg-muted text-muted-foreground': attendance.status === 'not-started' || attendance.status === 'scheduled',
+                        'bg-red-100 text-red-700': attendance.status === 'expired'
+                      }"
+                    >
+                      <div class="w-2 h-2 rounded-full" 
+                           [ngClass]="{
+                             'bg-success': attendance.status === 'graded',
+                             'bg-primary': attendance.status === 'completed',
+                             'bg-warning': attendance.status === 'active',
+                             'bg-muted-foreground': attendance.status === 'not-started' || attendance.status === 'scheduled',
+                             'bg-red-500': attendance.status === 'expired'
+                           }">
+                      </div>
+                      {{ attendance.status | titlecase }}
+                    </span>
+                    <div class="text-xs text-muted-foreground">
+                      {{ attendance.gradingStatus }}
                     </div>
-                    {{ attendance.status | titlecase }}
-                  </span>
+                  </div>
                 </td>
 
                 <!-- Actions -->
@@ -325,7 +340,7 @@
                     </button>
                     <hlm-dialog>
   <!-- Trigger Button -->
-                       <button
+  <button
     brnDialogTrigger
     hlmBtn
     variant="ghost"
@@ -347,7 +362,7 @@
       <path d="m15 5 4 4" />
     </svg>
     Notes
-                       </button>
+  </button>
 
   <!-- Dialog Content -->
   <hlm-dialog-content *brnDialogContent="let ctx" class="max-md:w-[95vw] max-sm:mx-auto">
@@ -465,4 +480,5 @@
       </ng-template>
     </div>
   </div>
+
 </section>
