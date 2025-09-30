@@ -17,7 +17,21 @@
           class="py-5 text-md"
           (click)="openAddModal(); teacherDialog.open()"
         >
-          <span class="material-symbols-outlined"> add </span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-plus-icon lucide-plus"
+          >
+            <path d="M5 12h14" />
+            <path d="M12 5v14" />
+          </svg>
           Add Teacher
         </button>
 
@@ -25,7 +39,7 @@
         <hlm-dialog-content
           *brnDialogContent="let ctx"
           (close)="closeModal()"
-          class="py-4 px-0 md:gap-4 gap-2 max-md:w-[95vw] max-md:mx-auto md:w-120 md:h-auto max-h-screen max-md:overflow-y-scroll"
+          class="py-4 px-0 md:gap-4 gap-2 max-md:w-[95vw] max-md:mx-auto md:w-120 max-h-screen"
         >
           <hlm-dialog-header>
             <h3
@@ -113,8 +127,6 @@
                 {{ errors.gender }}
               </div>
             </div>
-
-      
 
             <!-- Password -->
             <div class="mb-4">
@@ -247,7 +259,7 @@
 
               <span class="text-sm">Edit</span>
             </button>
-             <hlm-dialog>
+            <hlm-dialog>
               <button
                 (click)="openDeleteDialog(teacher)"
                 brnDialogTrigger
