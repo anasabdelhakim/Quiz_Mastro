@@ -1,7 +1,13 @@
-<main class="lg:max-w-[90%] px-5 py-10 max-sm:py-7 mx-auto">
+<main class="lg:max-w-[90%] px-5 py-10 max-sm:py-2 mx-auto">
   <!-- Header -->
+  <h1
+    class="text-xl text-foreground my-3 capitalize max-sm:block hidden"
+    *ngIf="quiz"
+  >
+    Title: {{ quiz.title }}*
+  </h1>
   <div
-    class="flex flex-wrap justify-between items-center gap-4 pb-8 border-b border-gray-200 mb-8"
+    class="flex flex-wrap justify-between items-center gap-4 pb-8 border-b border-gray-200 mb-8 max-sm:hidden"
   >
     <div
       class="flex gap-4 flex-col sm:flex-row justify-between items-center w-full"
@@ -11,7 +17,7 @@
           Student Grades
         </h1>
         <p class="text-lg text-muted-foreground mt-2 capitalize" *ngIf="quiz">
-          Title: {{ quiz.title }}
+          Title: {{ quiz.title }}*
         </p>
       </div>
       <button

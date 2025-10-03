@@ -132,8 +132,8 @@
         <hlm-select-value />
       </hlm-select-trigger>
       <hlm-select-content>
-        <hlm-option value="">All Statuses</hlm-option>
-        <hlm-option *ngFor="let status of statusOptions" [value]="status">
+        <hlm-option  value="" class="cursor-pointer">All Statuses</hlm-option>
+        <hlm-option class="cursor-pointer" *ngFor="let status of statusOptions" [value]="status">
           {{ status | titlecase }}
         </hlm-option>
       </hlm-select-content>
@@ -145,7 +145,7 @@
 
       <!-- Attendance Table -->
       <ng-container *ngIf="filteredAttendances.length > 0; else noAttendance">
-        <div class="attendance-table-container overflow-x-auto rounded-lg border border-border">
+        <div class="attendance-table-container overflow-x-auto rounded-lg border border-border  whitespace-nowrap">
           <table class="attendance-table w-full bg-white">
             <thead class="bg-gradient-to-r from-primary-soft to-accent-soft">
               <tr>
@@ -157,7 +157,7 @@
                     Student Name
                   </div>
                 </th>
-                <th class="text-left py-4 px-6 font-bold text-foreground text-base">
+                <th class="text-left py-4 px-6 font-bold text-foreground text-base ">
                   <div class="flex items-center gap-2">
                     <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -223,7 +223,7 @@
                 <td class="py-6 px-6">
                   <div class="flex items-center gap-2">
                     <div 
-                      class="grade-indicator w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg"
+                      class="grade-indicator min-w-12 min-h-12 rounded-full flex items-center justify-center font-bold text-lg"
                       [ngClass]="{
                         'bg-success-soft text-success': attendance.percentage >= 80,
                         'bg-warning-soft text-warning': attendance.percentage >= 60 && attendance.percentage < 80,
@@ -313,38 +313,49 @@
                 <!-- Actions -->
                 <td class="py-6 px-6">
                   <div class="flex gap-2">
-                    <button
-                      hlmBtn
-                      variant="outline"
-                      size="sm"
-                      (click)="viewDetails(attendance)"
+                  <hlm-dialog>
+  <button
+    brnDialogTrigger
+    hlmBtn
+    variant="outline"
+    size="sm"
+    [disabled]="!attendance.teacherNotes"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" class="lucide lucide-eye" width="16" height="16"
+      viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+      <circle cx="12" cy="12" r="3"/>
+    </svg>
+    View Notes
+  </button>
 
-                      [disabled]="attendance.status === 'not-started' || attendance.status === 'in-progress'"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        class="lucide lucide-eye-icon lucide-eye"
-                      >
-                        <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
-                        <circle cx="12" cy="12" r="3" />
-                      </svg>
-                      View
-                    </button>
-                    <hlm-dialog>
+  <hlm-dialog-content *brnDialogContent="let ctx" class="max-md:w-[95vw]">
+    <hlm-dialog-header>
+      <h3 brnDialogTitle hlm class="text-xl font-bold">Teacher Notes</h3>
+    </hlm-dialog-header>
+
+    <div class="p-4 bg-muted/30 rounded-lg">
+      <p class="text-foreground">
+        {{ attendance.teacherNotes || 'No notes available.' }}
+      </p>
+    </div>
+
+    <hlm-dialog-footer>
+      <button hlmBtn variant="outline" (click)="ctx.close()">Close</button>
+    </hlm-dialog-footer>
+  </hlm-dialog-content>
+</hlm-dialog>
+
+                <!-- Notes Button -->
+<hlm-dialog>
   <!-- Trigger Button -->
   <button
     brnDialogTrigger
     hlmBtn
     variant="ghost"
     size="sm"
+    (click)="addTeacherNotes(attendance, true)"  
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -358,18 +369,30 @@
       stroke-linejoin="round"
       class="lucide lucide-pencil-icon lucide-pencil"
     >
-      <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.5z" />
+      <path
+        d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.5z"
+      />
       <path d="m15 5 4 4" />
     </svg>
     Notes
   </button>
 
   <!-- Dialog Content -->
-  <hlm-dialog-content *brnDialogContent="let ctx" class="max-md:w-[95vw] max-sm:mx-auto">
+  <hlm-dialog-content
+    *brnDialogContent="let ctx"
+    class="max-md:w-[95vw] max-sm:mx-auto"
+  >
     <hlm-dialog-header>
       <div class="flex items-center gap-3 mb-6">
-        <div class="w-10 h-10 bg-primary-soft rounded-full flex items-center justify-center">
-          <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div
+          class="w-10 h-10 bg-primary-soft rounded-full flex items-center justify-center"
+        >
+          <svg
+            class="w-5 h-5 text-primary"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -379,11 +402,11 @@
           </svg>
         </div>
         <h3 brnDialogTitle hlm class="text-xl font-bold text-foreground">
-          Add Teacher Notes
+          {{ currentAttendance?.teacherNotes ? 'Update' : 'Add' }} Teacher Notes
         </h3>
       </div>
       <p brnDialogDescription hlm>
-        Add notes for this student & quiz.
+        Add or update notes for this student & quiz.
       </p>
     </hlm-dialog-header>
 
@@ -391,7 +414,8 @@
     <div class="bg-muted/30 rounded-lg p-4 mb-3">
       <p class="text-sm text-muted-foreground mb-1">Student & Quiz</p>
       <p class="font-semibold text-foreground">
-        {{ currentAttendance?.studentName }} - {{ getQuizTitle(currentAttendance?.quizId || '') }}
+        {{ currentAttendance?.studentName }} -
+        {{ getQuizTitle(currentAttendance?.quizId || '') }}
       </p>
     </div>
 
@@ -407,10 +431,16 @@
     <!-- Footer -->
     <hlm-dialog-footer class="gap-y-2">
       <button hlmBtn variant="outline" (click)="ctx.close()">Cancel</button>
-      <button hlmBtn (click)="saveTeacherNotes(); ctx.close()">Save Notes</button>
+      <button
+        hlmBtn
+        (click)="saveTeacherNotes(); ctx.close()"
+      >
+        Save Notes
+      </button>
     </hlm-dialog-footer>
   </hlm-dialog-content>
-                    </hlm-dialog>
+</hlm-dialog>
+
 
                   </div>
                 </td>

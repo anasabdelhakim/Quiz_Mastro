@@ -59,8 +59,9 @@ export class StudentToTeacherComponent implements OnInit {
   // For teacher notes modal
   showNotesModal = false;
   currentAttendance: any | null = null;
+  attendanceNotes: { [attendanceId: string]: string } = {};
   teacherNotes = '';
-
+  isEditingNotes = false;
   constructor(
     private quizService: QuizDataService,
     private activityService: ActivityService,
@@ -262,37 +263,41 @@ export class StudentToTeacherComponent implements OnInit {
     }
   }
 
-  addTeacherNotes(attendance: any): void {
+  addTeacherNotes(attendance: any, editMode = false): void {
     this.currentAttendance = { ...attendance };
-    const quiz = this.quizService.getQuizById(attendance.quizId);
-    this.teacherNotes =
-      (quiz as any)?.teacherNotes || attendance.teacherNotes || '';
+    this.teacherNotes = ''; // always start fresh
+    this.isEditingNotes = editMode;
     this.showNotesModal = true;
   }
 
   saveTeacherNotes(): void {
     if (this.currentAttendance) {
-      // Persist notes into quiz state so the rest of the app can see them
       this.quizService.updateQuiz(this.currentAttendance.quizId, {
-        // Extend Quiz model with teacherNotes
-        ...({ teacherNotes: this.teacherNotes } as any),
-      });
-      // Reflect in local view
+        teacherNotes: this.teacherNotes,
+      } as any);
+
+      // Reflect changes in local state
       const idx = this.attendances.findIndex(
         (a) => a.id === this.currentAttendance!.id
       );
-      if (idx !== -1) this.attendances[idx].teacherNotes = this.teacherNotes;
+      if (idx !== -1) {
+        this.attendances[idx].teacherNotes = this.teacherNotes;
+      }
       this.filterAttendances();
 
       toast.success('Teacher notes saved successfully!');
+
       this.activityService.addActivity(
         'teacher',
-        'Added Notes',
-        `Added notes for ${
+        this.currentAttendance.teacherNotes ? 'Updated Notes' : 'Added Notes',
+        `${this.isEditingNotes ? 'Updated' : 'Added'} notes for ${
           this.currentAttendance.studentName
         }'s ${this.getQuizTitle(this.currentAttendance.quizId)} quiz`
       );
     }
+
+    this.teacherNotes = '';
+
     this.closeNotesModal();
   }
 
@@ -300,8 +305,11 @@ export class StudentToTeacherComponent implements OnInit {
     this.showNotesModal = false;
     this.currentAttendance = null;
     this.teacherNotes = '';
+    this.isEditingNotes = false;
   }
-
+  getNotes(attendanceId: string) {
+    return this.attendanceNotes[attendanceId] || 'No notes available.';
+  }
   exportToCSV(): void {
     const headers = [
       'Student Name',

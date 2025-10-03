@@ -19,7 +19,7 @@ import {
   StoredTeacher,
 } from '../../../layout/connections/data-store.service';
 import { AuthService } from '../../../auth.service';
-
+import { Location } from '@angular/common';
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -41,7 +41,8 @@ export class HeaderComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private location: Location
   ) {}
 
   ngOnInit() {
@@ -82,12 +83,15 @@ export class HeaderComponent implements OnInit {
       ? 'https://lh3.googleusercontent.com/aida-public/AB6AXuCU_TnWvtxOoxM0E9Mg7qATAlVWg43mdNFLH7bJHGmUxqB62S1rQfrQ7lLotVa3xci96IRgQtupA4ckNRw6iipWPlDqf5ykHpSD_OpWL_egph0TgFmYewVwdVnfbz42BvrBmENuVIHlMzmZ93ZlZDSBoqX8lptmFo8l5m4TSN8V_p-X2a33Ig1amIXbf91Pf_Z_bf5ucawz3QorQdHJP9zDYvVQBQ0eYv6jIvmeRN8WUFlcuZTsg-jCfr2XUdFoLleY-VLLcEzvs60'
       : 'https://lh3.googleusercontent.com/aida-public/AB6AXuCO8yQbbNIqBInP9byXDRaNd7dMerBn3Cn8Y6K4VrhHp2wjqUf7wNaC5rsxiMZcyXY9SkZ65GLMoYNhV1_wDUfBHoXtzhcJWY_F1uIUPHGOVO9WCCbS2BTZN4Okb42lCmloCvPL91qlKbwR0anQNKtdtzjRe2I4_o94HnxiKpeCn7nMdozHkDzCtyDjHghsyuRmW4XEQ64FwjBvOumDxI57pEJ-mYmav3DDRya1gW3s8oUyP3WXQymdzYOVEd4eC9sIwteNpLmPDwk';
   }
-   logout() {
+  logout() {
     this.authService.logout();
     this.router.navigate(['/index']);
   }
   get firstName(): string {
-  const fullName = this.currentUser?.name || '';
-  return fullName.split(' ')[0] || 'Admin';
-}
+    const fullName = this.currentUser?.name || '';
+    return fullName.split(' ')[0] || 'Admin';
+  }
+  goBack() {
+    this.location.back();
+  }
 }

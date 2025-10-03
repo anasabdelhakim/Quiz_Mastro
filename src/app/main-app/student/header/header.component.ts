@@ -6,7 +6,7 @@ import {
   RouterLink,
   RouterLinkActive,
 } from '@angular/router';
-
+import { Location } from '@angular/common';
 import { filter } from 'rxjs/operators';
 
 import {
@@ -45,7 +45,8 @@ export class HeaderComponent implements OnInit {
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private authService: AuthService
+    private authService: AuthService,
+    private location: Location
   ) {}
 
   ngOnInit() {
@@ -96,5 +97,8 @@ export class HeaderComponent implements OnInit {
   get firstName(): string {
     const fullName = this.currentUser?.name || '';
     return fullName.split(' ')[0] || 'Admin';
+  }
+  goBack() {
+    this.location.back();
   }
 }
