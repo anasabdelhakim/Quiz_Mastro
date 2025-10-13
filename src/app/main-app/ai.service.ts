@@ -7,7 +7,7 @@ import { catchError, map } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class AiService {
-  private apiUrl = 'https://quiz-mastro-backend.vercel.app/api/ai'; 
+  private apiUrl = 'https://quiz-dashboard-backend.vercel.app/api/ai';
 
   constructor(private http: HttpClient) {}
 

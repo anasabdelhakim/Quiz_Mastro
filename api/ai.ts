@@ -1,6 +1,20 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  // === ✅ CORS Headers ===
+  res.setHeader(
+    'Access-Control-Allow-Origin',
+    'https://quiz-mastro-c5vv.vercel.app'
+  ); // frontend domain
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+  // === ✅ Handle Preflight Request ===
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
+  // === ✅ Allow Only POST ===
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -32,9 +46,9 @@ Return only a JSON array of questions.
     );
 
     const data = await response.json();
-    res.status(200).json(data);
+    return res.status(200).json(data);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Failed to generate quiz' });
+    console.error('❌ AI request error:', err);
+    return res.status(500).json({ error: 'Failed to generate quiz' });
   }
 }
