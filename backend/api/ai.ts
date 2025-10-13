@@ -1,6 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import fetch from 'node-fetch';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -21,7 +23,7 @@ Return only a JSON array of questions.
       {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+          Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`, // must be set in Vercel
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -32,6 +34,12 @@ Return only a JSON array of questions.
     );
 
     const data = await response.json();
+
+    // ✅ Add CORS headers so frontend can call this API
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
     res.status(200).json(data);
   } catch (err) {
     console.error(err);
