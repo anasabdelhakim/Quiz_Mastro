@@ -1,10 +1,10 @@
 <div
-  class="flex min-h-[100dvh] items-center sm:justify-center flex-col bg-[var(--background-color)] max-sm:px-2 overflow-hidden"
+  class="flex min-h-screen flex-col items-center justify-center bg-[var(--background-color)] p-4 overflow-hidden"
 >
-  <div class="w-full max-w-md max-sm:mt-8">
+  <div class="w-full max-w-md">
     <!-- Header -->
     <div class="mb-8 text-center">
-      <div class="mx-auto mb-4 h-15 w-15 text-primary max-sm:hidden">
+      <div class="mx-auto mb-4 h-12 w-12 text-primary">
         <!-- Logo -->
         <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
           <path
@@ -13,14 +13,12 @@
           />
         </svg>
       </div>
-      <h1 class="text-3xl font-bold text-foreground">Quiz Mastro</h1>
+      <h1 class="text-3xl font-bold text-foreground">Quiz Application</h1>
       <p class="mt-2 text-muted-foreground">Sign in to continue</p>
     </div>
 
     <!-- Card -->
-    <div
-      class="rounded-2xl bg-white px-8 pt-8 pb-6 max-sm:pt-6 max-sm:pb-4 max-sm:px-4 shadow-lg"
-    >
+    <div class="rounded-2xl bg-white px-8 pt-8 pb-6 shadow-lg">
       <form class="space-y-5" [formGroup]="form">
         <!-- Username -->
         <div>
@@ -40,16 +38,13 @@
               autofocus
               type="text"
               formControlName="username"
-              placeholder="Enter your username"
+              placeholder="student@username"
               #usernameInput
               (keydown.enter)="focusNext(passwordInput)"
               class="lg:h-12 lg:text-lg"
             />
           </div>
-          <p
-            *ngIf="errors.username"
-            class="text-destructive/70 text-sm mt-1 max-sm:text-[12px]"
-          >
+          <p *ngIf="errors.username" class="text-destructive/70 text-sm mt-1">
             {{ errors.username }}
           </p>
         </div>
@@ -72,13 +67,14 @@
               id="password"
               [type]="showPassword ? 'text' : 'password'"
               formControlName="password"
-              placeholder="Enter your password"
+              placeholder="teacher#password"
               (input)="onPasswordInput()"
               #passwordInput
               (keydown.enter)="onSubmit()"
               class="lg:h-12 lg:text-lg"
             />
 
+            <!-- Eye Icon -->
             <button
               *ngIf="passwordHasValue"
               type="button"
@@ -129,10 +125,7 @@
               </svg>
             </button>
           </div>
-          <p
-            *ngIf="errors.password"
-            class="text-destructive/70 text-sm mt-1 max-sm:text-[12px]"
-          >
+          <p *ngIf="errors.password" class="text-destructive/70 text-sm mt-1">
             {{ errors.password }}
           </p>
         </div>
@@ -140,70 +133,74 @@
         <!-- Submit -->
         <div>
           <button
-            hlmBtn
-            (click)="onSubmit()"
             type="submit"
-            class="text-lg px-4 py-2 flex w-full justify-center h-12"
+            class="bg-primary text-white rounded-md px-4 py-2 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-300 flex w-full justify-center h-12 text-base font-semibold"
           >
             Login
           </button>
         </div>
       </form>
 
-      <div class="flex flex-col mt-6 items-start gap-3">
-        <div class="h-[2px] w-full bg-secondary"></div>
-        <div class="flex flex-col gap-1">
-          <div class="flex items-center">
+      <!-- Demo Credentials Helper -->
+      <div class="mt-8 pt-6 border-t border-gray-100">
+        <div class="rounded-xl bg-slate-50 p-4 border border-slate-200/60">
+          <div class="flex items-center mb-3 text-slate-700">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
+              width="18"
+              height="18"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
               stroke-width="2"
               stroke-linecap="round"
               stroke-linejoin="round"
-              class="lucide lucide-info-icon lucide-info mr-1 text-destructive"
+              class="text-primary mr-2"
             >
-              <circle cx="12" cy="12" r="10" />
               <path d="M12 16v-4" />
               <path d="M12 8h.01" />
+              <circle cx="12" cy="12" r="10" />
             </svg>
-
-            <p class="text-gray-500 text-[13px] max-sm:text-[11px]">
-              Role: students/teachers
-            </p>
+            <h3 class="font-semibold text-sm">Demo Test Credentials</h3>
           </div>
-          <div class="flex items-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lucide lucide-info-icon lucide-info mr-1 text-destructive"
-            >
-              <circle cx="12" cy="12" r="10" />
-              <path d="M12 16v-4" />
-              <path d="M12 8h.01" />
-            </svg>
-          <p class="text-gray-500 text-[13px] max-sm:text-[11px]">
-             Example Admin: <strong>super@admin</strong>, password: <strong>super#password</strong>
-           </p>
+
+          <div class="space-y-3">
+            <!-- Admin Credentials -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-white rounded-lg border border-slate-200 shadow-sm gap-2">
+              <div>
+                <p class="text-xs font-bold text-slate-700">Admin / Teacher</p>
+                <p class="text-xs text-slate-500">User: <code class="bg-slate-100 px-1 py-0.5 rounded font-mono text-primary font-semibold">teacher&#64;demo</code> | Pass: <code class="bg-slate-100 px-1 py-0.5 rounded font-mono text-primary font-semibold">teacher#demo</code></p>
+              </div>
+              <button
+                type="button"
+                (click)="fillDemoCredentials('admin')"
+                class="text-xs bg-primary/10 hover:bg-primary/20 text-primary font-semibold py-1.5 px-3 rounded-md transition-colors border border-primary/20 flex items-center justify-center gap-1 cursor-pointer"
+              >
+                ⚡ Fill Admin
+              </button>
+            </div>
+
+            <!-- Student Credentials -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-white rounded-lg border border-slate-200 shadow-sm gap-2">
+              <div>
+                <p class="text-xs font-bold text-slate-700">Student Portal</p>
+                <p class="text-xs text-slate-500">User: <code class="bg-slate-100 px-1 py-0.5 rounded font-mono text-primary font-semibold">student&#64;demo</code> | Pass: <code class="bg-slate-100 px-1 py-0.5 rounded font-mono text-primary font-semibold">student#demo</code></p>
+              </div>
+              <button
+                type="button"
+                (click)="fillDemoCredentials('student')"
+                class="text-xs bg-primary/10 hover:bg-primary/20 text-primary font-semibold py-1.5 px-3 rounded-md transition-colors border border-primary/20 flex items-center justify-center gap-1 cursor-pointer"
+              >
+                ⚡ Fill Student
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Footer -->
-    <p
-      class="mt-6 text-center text-sm text-[var(--text-secondary)] max-sm:text-[12px]"
-    >
+    <p class="mt-6 text-center text-sm text-[var(--text-secondary)]">
       © 2025 Quiz App. All rights reserved.
     </p>
   </div>
