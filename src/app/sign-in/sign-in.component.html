@@ -19,7 +19,7 @@
 
     <!-- Card -->
     <div class="rounded-2xl bg-white px-8 pt-8 pb-6 shadow-lg">
-      <form class="space-y-5" [formGroup]="form">
+      <form class="space-y-5" [formGroup]="form" (ngSubmit)="onSubmit()">
         <!-- Username -->
         <div>
           <label
@@ -69,7 +69,6 @@
               placeholder="super#admin"
               (input)="onPasswordInput()"
               #passwordInput
-              (keydown.enter)="onSubmit()"
               class="lg:h-12 lg:text-lg"
             />
 
