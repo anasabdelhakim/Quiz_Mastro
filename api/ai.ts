@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  // Enable CORS for your Angular frontend
+  // Enable CORS for your Angular frontend (Dynamic origin required when Allow-Credentials is true)
   const origin = req.headers.origin || '*';
   res.setHeader('Access-Control-Allow-Origin', origin);
   res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -33,52 +33,36 @@ Requirements:
 3. For MCQ questions ('mcq'), provide exactly 4 options in an 'options' array, and specify the exact matching string in 'correctAnswer'.
 4. For Written questions ('written'), leave options empty and provide a sample answer or rubric in 'correctAnswer'.
 
-CRITICAL INSTRUCTION: You MUST respond ONLY with a valid JSON array of question objects adhering strictly to this exact schema:
-[
-  {
-    "text": "The question text here",
-    "type": "mcq", 
-    "difficulty": "easy", 
-    "options": ["Option 1", "Option 2", "Option 3", "Option 4"], 
-    "correctAnswer": "Option 1" 
-  }
-]
-Do NOT include any conversational text, markdown formatting, or \`\`\`json wrappers. Output pure JSON only.`;
+CRITICAL INSTRUCTION: You MUST respond ONLY with a valid JSON array of question objects. Do NOT include any conversational text, markdown formatting, or \`\`\`json wrappers. Output pure JSON only.`;
 
-    // Securely read API key from Vercel Environment Variables (Hides key from GitHub Secret Scanner!)
-    const apiKey = process.env['OPENROUTER_API_KEY'] || process.env['GEMINI_API_KEY'];
-    if (!apiKey) {
-      console.error('❌ OPENROUTER_API_KEY environment variable is missing in Vercel settings.');
+    // Check for Google Gemini API Key (Configured securely in Vercel Environment Variables)
+    const geminiKey = process.env['GEMINI_API_KEY'];
+    if (!geminiKey) {
+      console.error('❌ GEMINI_API_KEY environment variable is missing in Vercel settings.');
       return res.status(500).json({ error: 'API Key configuration missing on Vercel server.' });
     }
 
-    console.log('🚀 Sending secure serverless request to OpenRouter Universal Free AI...');
-    const openRouterUrl = 'https://openrouter.ai/api/v1/chat/completions';
-    const requestBody = {
-      model: 'openrouter/free', // Universal Free AI Router (Guaranteed 200 OK!)
-      messages: [{ role: 'user', content: prompt }],
-      temperature: 0.3
+    console.log('🚀 Using Google Gemini API for real AI Quiz Generation...');
+    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`;
+    const geminiBody = {
+      contents: [{ parts: [{ text: prompt }] }],
+      generationConfig: { temperature: 0.3 }
     };
 
-    const apiResponse = await fetch(openRouterUrl, {
+    const geminiResponse = await fetch(geminiUrl, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
-        'HTTP-Referer': 'https://quiz-mastro.vercel.app',
-        'X-Title': 'Quiz Mastro AI',
-      },
-      body: JSON.stringify(requestBody)
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(geminiBody)
     });
 
-    if (!apiResponse.ok) {
-      const errorText = await apiResponse.text();
-      console.error(`❌ OpenRouter API failed with status ${apiResponse.status}:`, errorText);
-      return res.status(apiResponse.status).json({ error: `AI API error: ${errorText}` });
+    if (!geminiResponse.ok) {
+      const errorText = await geminiResponse.text();
+      console.error(`❌ Google Gemini API failed with status ${geminiResponse.status}:`, errorText);
+      return res.status(geminiResponse.status).json({ error: `Gemini API error: ${errorText}` });
     }
 
-    const data = await apiResponse.json();
-    let aiContent = data.choices?.[0]?.message?.content || '[]';
+    const data = await geminiResponse.json();
+    let aiContent = data.candidates?.[0]?.content?.parts?.[0]?.text || '[]';
     
     // Clean any accidental markdown code blocks (e.g., ```json ... ```)
     aiContent = aiContent.trim();
