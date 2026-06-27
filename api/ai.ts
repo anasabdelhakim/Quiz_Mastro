@@ -82,8 +82,8 @@ CRITICAL INSTRUCTION: You MUST respond ONLY with a valid JSON array of question 
       aiContent = aiContent.replace(/^```/, "").replace(/```$/, "").trim();
     }
 
-    // Return the clean JSON string to the Angular frontend
-    return res.status(200).json({ output: aiContent });
+    // Return both full data object and clean JSON string to the Angular frontend
+    return res.status(200).json({ ...data, output: aiContent });
 
   } catch (error) {
     console.error('❌ Server Error in AI Route:', error);

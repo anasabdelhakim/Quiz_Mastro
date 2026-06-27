@@ -7,7 +7,7 @@ import { catchError, map } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class AiService {
-  private apiUrl = 'https://quiz-dashboard-backend.vercel.app/api/ai';
+  private apiUrl = 'https://quiz-mastro.vercel.app/api/ai';
 
   constructor(private http: HttpClient) {}
 
@@ -27,7 +27,7 @@ export class AiService {
           return res.choices[0].message.content;
         }
         if (res?.output) {
-          return JSON.stringify(res.output);
+          return typeof res.output === 'string' ? res.output : JSON.stringify(res.output);
         }
         return null;
       }),
