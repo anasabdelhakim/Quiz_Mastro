@@ -200,7 +200,7 @@ graph TD
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/anasabdelhakim/quiz-dashboard.git
+git clone https://github.com/anasabdelhakim/Quiz_Mastro.git
 cd quiz-dashboard
 ```
 
