@@ -2,7 +2,7 @@
 
 <div align="center">
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-quiz-mastro.vercel.app-3388ff?style=for-the-badge&logo=vercel&logoColor=white)](https://quizmastro.anasdev.shop)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-quiz-mastro.vercel.app-3388ff?style=for-the-badge&logo=vercel&logoColor=white)](https://quiz-mastro.vercel.app)
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 ![Angular](https://img.shields.io/badge/Angular-19.2-DD0031?style=for-the-badge&logo=angular&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.1-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
@@ -99,7 +99,7 @@
 
 ## 🔑 Demo Login Credentials
 
-Explore the platform live at **[quizmastro.anasdev.shop](https://quizmastro.anasdev.shop)** or in your local development environment using the following pre-configured credentials:
+Explore the platform live at **[quiz-mastro.vercel.app](https://quiz-mastro.vercel.app)** or in your local development environment using the following pre-configured credentials:
 
 | Role | Username | Password | Access Rights |
 | :--- | :--- | :--- | :--- |
