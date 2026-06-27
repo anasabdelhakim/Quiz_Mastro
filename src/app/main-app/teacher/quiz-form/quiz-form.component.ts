@@ -332,11 +332,11 @@ export class QuizFormComponent {
             );
 
             questions.forEach((q) => {
-              this.newQuestionText.setValue(q.text || '');
-              this.newQuestionType.setValue(q.type);
+              this.newQuestionText.setValue(q.text || q.question || q.title || '');
+              this.newQuestionType.setValue(q.type || 'mcq');
 
               const difficulty = (
-                (q.difficulty || 'medium') as string
+                (q.difficulty || q.level || 'medium') as string
               ).toLowerCase() as 'easy' | 'medium' | 'hard';
 
               let questionPoints = 10; // fallback

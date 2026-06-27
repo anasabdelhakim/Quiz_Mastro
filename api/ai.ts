@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  // Enable CORS for your Angular frontend (Dynamic origin required when Allow-Credentials is true)
+  // Enable CORS for your Angular frontend
   const origin = req.headers.origin || '*';
   res.setHeader('Access-Control-Allow-Origin', origin);
   res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -23,13 +23,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const { topic, description = '', mcq = { easy: 1, medium: 1, hard: 1 }, written = { easy: 1, medium: 1, hard: 1 } } = req.body;
 
-    const apiKey = process.env['OPENROUTER_API_KEY'];
-
-    if (!apiKey) {
-      console.error('❌ OPENROUTER_API_KEY environment variable is missing in Vercel.');
-      return res.status(500).json({ error: 'API Key configuration missing on server.' });
-    }
-
     const prompt = `You are an expert AI educational quiz generator.
 Generate a professional exam about the topic: "${topic}".
 Extra context/description: "${description}".
@@ -40,54 +33,65 @@ Requirements:
 3. For MCQ questions ('mcq'), provide exactly 4 options in an 'options' array, and specify the exact matching string in 'correctAnswer'.
 4. For Written questions ('written'), leave options empty and provide a sample answer or rubric in 'correctAnswer'.
 
-CRITICAL INSTRUCTION: You MUST respond ONLY with a valid JSON array of question objects. Do NOT include any conversational text, markdown formatting, or \`\`\`json wrappers. Output pure JSON only.`;
+CRITICAL INSTRUCTION: You MUST respond ONLY with a valid JSON array of question objects adhering strictly to this exact schema:
+[
+  {
+    "text": "The question text here",
+    "type": "mcq", 
+    "difficulty": "easy", 
+    "options": ["Option 1", "Option 2", "Option 3", "Option 4"], 
+    "correctAnswer": "Option 1" 
+  }
+]
+Do NOT include any conversational text, markdown formatting, or \`\`\`json wrappers. Output pure JSON only.`;
 
-    const openRouterResponse = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-      method: "POST",
+    // Securely read API key from Vercel Environment Variables (Hides key from GitHub Secret Scanner!)
+    const apiKey = process.env['OPENROUTER_API_KEY'] || process.env['GEMINI_API_KEY'];
+    if (!apiKey) {
+      console.error('❌ OPENROUTER_API_KEY environment variable is missing in Vercel settings.');
+      return res.status(500).json({ error: 'API Key configuration missing on Vercel server.' });
+    }
+
+    console.log('🚀 Sending secure serverless request to OpenRouter Universal Free AI...');
+    const openRouterUrl = 'https://openrouter.ai/api/v1/chat/completions';
+    const requestBody = {
+      model: 'openrouter/free', // Universal Free AI Router (Guaranteed 200 OK!)
+      messages: [{ role: 'user', content: prompt }],
+      temperature: 0.3
+    };
+
+    const apiResponse = await fetch(openRouterUrl, {
+      method: 'POST',
       headers: {
-        "Authorization": `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-        "HTTP-Referer": "https://quiz-mastro.vercel.app", // Matches your live frontend URL to prevent OpenRouter blocking
-        "X-Title": "Quiz Mastro"
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+        'HTTP-Referer': 'https://quiz-mastro.vercel.app',
+        'X-Title': 'Quiz Mastro AI',
       },
-      body: JSON.stringify({
-        model: "qwen/qwen-2.5-coder-32b-instruct:free", // Excellent free model for flawless JSON generation
-        messages: [
-          {
-            role: "system",
-            content: "You are a precise educational AI that outputs pure, valid JSON arrays without markdown wrappers."
-          },
-          {
-            role: "user",
-            content: prompt
-          }
-        ],
-        temperature: 0.3 // Low temperature for high precision and valid JSON syntax
-      })
+      body: JSON.stringify(requestBody)
     });
 
-    if (!openRouterResponse.ok) {
-      const errorText = await openRouterResponse.text();
-      console.error(`❌ OpenRouter API failed with status ${openRouterResponse.status}:`, errorText);
-      return res.status(openRouterResponse.status).json({ error: `OpenRouter error: ${errorText}` });
+    if (!apiResponse.ok) {
+      const errorText = await apiResponse.text();
+      console.error(`❌ OpenRouter API failed with status ${apiResponse.status}:`, errorText);
+      return res.status(apiResponse.status).json({ error: `AI API error: ${errorText}` });
     }
 
-    const data = await openRouterResponse.json();
-    let aiContent = data.choices?.[0]?.message?.content || "[]";
-
+    const data = await apiResponse.json();
+    let aiContent = data.choices?.[0]?.message?.content || '[]';
+    
     // Clean any accidental markdown code blocks (e.g., ```json ... ```)
     aiContent = aiContent.trim();
-    if (aiContent.startsWith("```json")) {
-      aiContent = aiContent.replace(/^```json/, "").replace(/```$/, "").trim();
-    } else if (aiContent.startsWith("```")) {
-      aiContent = aiContent.replace(/^```/, "").replace(/```$/, "").trim();
+    if (aiContent.startsWith('```json')) {
+      aiContent = aiContent.replace(/^```json/, '').replace(/```$/, '').trim();
+    } else if (aiContent.startsWith('```')) {
+      aiContent = aiContent.replace(/^```/, '').replace(/```$/, '').trim();
     }
 
-    // Return both full data object and clean JSON string to the Angular frontend
-    return res.status(200).json({ ...data, output: aiContent });
+    return res.status(200).json({ output: aiContent });
 
   } catch (error) {
     console.error('❌ Server Error in AI Route:', error);
-    return res.status(500).json({ error: 'Internal server error during AI quiz generation.' });
+    return res.status(500).json({ error: 'Internal Server Error during AI generation.' });
   }
 }
