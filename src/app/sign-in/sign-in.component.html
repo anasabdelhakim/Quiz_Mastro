@@ -38,7 +38,7 @@
               autofocus
               type="text"
               formControlName="username"
-              placeholder="student@username"
+              placeholder="super@admin"
               #usernameInput
               (keydown.enter)="focusNext(passwordInput)"
               class="lg:h-12 lg:text-lg"
@@ -49,7 +49,6 @@
           </p>
         </div>
 
-        <!-- Password -->
         <!-- Password -->
         <div>
           <label
@@ -67,7 +66,7 @@
               id="password"
               [type]="showPassword ? 'text' : 'password'"
               formControlName="password"
-              placeholder="teacher#password"
+              placeholder="super#admin"
               (input)="onPasswordInput()"
               #passwordInput
               (keydown.enter)="onSubmit()"
@@ -168,8 +167,8 @@
             <!-- Admin Credentials -->
             <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-white rounded-lg border border-slate-200 shadow-sm gap-2">
               <div>
-                <p class="text-xs font-bold text-slate-700">Admin / Teacher</p>
-                <p class="text-xs text-slate-500">User: <code class="bg-slate-100 px-1 py-0.5 rounded font-mono text-primary font-semibold">teacher&#64;demo</code> | Pass: <code class="bg-slate-100 px-1 py-0.5 rounded font-mono text-primary font-semibold">teacher#demo</code></p>
+                <p class="text-xs font-bold text-slate-700">Admin</p>
+                <p class="text-xs text-slate-500">User: <code class="bg-slate-100 px-1 py-0.5 rounded font-mono text-primary font-semibold">super&#64;admin</code> | Pass: <code class="bg-slate-100 px-1 py-0.5 rounded font-mono text-primary font-semibold">super#admin</code></p>
               </div>
               <button
                 type="button"
@@ -177,21 +176,6 @@
                 class="text-xs bg-primary/10 hover:bg-primary/20 text-primary font-semibold py-1.5 px-3 rounded-md transition-colors border border-primary/20 flex items-center justify-center gap-1 cursor-pointer"
               >
                 ⚡ Fill Admin
-              </button>
-            </div>
-
-            <!-- Student Credentials -->
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-white rounded-lg border border-slate-200 shadow-sm gap-2">
-              <div>
-                <p class="text-xs font-bold text-slate-700">Student Portal</p>
-                <p class="text-xs text-slate-500">User: <code class="bg-slate-100 px-1 py-0.5 rounded font-mono text-primary font-semibold">student&#64;demo</code> | Pass: <code class="bg-slate-100 px-1 py-0.5 rounded font-mono text-primary font-semibold">student#demo</code></p>
-              </div>
-              <button
-                type="button"
-                (click)="fillDemoCredentials('student')"
-                class="text-xs bg-primary/10 hover:bg-primary/20 text-primary font-semibold py-1.5 px-3 rounded-md transition-colors border border-primary/20 flex items-center justify-center gap-1 cursor-pointer"
-              >
-                ⚡ Fill Student
               </button>
             </div>
           </div>
