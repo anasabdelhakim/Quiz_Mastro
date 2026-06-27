@@ -5,13 +5,12 @@ import { Router } from '@angular/router';
 import { z } from 'zod';
 import { HlmInput } from '@spartan-ng/helm/input';
 import { toast } from 'ngx-sonner';
-import { AuthService } from '../auth.service'; 
-import { HlmButton } from '@spartan-ng/helm/button';
+import { AuthService } from '../auth.service'; // ✅ import service
 
 @Component({
   selector: 'app-sign-in',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HlmInput, HlmButton],
+  imports: [CommonModule, ReactiveFormsModule, HlmInput],
   templateUrl: './sign-in.component.html',
   styleUrls: ['./sign-in.component.css'],
 })
@@ -49,11 +48,38 @@ export class SignInComponent {
     .object({
       username: z
         .string()
-        .min(3, 'Username must be at least 3 characters'),
+        .min(3, 'Username must be at least 3 characters')
+        .regex(/^(student|teacher)@[a-zA-Z0-9]+$/, {
+          message: 'Username must be in correct format',
+        }),
       password: z
         .string()
-        .min(6, 'Password must be at least 6 characters'),
-    });
+        .min(6, 'Password must be at least 6 characters')
+        .regex(/^(student|teacher)#[a-zA-Z0-9]+$/, {
+          message: 'Password must be in correct format',
+        }),
+    })
+    .refine(
+      (data) => {
+        const userRole = data.username.startsWith('student@')
+          ? 'student'
+          : data.username.startsWith('teacher@')
+          ? 'teacher'
+          : null;
+
+        const passRole = data.password.startsWith('student#')
+          ? 'student'
+          : data.password.startsWith('teacher#')
+          ? 'teacher'
+          : null;
+
+        return userRole !== null && userRole === passRole;
+      },
+      {
+        message: 'Username and password must belong to the same role',
+        path: ['password'], // show error under password field
+      }
+    );
 
   validateForm(value: any) {
     this.errors = {};
@@ -82,6 +108,22 @@ export class SignInComponent {
     this.showPassword = !this.showPassword;
   }
 
+  fillDemoCredentials(role: 'admin' | 'student') {
+    if (role === 'admin') {
+      this.form.patchValue({
+        username: 'teacher@demo',
+        password: 'teacher#demo',
+      });
+    } else {
+      this.form.patchValue({
+        username: 'student@demo',
+        password: 'student#demo',
+      });
+    }
+    this.passwordHasValue = true;
+    toast.success(`⚡ Auto-filled ${role === 'admin' ? 'Admin' : 'Student'} credentials!`);
+  }
+
   onSubmit() {
     this.submitted = true;
 
@@ -98,25 +140,19 @@ export class SignInComponent {
     }
 
     // ✅ Use AuthService to log in and get role
-    console.log('Attempting login with:', { username: trimmedValue.username, password: trimmedValue.password });
-    
     const role = this.authService.login(
       trimmedValue.username,
       trimmedValue.password
     );
 
-    console.log('Login result:', { role, userId: this.authService.getUserId() });
-
     if (role) {
-      toast.success('Login successful!', { duration: 2000 });
+      toast.success('✅ Login successful!', { duration: 2000 });
 
       // Redirect based on role
       if (role === 'student') {
-        this.router.navigate(['/student-dashboard'], { replaceUrl: true });
+        this.router.navigate(['/student-dashboard']);
       } else if (role === 'teacher') {
-        this.router.navigate(['/teacher-dashboard'], { replaceUrl: true });
-      } else if (role === 'super') {
-        this.router.navigate(['/home'], { replaceUrl: true });
+        this.router.navigate(['/home']); // teacher dashboard
       }
     } else {
       toast.error('❌ Invalid username or password');
