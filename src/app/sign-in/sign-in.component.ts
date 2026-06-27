@@ -38,8 +38,12 @@ export class SignInComponent {
       };
       this.form.patchValue(trimmedValue, { emitEvent: false });
 
-      if (this.submitted) {
-        this.validateForm(trimmedValue);
+      // Dynamically clear errors as user types to prevent aggressive multi-field errors
+      if (trimmedValue.username && trimmedValue.username.length >= 3) {
+        delete this.errors.username;
+      }
+      if (trimmedValue.password && trimmedValue.password.length >= 6) {
+        delete this.errors.password;
       }
     });
   }
@@ -47,16 +51,10 @@ export class SignInComponent {
   schema = z.object({
     username: z
       .string()
-      .min(3, 'Username must be at least 3 characters')
-      .regex(/^super@[a-zA-Z0-9]+$/, {
-        message: 'Username must be in correct format (e.g., super@admin)',
-      }),
+      .min(3, 'Username must be at least 3 characters'),
     password: z
       .string()
-      .min(6, 'Password must be at least 6 characters')
-      .regex(/^super#[a-zA-Z0-9]+$/, {
-        message: 'Password must be in correct format (e.g., super#admin)',
-      }),
+      .min(6, 'Password must be at least 6 characters'),
   });
 
   validateForm(value: any) {
@@ -93,6 +91,7 @@ export class SignInComponent {
         password: 'super#admin',
       });
       this.passwordHasValue = true;
+      this.errors = {}; // Clear any existing errors instantly
       toast.success('⚡ Auto-filled Admin credentials!');
     }
   }
@@ -112,7 +111,6 @@ export class SignInComponent {
       return;
     }
 
-    // ✅ Use AuthService to log in
     const role = this.authService.login(
       trimmedValue.username,
       trimmedValue.password
@@ -120,8 +118,13 @@ export class SignInComponent {
 
     if (role) {
       toast.success('✅ Login successful!', { duration: 2000 });
-      // Redirect to the main dashboard/home
-      this.router.navigate(['/home']);
+      if (role === 'super') {
+        this.router.navigate(['/home']);
+      } else if (role === 'teacher') {
+        this.router.navigate(['/teacher-dashboard']);
+      } else if (role === 'student') {
+        this.router.navigate(['/student-dashboard']);
+      }
     } else {
       toast.error('❌ Invalid username or password');
     }

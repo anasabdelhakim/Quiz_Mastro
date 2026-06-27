@@ -1,6 +1,7 @@
 @import "@angular/cdk/overlay-prebuilt.css";
 @import "tailwindcss";
 @import "@spartan-ng/brain/hlm-tailwind-preset.css";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
 
 @theme inline {
   /* -------------------------
@@ -44,6 +45,7 @@
   --color-popover-foreground: var(--popover-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
+
   /* -------------------------
      Status Colors
   ------------------------- */
@@ -69,6 +71,7 @@
   --shadow-medium: var(--shadow-medium);
   --shadow-strong: var(--shadow-strong);
   --shadow-primary: var(--shadow-primary);
+  --shadow-glass: var(--shadow-glass);
 
   /* -------------------------
      Transitions
@@ -79,6 +82,7 @@
 
   --radius-main: var(--radius);
 }
+
 :root {
   /* -------------------------
      Primary Colors
@@ -102,7 +106,6 @@
   /* -------------------------
      Blacky Colors
   ------------------------- */
-
   --border: #e2e4e9; /* 220 13% 91% */
   --border-hover: #cdd1d9; /* 220 13% 85% */
   --input: #eeeff2; /* 216 12% 94% */
@@ -116,6 +119,7 @@
   --foreground: #2d3a4f; /* 220 15% 9% */
   --surface: #eeeff2; /* 216 12% 94% */
   --surface-hover: #e3e5e9; /* 216 12% 91% */
+  
   /* Card & Panel Colors */
   --card: #ffffff;
   --card-foreground: #121822;
@@ -124,6 +128,7 @@
   /* Popover Colors */
   --popover: #ffffff;
   --popover-foreground: #121822;
+  
   /* Muted Colors */
   --muted: #eeeff2;
   --muted-foreground: #6e7787;
@@ -131,7 +136,6 @@
   /* -------------------------
      Status Colors
   ------------------------- */
-  /* Status Colors */
   --success: #3fcc8f; /* 145 63% 42% */
   --success-hover: #36b87f;
   --success-foreground: #ffffff; /* 0 0% 100% */
@@ -148,17 +152,19 @@
   --destructive-soft: #fee2e2; /* 0 84% 92% */
 
   /* -------------------------
-     Shadows
+     Shadows & Transitions
   ------------------------- */
   --shadow-soft: 0 2px 8px -2px hsl(220 15% 9% / 0.08);
   --shadow-medium: 0 4px 16px -4px hsl(220 15% 9% / 0.12);
   --shadow-strong: 0 8px 32px -8px hsl(220 15% 9% / 0.16);
   --shadow-primary: 0 8px 32px -8px hsl(213 93% 50% / 0.3);
+  --shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
 
-  /* -------------------------
-     Additional Palette
-  ------------------------- */
-  --radius: 0.325rem; /* 5px */
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+  --radius: 0.5rem;
 }
 
 /* -------------------------
@@ -169,6 +175,13 @@
     font-family: "Inter", sans-serif;
     background-color: var(--background);
     color: var(--foreground);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "Outfit", sans-serif;
+    letter-spacing: -0.02em;
   }
 }
 
@@ -188,7 +201,6 @@
   .gradient-primary {
     background: linear-gradient(135deg, hsl(213 93% 50%), hsl(213 100% 70%));
   }
-
   .gradient-accent {
     background: linear-gradient(135deg, hsl(213 100% 94%), hsl(213 100% 88%));
   }
@@ -198,16 +210,86 @@
   .gradient-card {
     background: linear-gradient(135deg, hsl(0 0% 100%), hsl(216 12% 99%));
   }
+
+  /* Premium Glassmorphism Utilities */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: var(--shadow-glass);
+  }
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: var(--shadow-soft);
+  }
+  .glass-navbar {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(226, 228, 233, 0.6);
+  }
+
+  /* Ambient Glow Gradients */
+  .ambient-glow-primary {
+    position: relative;
+  }
+  .ambient-glow-primary::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+    opacity: 0.15;
+    filter: blur(20px);
+    pointer-events: none;
+    z-index: -1;
+  }
+  .ambient-glow-accent {
+    position: relative;
+  }
+  .ambient-glow-accent::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle, #a1c4fd 0%, transparent 70%);
+    opacity: 0.2;
+    filter: blur(25px);
+    pointer-events: none;
+    z-index: -1;
+  }
 }
 
 /* -------------------------
-   Components
+   Components & Micro-Animations
 -------------------------- */
 @layer components {
   .card {
     @apply bg-card text-foreground rounded-md shadow-md px-6 py-6 max-sm:px-3 break-words max-w-full;
   }
+
+  /* Premium Dynamic Hover Effects */
+  .card-hover {
+    transition: transform var(--transition-smooth), box-shadow var(--transition-smooth);
+  }
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-strong);
+  }
+
+  .hover-scale {
+    transition: transform var(--transition-fast);
+  }
+  .hover-scale:hover {
+    transform: scale(1.02);
+  }
+  .hover-scale:active {
+    transform: scale(0.98);
+  }
 }
+
 .hover-none {
   background-color: var(--primary-soft) !important;
 }
@@ -235,6 +317,15 @@
 
 .button-click:active {
   transform: scale(0.95);
+}
+
+@keyframes pageFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.page-animate {
+  animation: pageFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .btn-active {

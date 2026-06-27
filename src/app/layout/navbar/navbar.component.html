@@ -1,4 +1,4 @@
-<header class="gradient-card border-b border-gray-200 sticky top-0 z-50">
+<header class="glass-navbar sticky top-0 z-50 backdrop-blur-md bg-white/80 shadow-sm transition-all">
   <div
     class="flex flex-col sm:flex-row items-center justify-between py-4 px-4 sm:px-6 lg:px-8 gap-4 sm:gap-0"
   >
@@ -179,25 +179,45 @@
 
         <!-- User (mobile only beside search) -->
         <div class="sm:hidden flex items-center mb-2">
-          <div
-            class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lucide lucide-user-icon lucide-user text-accent"
+          <brn-popover>
+            <button
+              brnPopoverTrigger
+              class="flex items-center gap-2 rounded-full border border-gray-200 p-1 text-sm font-medium hover:bg-gray-100 text-primary transition-all data-[state=open]:ring-2 data-[state=open]:ring-blue-500 cursor-pointer"
             >
-              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-              <circle cx="12" cy="7" r="4" />
-            </svg>
-          </div>
+              <img
+                alt="User Avatar"
+                class="h-8 w-8 rounded-full"
+                [src]="getAvatar(currentUser)"
+              />
+            </button>
+            <div
+              hlmPopoverContent
+              *brnPopoverContent="let ctx"
+              class="min-h-40 w-45 mr-2 mt-3.5 space-y-2 relative"
+            >
+              <div class="flex flex-col gap-3">
+                <div class="w-full aspect-square">
+                  <img
+                    class="h-full object-contain w-full object-cover object-center rounded-md"
+                    [src]="getAvatar(currentUser)"
+                    alt="Profile picture"
+                  />
+                </div>
+                <div class="w-full">
+                  <div class="mb-2">
+                    <p class="font-medium">{{ currentUser?.name || 'Super Admin' }}</p>
+                    <p class="text-sm text-gray-500">{{ currentUser ? 'User' : 'Super Admin' }}</p>
+                  </div>
+                  <div class="border-b-2 border-border"></div>
+                  <div class="flex flex-col text-left mt-2">
+                    <button hlmBtn variant="ghost" class="w-full justify-start hover:bg-accent/10 px-1">Profile</button>
+                    <button hlmBtn variant="ghost" class="w-full justify-start hover:bg-accent/10 px-1">Settings</button>
+                    <button hlmBtn variant="ghost" (click)="logout()" class="w-full justify-start text-red-600 hover:bg-red-50 px-1">Sign Out</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </brn-popover>
         </div>
       </div>
     </div>
@@ -254,29 +274,85 @@
 
       <!-- User info -->
       <div class="flex items-center space-x-3">
-        <div
-          class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="lucide lucide-user-icon lucide-user text-white"
+        <brn-popover>
+          <button
+            brnPopoverTrigger
+            class="flex items-center gap-2 rounded-full border border-gray-200 p-1 pr-3 text-sm font-medium hover:bg-gray-100 text-primary transition-all data-[state=open]:ring-2 data-[state=open]:ring-blue-500 cursor-pointer"
           >
-            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-            <circle cx="12" cy="7" r="4" />
-          </svg>
-        </div>
-        <div>
-          <p class="font-semibold text-gray-800 text-base">Super Admin</p>
-          <p class="text-sm text-gray-500">adminquiz.app</p>
-        </div>
+            <img
+              alt="User Avatar"
+              class="h-8 w-8 rounded-full"
+              [src]="getAvatar(currentUser)"
+            />
+            <span>{{ firstName }}</span>
+            <svg
+              class="h-4 w-4 text-muted-foreground"
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+
+          <div
+            hlmPopoverContent
+            *brnPopoverContent="let ctx"
+            class="min-h-40 w-95 mr-5 mt-3.5 space-y-2 relative"
+          >
+            <div
+              class="absolute -top-[8.8px] right-4 w-4 h-4 rotate-45 bg-popover border-l border-t border-border"
+            ></div>
+
+            <div class="flex gap-5">
+              <div class="w-1/2 aspect-square">
+                <img
+                  class="h-full w-full object-cover object-center rounded-md"
+                  [src]="getAvatar(currentUser)"
+                  alt="Profile picture"
+                />
+              </div>
+              <div class="w-1/2">
+                <div class="mb-2">
+                  <p class="font-medium">{{ currentUser?.name || 'Super Admin' }}</p>
+                  <p class="text-sm text-gray-500">{{ currentUser ? 'User' : 'Super Admin' }}</p>
+                </div>
+                <div class="border-b-2 border-border"></div>
+
+                <div class="flex flex-col text-left mt-2">
+                  <button
+                    hlmBtn
+                    variant="ghost"
+                    class="w-full justify-start hover:bg-accent/10 px-1"
+                  >
+                    Profile
+                  </button>
+
+                  <button
+                    hlmBtn
+                    variant="ghost"
+                    class="w-full justify-start hover:bg-accent/10 px-1"
+                  >
+                    Settings
+                  </button>
+
+                  <button
+                    hlmBtn
+                    variant="ghost"
+                    (click)="logout()"
+                    class="w-full justify-start text-red-600 hover:bg-red-50 px-1"
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </brn-popover>
       </div>
     </div>
   </div>
