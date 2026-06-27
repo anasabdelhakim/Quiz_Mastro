@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { z } from 'zod';
 import { HlmInput } from '@spartan-ng/helm/input';
 import { toast } from 'ngx-sonner';
-import { AuthService } from '../auth.service'; // ✅ import service
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -44,42 +44,20 @@ export class SignInComponent {
     });
   }
 
-  schema = z
-    .object({
-      username: z
-        .string()
-        .min(3, 'Username must be at least 3 characters')
-        .regex(/^(student|teacher)@[a-zA-Z0-9]+$/, {
-          message: 'Username must be in correct format',
-        }),
-      password: z
-        .string()
-        .min(6, 'Password must be at least 6 characters')
-        .regex(/^(student|teacher)#[a-zA-Z0-9]+$/, {
-          message: 'Password must be in correct format',
-        }),
-    })
-    .refine(
-      (data) => {
-        const userRole = data.username.startsWith('student@')
-          ? 'student'
-          : data.username.startsWith('teacher@')
-          ? 'teacher'
-          : null;
-
-        const passRole = data.password.startsWith('student#')
-          ? 'student'
-          : data.password.startsWith('teacher#')
-          ? 'teacher'
-          : null;
-
-        return userRole !== null && userRole === passRole;
-      },
-      {
-        message: 'Username and password must belong to the same role',
-        path: ['password'], // show error under password field
-      }
-    );
+  schema = z.object({
+    username: z
+      .string()
+      .min(3, 'Username must be at least 3 characters')
+      .regex(/^super@[a-zA-Z0-9]+$/, {
+        message: 'Username must be in correct format (e.g., super@admin)',
+      }),
+    password: z
+      .string()
+      .min(6, 'Password must be at least 6 characters')
+      .regex(/^super#[a-zA-Z0-9]+$/, {
+        message: 'Password must be in correct format (e.g., super#admin)',
+      }),
+  });
 
   validateForm(value: any) {
     this.errors = {};
@@ -108,20 +86,15 @@ export class SignInComponent {
     this.showPassword = !this.showPassword;
   }
 
-  fillDemoCredentials(role: 'admin' | 'student') {
+  fillDemoCredentials(role: 'admin') {
     if (role === 'admin') {
       this.form.patchValue({
-        username: 'teacher@demo',
-        password: 'teacher#demo',
+        username: 'super@admin',
+        password: 'super#admin',
       });
-    } else {
-      this.form.patchValue({
-        username: 'student@demo',
-        password: 'student#demo',
-      });
+      this.passwordHasValue = true;
+      toast.success('⚡ Auto-filled Admin credentials!');
     }
-    this.passwordHasValue = true;
-    toast.success(`⚡ Auto-filled ${role === 'admin' ? 'Admin' : 'Student'} credentials!`);
   }
 
   onSubmit() {
@@ -139,7 +112,7 @@ export class SignInComponent {
       return;
     }
 
-    // ✅ Use AuthService to log in and get role
+    // ✅ Use AuthService to log in
     const role = this.authService.login(
       trimmedValue.username,
       trimmedValue.password
@@ -147,13 +120,8 @@ export class SignInComponent {
 
     if (role) {
       toast.success('✅ Login successful!', { duration: 2000 });
-
-      // Redirect based on role
-      if (role === 'student') {
-        this.router.navigate(['/student-dashboard']);
-      } else if (role === 'teacher') {
-        this.router.navigate(['/home']); // teacher dashboard
-      }
+      // Redirect to the main dashboard/home
+      this.router.navigate(['/home']);
     } else {
       toast.error('❌ Invalid username or password');
     }
