@@ -20,25 +20,16 @@
 
 ## 🚀 What Makes This Project Stand Out — A Reviewer's Hook
 
-> **Skip to the code that matters.** These are the technically complex, non-trivial engineering decisions baked into Quiz Mastro. Each item below is implemented in real code — not described as a concept.
+> **Skip to the code that matters.** These are the technically complex, non-trivial engineering decisions baked into Quiz Mastro.
 
-### ⚡ 1. AI-Powered Quiz Generation (OpenRouter + Custom JSON Pipeline)
-The `AiService` integrates with the **OpenRouter API** (`openrouter/free` model) to allow teachers to specify exact counts of MCQ and written questions by **difficulty tier** (easy / medium / hard) and **custom point allocations per tier**. The AI returns raw JSON, which is defensively parsed in `QuizFormComponent.createQuizByAI()` — stripping markdown wrappers, extracting JSON array bounds, and iterating questions to programmatically drive Angular `FormArray` controls. This is not a simple API call; it bridges a live AI response directly into the reactive form state.
-
-### ⚡ 2. Multi-Phase Quiz Lifecycle State Machine
-Quizzes don't have a single status — they move through a carefully engineered state machine: `unpublished → published → grading → finished`, with **role-specific derived status overlays** for students: `scheduled → active → expired → grading → finished`. The `QuizDataService.evaluateQuizStatus()` method applies time-based transitions automatically. The teacher dashboard polls `checkAllQuizStatuses()` every 30 seconds via `setInterval`, and individual quiz statuses are re-evaluated on every retrieval to ensure consistency across refreshes and LocalStorage revivals.
-
-### ⚡ 3. Connection-Scoped Quiz Visibility
-Students do **not** see all quizzes — only those created by teachers they are explicitly **connected** to. The `ConnectionService` manages a persistent `student ↔ teacher` graph stored in LocalStorage. `QuizDataService.getQuizzes('student')` cross-references the authenticated student's connection set against each quiz's `teacherId` before returning the filtered list. This creates a real enrollment model without a backend database.
-
-### ⚡ 4. Per-Student Submission & Grading Engine
-Every student's quiz attempt is tracked independently in a nested `submissions` map keyed by `quizId → studentId`. The grading engine (`GradingQuizComponent`) supports: **auto-grading MCQs** by comparing submitted option IDs against the stored `correctAnswer`, **manual score override** for written questions, and **per-question teacher explanations**. Final grades are written back per-student via `gradeQuizForStudent()`, and the quiz transitions to `finished` only when all connected students are marked as graded — enforced by `checkQuizCompletionStatus()`.
-
-### ⚡ 5. Time-Locked Exam with Audio Warning & Auto-Submit
-The `AttemptQuizComponent` computes the remaining time by diffing `Date.now()` against `startTime + duration * 60000` — accounting for mid-session page loads. When `timeLeft <= 8` seconds, a **clock-ticking audio effect** fires once via the Web Audio API. At `timeLeft === 0`, `autoSubmit()` is called, which calculates actual time spent from the `startedAt` timestamp, persists the submission, and navigates the student away — all without teacher intervention.
-
-### ⚡ 6. Three-Tier Role System with Isolated Layouts
-The router defines **three fully isolated layout shells** (`LayoutComponent` for Super Admin, `LayoutTeacherComponent` for Teacher, `LayoutStudentComponent` for Student), each protected by `authGuard` with a `data: { role }` configuration. The guard reads the role from `AuthService` and redirects unauthorized access. The Super Admin portal includes a global `SearchService` that searches across students, teachers, and connections with **live term highlighting** via regex injection into result titles and descriptions.
+| Engineering Feature | Technical Implementation | Key Benefit |
+| :--- | :--- | :--- |
+| **🤖 AI Quiz Generation** | Parses raw OpenRouter JSON defensively into Angular `FormArray` controls. | Automatically generates tiered quizzes without breaking the UI on malformed AI output. |
+| **🔄 Lifecycle State Machine** | Quizzes transition states (`published → grading → finished`) via automatic time-based evaluation. | Ensures consistent exam states across refreshes and LocalStorage revivals. |
+| **🔗 Connection-Scoped Visibility**| Cross-references a `student ↔ teacher` graph before returning filtered quiz lists. | Creates a secure, real-time enrollment model without a backend database. |
+| **📊 Per-Student Grading Engine** | Auto-grades MCQs and supports per-question manual scoring for written responses. | Prevents quiz completion until all enrolled students are accurately evaluated. |
+| **⏳ Time-Locked Exam** | Computes remaining time mid-session with Web Audio warnings and an `autoSubmit` trigger. | Enforces strict exam durations autonomously without teacher intervention. |
+| **🛡️ Isolated Layout Shells** | Mounts three independent layout shells protected by role-level `authGuard` data checks. | Guarantees complete route and data isolation between Admins, Teachers, and Students. |
 
 ---
 
