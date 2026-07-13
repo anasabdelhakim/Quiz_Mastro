@@ -47,8 +47,9 @@
 - [📄 License](#-license)
 
 ---
-
-## ✨ Key Features
+> **⚠️ AI Feature Note (Live Demo):** The AI Quiz Generation feature in the live demo utilizes a shared OpenRouter API key. Due to public rate limits, AI generation may occasionally be restricted. For uninterrupted access and production deployment, the platform is designed with a "Bring Your Own Key" (BYOK) architecture. See the installation steps to run it locally with your own free key.
+## 
+✨ Key Features
 
 ### 🤖 1. AI-Assisted Quiz Builder
 - **OpenRouter AI Integration**: Teachers can auto-generate full quizzes by specifying a topic, description, and exact question counts broken down by type (MCQ / Written) and difficulty (Easy / Medium / Hard) — each with a custom point value.
@@ -265,11 +266,12 @@ Using npm:
 npm install
 ```
 
-### 3. (Optional) Configure AI Quiz Generation
-To enable the AI quiz builder, open `src/app/main-app/ai.service.ts` and replace the placeholder with your free OpenRouter API key:
+### 3. Configure AI Quiz Generation (Bring Your Own Key)
+To prevent API rate-limiting in production and local development, Quiz Mastro requires you to supply your own OpenRouter API key. 
+
+Open `src/app/main-app/ai.service.ts` and replace the placeholder with your free key:
 ```typescript
 private apiKey = 'sk-or-v1-YOUR_KEY_HERE'; // Get a free key at openrouter.ai/keys
-```
 
 ### 4. Start the Development Server
 ```bash
