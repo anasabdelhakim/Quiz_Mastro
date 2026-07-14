@@ -269,10 +269,18 @@ npm install
 ### 3. Configure AI Quiz Generation (Bring Your Own Key)
 To prevent API rate-limiting in production and local development, Quiz Mastro requires you to supply your own OpenRouter API key. 
 
-Open `src/app/main-app/ai.service.ts` and replace the placeholder with your free key:
-```typescript
-private apiKey = 'sk-or-v1-YOUR_KEY_HERE'; // Get a free key at openrouter.ai/keys
+Because Quiz Mastro uses a secure Vercel Serverless Function (`api/ai.ts`), your API key is never exposed to the frontend.
 
+**For Vercel Deployment:**
+Go to your Vercel Dashboard → Project Settings → Environment Variables and add:
+- **Name:** `OPENROUTER_API_KEY`
+- **Value:** `sk-or-v1-YOUR_KEY_HERE`
+
+**For Local Development:**
+Create a `.env` file in the root directory and add:
+```env
+OPENROUTER_API_KEY=sk-or-v1-YOUR_KEY_HERE
+```
 ### 4. Start the Development Server
 ```bash
 ng serve

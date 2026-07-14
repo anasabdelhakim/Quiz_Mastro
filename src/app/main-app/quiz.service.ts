@@ -114,24 +114,17 @@ export class QuizDataService {
     if (!quiz) return;
 
     const now = Date.now();
-    const end = quiz.startTime.getTime() + quiz.duration * 60000;
+    // Bulletproof parsing with NaN fallbacks for older quizzes
+    let start = new Date(quiz.startTime).getTime();
+    if (isNaN(start)) start = 0;
+    let duration = Number(quiz.duration);
+    if (isNaN(duration)) duration = 0;
+    const end = start + duration * 60000;
 
-    // If quiz is published and time has expired, set to grading regardless of submissions
-    if (quiz.status === 'published' && now > end) {
-      this.updateQuiz(quizId, { status: 'grading' });
-
-      // Set all connected students to grading status if they haven't submitted
-      const teacherId = quiz.teacherId;
-      if (teacherId) {
-        const connectedStudents = this.getAllConnectedStudentsForQuiz(
-          quizId,
-          teacherId
-        );
-        connectedStudents.forEach((student) => {
-          if (!student.hasSubmission) {
-            this.setGradingForStudent(quizId, student.studentId);
-          }
-        });
+    // If quiz is not finished/unpublished and time has expired, set to grading
+    if (quiz.status !== 'finished' && quiz.status !== 'unpublished' && now > end) {
+      if (quiz.status !== 'grading') {
+        this.updateQuiz(quizId, { status: 'grading' });
       }
     }
   }
@@ -227,6 +220,7 @@ export class QuizDataService {
       ...entry,
       status: 'grading',
       startedAt: entry.startedAt || new Date(),
+      studentAnswers: entry.studentAnswers || {},
     };
     this.saveSubmissions();
   }
@@ -330,8 +324,12 @@ export class QuizDataService {
     role?: 'teacher' | 'student'
   ): Quiz => {
     const now = Date.now();
-    const start = quiz.startTime.getTime();
-    const end = start + quiz.duration * 60000;
+    // Bulletproof parsing with NaN fallbacks for older quizzes
+    let start = new Date(quiz.startTime).getTime();
+    if (isNaN(start)) start = 0;
+    let duration = Number(quiz.duration);
+    if (isNaN(duration)) duration = 0;
+    const end = start + duration * 60000;
 
     let status: QuizStatus = quiz.status;
 
@@ -341,16 +339,16 @@ export class QuizDataService {
       if (status === 'finished') {
         return { ...quiz, status };
       }
-      if (
-        ['unpublished', 'published', 'grading', 'finished'].includes(status)
-      ) {
-        return { ...quiz, status };
-      }
-
-      // Check if quiz time has finished and there are student submissions
-      if (status === 'published' && now > end) {
+      // Check if quiz time has expired
+      if (now > end && status !== 'unpublished') {
         // Automatically transition to grading status when time expires
         return { ...quiz, status: 'grading' };
+      }
+
+      if (
+        ['unpublished', 'grading', 'finished'].includes(status)
+      ) {
+        return { ...quiz, status };
       }
 
       // If quiz is published, keep it as published

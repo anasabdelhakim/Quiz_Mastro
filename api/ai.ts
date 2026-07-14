@@ -35,34 +35,40 @@ Requirements:
 
 CRITICAL INSTRUCTION: You MUST respond ONLY with a valid JSON array of question objects. Do NOT include any conversational text, markdown formatting, or \`\`\`json wrappers. Output pure JSON only.`;
 
-    // Check for Google Gemini API Key (Configured securely in Vercel Environment Variables)
-    const geminiKey = process.env['GEMINI_API_KEY'];
-    if (!geminiKey) {
-      console.error('❌ GEMINI_API_KEY environment variable is missing in Vercel settings.');
+    // Check for OpenRouter API Key (Configured securely in Vercel Environment Variables)
+    const openrouterKey = process.env['OPENROUTER_API_KEY'];
+    if (!openrouterKey) {
+      console.error('❌ OPENROUTER_API_KEY environment variable is missing in Vercel settings.');
       return res.status(500).json({ error: 'API Key configuration missing on Vercel server.' });
     }
 
-    console.log('🚀 Using Google Gemini API for real AI Quiz Generation...');
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`;
-    const geminiBody = {
-      contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: { temperature: 0.3 }
+    console.log('🚀 Using OpenRouter API for real AI Quiz Generation...');
+    const openRouterUrl = 'https://openrouter.ai/api/v1/chat/completions';
+    const openRouterBody = {
+      model: 'openrouter/free', // Universal Free AI Router
+      messages: [{ role: 'user', content: prompt }],
+      temperature: 0.3
     };
 
-    const geminiResponse = await fetch(geminiUrl, {
+    const openRouterResponse = await fetch(openRouterUrl, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(geminiBody)
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${openrouterKey}`,
+        'HTTP-Referer': 'https://quiz-mastro.vercel.app', // Update with your actual Vercel domain if needed
+        'X-Title': 'Quiz Mastro AI'
+      },
+      body: JSON.stringify(openRouterBody)
     });
 
-    if (!geminiResponse.ok) {
-      const errorText = await geminiResponse.text();
-      console.error(`❌ Google Gemini API failed with status ${geminiResponse.status}:`, errorText);
-      return res.status(geminiResponse.status).json({ error: `Gemini API error: ${errorText}` });
+    if (!openRouterResponse.ok) {
+      const errorText = await openRouterResponse.text();
+      console.error(`❌ OpenRouter API failed with status ${openRouterResponse.status}:`, errorText);
+      return res.status(openRouterResponse.status).json({ error: `OpenRouter API error: ${errorText}` });
     }
 
-    const data = await geminiResponse.json();
-    let aiContent = data.candidates?.[0]?.content?.parts?.[0]?.text || '[]';
+    const data = await openRouterResponse.json();
+    let aiContent = data.choices?.[0]?.message?.content || '[]';
     
     // Clean any accidental markdown code blocks (e.g., ```json ... ```)
     aiContent = aiContent.trim();

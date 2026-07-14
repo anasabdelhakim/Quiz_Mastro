@@ -45,10 +45,10 @@ export class TeacherDashboardComponent implements OnInit, OnDestroy {
       this.loadQuizzes();
     });
 
-    // Check quiz statuses every 30 seconds
+    // Check quiz statuses every 5 seconds for more real-time updates
     this.statusCheckInterval = setInterval(() => {
       this.quizService.checkAllQuizStatuses();
-    }, 30000);
+    }, 5000);
   }
 
   ngOnDestroy(): void {

@@ -222,6 +222,24 @@
                   <span>Ready for Grading:</span>
                 </div>
 
+                <ng-container *ngIf="gradingQueue[quiz.id]?.length; else noStudents">
+                  <div
+                    *ngFor="let student of gradingQueue[quiz.id]"
+                    class="flex items-center justify-between p-2 rounded bg-gray-50 border border-gray-100"
+                  >
+                    <span class="text-sm font-medium text-gray-700">{{ student.name }}</span>
+                    <button
+                      hlmBtn
+                      variant="ghost"
+                      size="sm"
+                      class="text-xs h-8 px-2"
+                      (click)="gradeQuiz(quiz, student.studentId)"
+                    >
+                      Grade
+                    </button>
+                  </div>
+                </ng-container>
+
                 <ng-template #noStudents>
                   <div class="text-sm text-muted-foreground text-center py-4">
                     No students connected to this quiz.
