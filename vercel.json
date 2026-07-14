@@ -1,14 +1,10 @@
 {
   "buildCommand": "rm -rf .angular && npm run build",
   "outputDirectory": "dist/quiz-dashboard/browser",
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
