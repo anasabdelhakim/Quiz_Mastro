@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm run build -- --no-cache",
+  "buildCommand": "rm -rf .angular && npm run build",
   "outputDirectory": "dist/quiz-dashboard/browser",
   "routes": [
     {
