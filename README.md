@@ -1,140 +1,118 @@
 # 🎯 Quiz Mastro — Modern Interactive Quiz & Assessment Dashboard Platform
 
-<div align="center">
+[![TypeScript](https://img.shields.io/badge/TypeScript_5.9-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](#) [![Angular](https://img.shields.io/badge/Angular_20.2-DD0031?style=for-the-badge&logo=angular&logoColor=white)](#) [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS_4.1-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](#) [![RxJS](https://img.shields.io/badge/RxJS_7.8-B7178C?style=for-the-badge&logo=reactivex&logoColor=white)](#) [![Zod](https://img.shields.io/badge/Zod_v4-3068b7?style=for-the-badge&logo=zod&logoColor=white)](#) [![Spartan-ng](https://img.shields.io/badge/Spartan--ng_Helm-000000?style=for-the-badge&logo=angular&logoColor=white)](#) [![OpenRouter AI](https://img.shields.io/badge/OpenRouter_AI-FF6B35?style=for-the-badge&logo=openai&logoColor=white)](#)
 
-![TypeScript](https://img.shields.io/badge/TypeScript_5.9-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
-![Angular](https://img.shields.io/badge/Angular_20.2-DD0031?style=for-the-badge&logo=angular&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS_4.1-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
-![RxJS](https://img.shields.io/badge/RxJS_7.8-B7178C?style=for-the-badge&logo=reactivex&logoColor=white)
-![Zod](https://img.shields.io/badge/Zod_v4-3068b7?style=for-the-badge&logo=zod&logoColor=white)
-![Spartan-ng](https://img.shields.io/badge/Spartan--ng_Helm-000000?style=for-the-badge&logo=angular&logoColor=white)
-![OpenRouter AI](https://img.shields.io/badge/OpenRouter_AI-FF6B35?style=for-the-badge&logo=openai&logoColor=white)
-![Lucide](https://img.shields.io/badge/Lucide_Icons-F26522?style=for-the-badge&logo=lucide&logoColor=white)
-![Jasmine](https://img.shields.io/badge/Jasmine-8A4182?style=for-the-badge&logo=jasmine&logoColor=white)
-
-> **Quiz Mastro** is a production-grade, full-lifecycle quiz management and assessment platform built for educators and students. Engineered with **Angular 20 Standalone Components**, **Spartan-ng (Helm)**, and **Tailwind CSS v4**, the platform covers every stage of the academic assessment pipeline — from AI-assisted quiz generation and time-locked student examination, to per-student manual grading with MCQ auto-correction, and a post-exam student review portal. The platform implements a **three-tier role system** (Super Admin, Teacher, Student) with separate layouts, isolated route guards, and connection-scoped data visibility.
-
-</div>
+> **Quiz Mastro** is a production-grade, full-lifecycle quiz management and assessment platform built for educators and students. Engineered with **Angular 20 Standalone Components**, **Spartan-ng (Helm)**, and **Tailwind CSS v4**, the platform covers every stage of the academic assessment pipeline — from AI-assisted quiz generation and time-locked student examination, to per-student manual grading with MCQ auto-correction, and a post-exam student review portal.
 
 ---
 
-## 🚀 What Makes This Project Stand Out — A Reviewer's Hook
+## 🎬 See It In Action
 
-> **Skip to the code that matters.** These are the technically complex, non-trivial engineering decisions baked into Quiz Mastro.
+<table>
+<tr>
+<td width="50%" align="center">
 
-| Engineering Feature | Technical Implementation | Key Benefit |
+**Setup & Full Quiz Lifecycle**
+User setup, AI quiz generation, and the timed student attempt interface.
+
+[![Setup & Full Quiz Lifecycle](https://img.youtube.com/vi/OUuKsCQ6l9k/maxresdefault.jpg)](https://youtu.be/OUuKsCQ6l9k)
+
+[![Watch on YouTube](https://img.shields.io/badge/▶_Watch_on-YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/OUuKsCQ6l9k)
+
+</td>
+<td width="50%" align="center">
+
+**Grading & AI Review Helper**
+Grading submissions, showing final grades, and the AI bot helper for post-exam review.
+
+[![Grading & AI Review Helper](https://img.youtube.com/vi/FjHPU_BzmwY/maxresdefault.jpg)](https://youtu.be/FjHPU_BzmwY)
+
+[![Watch on YouTube](https://img.shields.io/badge/▶_Watch_on-YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/FjHPU_BzmwY)
+
+</td>
+</tr>
+</table>
+
+---
+
+**[→ Try the live demo yourself](https://quiz-mastro.vercel.app)** — see the [demo credentials](#-demo-login-credentials) below.
+
+## 📌 Table of Contents
+
+- [⚡ Why Quiz Mastro Is Different](#-why-quiz-mastro-is-different--30-second-hook)
+- [🚀 Core Engineering Achievements](#-core-engineering-achievements)
+- [📸 Screenshots](#-screenshots)
+- [🔑 Demo Login Credentials](#-demo-login-credentials)
+- [🏛️ System Architecture](#️-system-architecture)
+- [💻 Comprehensive Tech Stack](#-comprehensive-tech-stack)
+- [🌐 Core Route Reference](#-core-route--navigation-reference)
+- [🚀 Getting Started & Installation](#-getting-started--installation)
+- [👨💻 Author & Connect](#-author--connect)
+- [📄 License](#-license)
+
+---
+
+## ⚡ Why Quiz Mastro Is Different — 30-Second Hook
+
+If you are reviewing this project, these are the hard engineering problems it solves that most single-page applications avoid:
+
+| Challenge | What Most Apps Do | What Quiz Mastro Does |
+| :--- | :--- | :--- |
+| **AI Integration Security** | Hardcode API keys in the frontend (stealing risk) | **Secure Vercel Serverless Function** proxying AI requests, keeping the key 100% hidden. |
+| **AI JSON Parsing** | `JSON.parse()` and crash when AI hallucinates Markdown | **Resilient Pipeline** that strips Markdown code fences defensively before mapping to Angular `FormArray`. |
+| **Exam State Persistence** | Lose all answers if the student refreshes the page | **Progressive Persistence** saving partial answers to LocalStorage on every single click. |
+| **Role-Based Isolation** | Hide buttons based on `isAdmin` booleans | **Isolated Layout Shells** mounted as separate router outlet groups guarded by deep data checks. |
+| **Quiz Lifecycle State** | Require manual "Start Exam" clicks from teachers | **Time-Locked Auto-Status** evaluating `scheduled → active → expired` automatically based on time constraints. |
+
+---
+
+## 🚀 Core Engineering Achievements
+
+| Engineering Domain | Technical Implementation | Key Benefit |
 | :--- | :--- | :--- |
 | **🤖 AI Quiz Generation** | Parses raw OpenRouter JSON defensively into Angular `FormArray` controls. | Automatically generates tiered quizzes without breaking the UI on malformed AI output. |
 | **🔄 Lifecycle State Machine** | Quizzes transition states (`published → grading → finished`) via automatic time-based evaluation. | Ensures consistent exam states across refreshes and LocalStorage revivals. |
 | **🔗 Connection-Scoped Visibility**| Cross-references a `student ↔ teacher` graph before returning filtered quiz lists. | Creates a secure, real-time enrollment model without a backend database. |
 | **📊 Per-Student Grading Engine** | Auto-grades MCQs and supports per-question manual scoring for written responses. | Prevents quiz completion until all enrolled students are accurately evaluated. |
 | **⏳ Time-Locked Exam** | Computes remaining time mid-session with Web Audio warnings and an `autoSubmit` trigger. | Enforces strict exam durations autonomously without teacher intervention. |
-| **🛡️ Isolated Layout Shells** | Mounts three independent layout shells protected by role-level `authGuard` data checks. | Guarantees complete route and data isolation between Admins, Teachers, and Students. |
-
----
-
-## 📌 Table of Contents
-- [🚀 What Makes This Project Stand Out](#-what-makes-this-project-stand-out--a-reviewers-hook)
-- [✨ Key Features](#-key-features)
-- [🎬 Video Demo](#-video-demo)
-- [📸 Screenshots](#-screenshots)
-- [🔑 Demo Login Credentials](#-demo-login-credentials)
-- [🏛️ System Architecture](#️-system-architecture)
-- [💻 Comprehensive Tech Stack](#-comprehensive-tech-stack)
-- [🌐 Core Route & Navigation Reference](#-core-route--navigation-reference)
-- [🚀 Getting Started & Installation](#-getting-started--installation)
-- [👨💻 Author & Connect](#-author--connect)
-- [📄 License](#-license)
-
----
-> **⚠️ AI Feature Note (Live Demo):** The AI Quiz Generation feature in the live demo utilizes a shared OpenRouter API key. Due to public rate limits, AI generation may occasionally be restricted. For uninterrupted access and production deployment, the platform is designed with a "Bring Your Own Key" (BYOK) architecture. See the installation steps to run it locally with your own free key.
-## 
-✨ Key Features
-
-### 🤖 1. AI-Assisted Quiz Builder
-- **OpenRouter AI Integration**: Teachers can auto-generate full quizzes by specifying a topic, description, and exact question counts broken down by type (MCQ / Written) and difficulty (Easy / Medium / Hard) — each with a custom point value.
-- **Resilient JSON Parsing**: The AI response pipeline defensively strips markdown code fences and extracts valid JSON arrays before injecting them into Angular's reactive `FormArray`, ensuring no broken form states from malformed AI output.
-
-### 🛠️ 2. Three-Tier Role Architecture & Route Isolation
-- **Super Admin, Teacher, Student**: Three independent layout shells and navigation trees, each mounted as a separate router outlet group guarded by `authGuard` with role-level data checking.
-- **Quiz Guard**: A dedicated `QuizGuard` enforces context — students can only enter `attempt-quiz` when the quiz status is `active`, and teachers can only access `grading-quiz` when status is `grading`. Direct URL access is blocked at the guard level.
-
-### 📋 3. Full Quiz Lifecycle Management
-- **Multi-Phase State Machine**: Quizzes progress through `unpublished → published → grading → finished` automatically. The teacher dashboard polls quiz statuses every 30 seconds, and student-facing statuses (`scheduled`, `active`, `expired`) are computed in real-time from start time and duration.
-- **Manual & AI Quiz Creation**: Teachers can build quizzes manually question-by-question via a reactive `FormArray`-backed builder, or generate an entire question set through the AI dialog — both paths feed into the same quiz model.
-
-### 🎯 4. Timed Student Examination Interface
-- **Countdown Timer with Audio**: The exam interface calculates remaining time from the quiz's scheduled `startTime`, plays a **clock-ticking audio cue** in the final 8 seconds, and automatically submits the exam when time expires.
-- **Progressive Answer Persistence**: Each answer selection immediately calls `updateStudentAnswerForStudent()`, persisting partial answers to LocalStorage in real-time — protecting against accidental navigation or page refresh.
-- **Question Navigation Panel**: Students can jump directly to any question by index, with answered/unanswered visual indicators per question slot.
-
-### 📊 5. Per-Student Grading Engine
-- **MCQ Auto-Grading**: The grading view automatically detects correct MCQ answers by comparing the student's submitted option ID against the stored `correctAnswer` and awards full points.
-- **Written Question Manual Scoring**: Teachers can assign custom scores to written responses with a per-question input. Manual scores take precedence over any auto-computed values.
-- **Grade Completion Gate**: A quiz only transitions to `finished` after all connected students have been reviewed — enforced by `checkQuizCompletionStatus()` which compares submitted vs. graded student counts.
-
-### 🔗 6. Student–Teacher Connection Graph
-- **Enrollment Model**: Students are only shown quizzes from teachers they are connected to. The `ConnectionService` maintains a persistent graph in LocalStorage and exposes filtered query methods (`getConnectionsByStudent`, `getConnectionsByTeacher`).
-- **Admin Relationship Map**: The Super Admin portal renders a computed signal-based relationship visualizer (`RelashionMapComponent`) showing which students are enrolled under which teachers, with live search filtering.
-
-### 🔍 7. Global Cross-Entity Search (Super Admin)
-- **Multi-Type Search Engine**: The `SearchService` queries students, teachers, connections, and navigation pages in a single pass, returning a unified result set with **inline term highlighting** applied via regex injection into both title and description fields.
-- **Real-Time Term Highlight**: Matched substrings are wrapped in `<mark>` tags for immediate visual feedback as the admin types.
-
-### 🔒 8. Zod-Validated Authentication
-- **Schema-First Login**: The sign-in form uses **Zod** to validate credentials before submission, surfacing field-level error messages reactively as the user types and suppressing duplicate errors intelligently.
-- **Three-Path Role Routing**: On successful login, `AuthService` resolves the user against the student or teacher registry (or the hardcoded super admin), persists the session to LocalStorage, and routes to the correct role portal automatically.
-
----
-
-## 🎬 Video Demo
-
-<!-- ───────────────────────────────────────────────────────────────────────── -->
-<!-- TODO (YOU):                                                               -->
-<!--   1. Record a 30–60 second screen walkthrough:                           -->
-<!--      - Landing page experience & preloader animation                      -->
-<!--      - Login via Super Admin credentials                                  -->
-<!--      - Admin explores overview, relationship map, and connection graph    -->
-<!--      - Login via Teacher demo credentials                                 -->
-<!--      - Teacher creates a quiz manually and via AI generation              -->
-<!--      - Teacher publishes quiz, views student submissions, grades them     -->
-<!--      - Login via Student demo credentials                                 -->
-<!--      - Student navigates dashboard, attempts a live quiz, reviews result  -->
-<!--   2. Upload to YouTube as "Unlisted"                                     -->
-<!--   3. Replace YOUR_VIDEO_ID below with your actual YouTube video ID       -->
-<!-- ───────────────────────────────────────────────────────────────────────── -->
-
-[![Quiz Mastro Demo Video](https://img.youtube.com/vi/YOUR_VIDEO_ID/maxresdefault.jpg)](https://www.youtube.com/watch?v=YOUR_VIDEO_ID)
-
-*▶ Click the thumbnail above to watch the full walkthrough on YouTube.*
+| **🔍 Global Search Engine** | Multi-type search engine querying students, teachers, and connections with inline regex highlighting. | Unified admin experience with `<mark>` tags wrapping real-time search term matches. |
 
 ---
 
 ## 📸 Screenshots
 
-<!-- ───────────────────────────────────────────────────────────────────────── -->
-<!-- TODO (YOU):                                                               -->
-<!--   Take clean, full-window screenshots of each screen below and save them -->
-<!--   as .png files into the docs/assets/ folder of this repo, then push.   -->
-<!-- ───────────────────────────────────────────────────────────────────────── -->
-
-### 1. Immersive Landing Page & Hero Section
-![Landing Page](./docs/assets/landing-page.png)
-*The modern hero presentation featuring clear value propositions, dual-role overview, and seamless sign-in access.*
-
-### 2. Teacher Command Center & AI Quiz Builder
-![Teacher Dashboard](./docs/assets/teacher-dashboard.png)
-*Educator portal for managing published quizzes, monitoring student submission status, grading queues, and launching the AI quiz generation dialog.*
-
-### 3. Student Assessment Portal & Exam Interface
-![Student Portal](./docs/assets/student-portal.png)
-*Connection-scoped student view showing only quizzes from enrolled teachers, with a timed exam interface featuring real-time answer persistence and auto-submit.*
+<table>
+  <tr>
+    <td width="50%" align="center">
+      <b>1. Teacher AI Quiz Generation</b><br>
+      <img src="./docs/assets/quiz-ai-create.png" alt="Teacher Dashboard"><br>
+      <i>Educator portal featuring the AI prompt builder for automatic question generation, tiered by difficulty.</i>
+    </td>
+    <td width="50%" align="center">
+      <b>2. Student Assessment Interface</b><br>
+      <img src="./docs/assets/quiz.png" alt="Student Exam"><br>
+      <i>Time-locked exam interface with real-time answer persistence, automatic countdowns, and quick question navigation.</i>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center">
+      <b>3. Admin Control Panel</b><br>
+      <img src="./docs/assets/admin.png" alt="Admin Dashboard"><br>
+      <i>Global platform statistics, student/teacher management, and signal-computed connection relationship maps.</i>
+    </td>
+    <td width="50%" align="center">
+      <b>4. Student Dashboard</b><br>
+      <img src="./docs/assets/student-dash.png" alt="Student Dashboard"><br>
+      <i>Connection-scoped student view showing only quizzes from enrolled teachers, tracked through their full lifecycle.</i>
+    </td>
+  </tr>
+</table>
 
 ---
 
 ## 🔑 Demo Login Credentials
 
-Explore the platform live at **[quiz-mastro.vercel.app](https://quiz-mastro.vercel.app)** or in your local development environment using the following pre-configured credentials:
+Explore the platform live at **[quiz-mastro.vercel.app](https://quiz-mastro.vercel.app)** using the following pre-configured credentials:
 
 | Role | Username | Password | Access Rights |
 | :--- | :--- | :--- | :--- |
@@ -166,8 +144,9 @@ graph TD
     QuizState -->|Status machine evaluation| StatusEngine[evaluateQuizStatus / checkAllQuizStatuses]
     QuizState -->|Per-student submissions map| GradingEngine[gradeQuizForStudent / checkQuizCompletionStatus]
 
-    TeacherView -->|OpenRouter HTTP POST| AIService[AiService / AI Quiz Generation]
-    AIService -->|JSON parse pipeline| QuizFormArray[ReactiveForm FormArray injection]
+    TeacherView -->|AI Request| Vercel[Vercel Serverless Function /api/ai]
+    Vercel -->|Secure HTTP POST| OpenRouter[OpenRouter LLM API]
+    Vercel -.->|JSON response| TeacherView
 
     AdminView -->|SearchService multi-type query| SearchEngine[Global Search - Students / Teachers / Connections]
     AdminView -->|Computed signals| RelationMap[RelashionMapComponent - Enrollment Graph]
@@ -175,9 +154,9 @@ graph TD
 
 **Key Architectural Decisions:**
 - **Standalone Components**: Every component is declared as standalone, enabling fine-grained lazy loading and eliminating NgModule boilerplate entirely.
+- **Serverless AI Proxy**: The `api/ai.ts` Vercel function acts as a secure middleware layer. It injects the `OPENROUTER_API_KEY` on the backend, completely hiding it from the browser and preventing token theft.
 - **BehaviorSubject-Driven State**: `QuizDataService` exposes `quizzes$` as a `BehaviorSubject`, allowing the teacher dashboard to reactively subscribe and re-render on any quiz state mutation without manual change detection.
-- **Computed Signals in Admin**: The relationship map uses Angular 20's `computed()` signals to derive the filtered student–teacher graph reactively from `search()` signal input — no manual subscription management.
-- **Spartan-ng / Helm**: Headless UI primitives (Brain layer) combined with Helm-styled components give full accessibility compliance with zero custom dialog or select implementations.
+- **Computed Signals in Admin**: The relationship map uses Angular 20's `computed()` signals to derive the filtered student–teacher graph reactively from `search()` signal input.
 
 ---
 
@@ -191,6 +170,7 @@ graph TD
 | RxJS 7.8 | BehaviorSubject-driven quiz state, reactive subscriptions, and observable pipelines |
 | Zod v4 | TypeScript-first schema validation for the authentication sign-in form |
 | OpenRouter API | AI backend for topic-to-quiz generation with difficulty-tiered question output |
+| Vercel Serverless | Node.js CommonJS functions (`/api`) providing a secure proxy for API keys |
 
 ### 🎨 Styling & UI Ecosystem
 | Technology | Purpose |
@@ -266,26 +246,20 @@ Using npm:
 npm install
 ```
 
-### 3. Configure AI Quiz Generation (Bring Your Own Key)
-To prevent API rate-limiting in production and local development, Quiz Mastro requires you to supply your own OpenRouter API key. 
+### 3. Configure Secure AI Proxy (OpenRouter)
+Quiz Mastro now uses a secure **Vercel Serverless Function** (`api/ai.ts`) to communicate with the AI. This means your API key is hidden entirely from the browser. You must provide a key for the local dev server to use.
 
-Because Quiz Mastro uses a secure Vercel Serverless Function (`api/ai.ts`), your API key is never exposed to the frontend.
-
-**For Vercel Deployment:**
-Go to your Vercel Dashboard → Project Settings → Environment Variables and add:
-- **Name:** `OPENROUTER_API_KEY`
-- **Value:** `sk-or-v1-YOUR_KEY_HERE`
-
-**For Local Development:**
 Create a `.env` file in the root directory and add:
 ```env
 OPENROUTER_API_KEY=sk-or-v1-YOUR_KEY_HERE
 ```
+> **Vercel Deployment Note:** For production, go to your Vercel Dashboard → Project Settings → Environment Variables and add `OPENROUTER_API_KEY` there, ensuring it is checked for all environments.
+
 ### 4. Start the Development Server
 ```bash
 ng serve
 ```
-> The application will start immediately. Open your browser and navigate to `http://localhost:4200/`.
+> The application will start immediately. Open your browser and navigate to `http://localhost:4200/`. *Note: If you want to test the serverless function locally, you can use `vercel dev` instead of `ng serve`.*
 
 ### 5. Build for Production
 ```bash
@@ -293,24 +267,16 @@ ng build
 ```
 > This will compile the Angular application using the high-performance esbuild pipeline, producing optimized static artifacts in the `dist/` directory.
 
-### 6. Running Unit Tests
-```bash
-ng test
-```
-
 ---
 
 ## 👨💻 Author & Connect
 
-**Anas Abdelhakim**  
+**Anas Abdelhakim Ali**  
 *Full Stack & AI Engineer | Senior CS Student at Nile University*
 
-Passionate about building scalable, high-performance systems and modular architectures. Always eager to discuss complex system design, performance-driven frontend architecture, or agentic AI development.
-
 <div align="left">
-  <a href="https://linkedin.com/in/anasabdelhakim"><img src="https://img.shields.io/badge/LinkedIn-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" /></a>
+  <a href="https://linkedin.com/in/anasabdelhakim-548aa5268"><img src="https://img.shields.io/badge/LinkedIn-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" /></a>
   <a href="https://github.com/anasabdelhakim"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" /></a>
-  <a href="https://x.com/anasabdelhakim"><img src="https://img.shields.io/badge/X-black.svg?style=for-the-badge&logo=X&logoColor=white" alt="X" /></a>
   <a href="mailto:anasabdoali22@gmail.com"><img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Email" /></a>
 </div>
 
