@@ -25,7 +25,7 @@ User setup, AI quiz generation, and the timed student attempt interface.
 **Grading & AI Review Helper**
 Grading submissions, showing final grades, and the AI bot helper for post-exam review.
 
-[![Grading & AI Review Helper](https://img.youtube.com/vi/FjHPU_BzmwY/0.jpg)](https://youtu.be/FjHPU_BzmwY)
+[![Grading & AI Review Helper](https://img.youtube.com/vi/FjHPU_BzmwY/maxresdefault.jpg)](https://youtu.be/FjHPU_BzmwY)
 
 [![Watch on YouTube](https://img.shields.io/badge/▶_Watch_on-YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/FjHPU_BzmwY)
 
