@@ -1,6 +1,6 @@
 # 🎯 Quiz Mastro — Modern Interactive Quiz & Assessment Dashboard Platform
 
-[![TypeScript](https://img.shields.io/badge/TypeScript_5.9-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](#) [![Angular](https://img.shields.io/badge/Angular_20.2-DD0031?style=for-the-badge&logo=angular&logoColor=white)](#) [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS_4.1-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](#) [![RxJS](https://img.shields.io/badge/RxJS_7.8-B7178C?style=for-the-badge&logo=reactivex&logoColor=white)](#) [![Zod](https://img.shields.io/badge/Zod_v4-3068b7?style=for-the-badge&logo=zod&logoColor=white)](#) [![Spartan-ng](https://img.shields.io/badge/Spartan--ng_Helm-000000?style=for-the-badge&logo=angular&logoColor=white)](#) [![OpenRouter AI](https://img.shields.io/badge/OpenRouter_AI-FF6B35?style=for-the-badge&logo=openai&logoColor=white)](#)
+[![TypeScript](https://img.shields.io/badge/TypeScript_5.9-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](#) [![Angular](https://img.shields.io/badge/Angular_20.2-DD0031?style=for-the-badge&logo=angular&logoColor=white)](#) [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS_4.1-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](#) [![RxJS](https://img.shields.io/badge/RxJS_7.8-B7178C?style=for-the-badge&logo=reactivex&logoColor=white)](#) [![Zod](https://img.shields.io/badge/Zod_v4-3068b7?style=for-the-badge&logo=zod&logoColor=white)](#) [![Spartan-ng](https://img.shields.io/badge/Spartan--ng_Helm-000000?style=for-the-badge&logo=angular&logoColor=white)](#) [![OpenRouter AI](https://img.shields.io/badge/OpenRouter_AI-FF6B35?style=for-the-badge&logo=openai&logoColor=white)](#) [![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](#) [![ngx-sonner](https://img.shields.io/badge/ngx--sonner-FF4B4B?style=for-the-badge&logo=angular&logoColor=white)](#) [![EmailJS](https://img.shields.io/badge/EmailJS-F9A826?style=for-the-badge)](#) [![Lucide](https://img.shields.io/badge/Lucide-F97316?style=for-the-badge&logo=lucide&logoColor=white)](#)
 
 > **Quiz Mastro** is a production-grade, full-lifecycle quiz management and assessment platform built for educators and students. Engineered with **Angular 20 Standalone Components**, **Spartan-ng (Helm)**, and **Tailwind CSS v4**, the platform covers every stage of the academic assessment pipeline — from AI-assisted quiz generation and time-locked student examination, to per-student manual grading with MCQ auto-correction, and a post-exam student review portal.
 
@@ -15,9 +15,9 @@
 **Setup & Full Quiz Lifecycle**
 User setup, AI quiz generation, and the timed student attempt interface.
 
-[![Setup & Full Quiz Lifecycle](https://img.youtube.com/vi/OUuKsCQ6l9k/0.jpg)](https://youtu.be/OUuKsCQ6l9k)
+[![Setup & Full Quiz Lifecycle](https://img.youtube.com/vi/vWGQuDmPvIM/maxresdefault.jpg)](https://youtu.be/vWGQuDmPvIM)
 
-[![Watch on YouTube](https://img.shields.io/badge/▶_Watch_on-YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/OUuKsCQ6l9k)
+[![Watch on YouTube](https://img.shields.io/badge/▶_Watch_on-YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/vWGQuDmPvIM)
 
 </td>
 <td width="50%" align="center">
